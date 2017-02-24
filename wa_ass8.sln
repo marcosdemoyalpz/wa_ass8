@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PHttp", "PHttp\PHttp.csproj", "{7152003D-3769-4A45-8ADA-6A8AA2E6FA84}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mvc", "Mvc\Mvc.csproj", "{9CBD7DC2-D491-485A-A26B-3C8B8D01987C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp", "ConsoleApp\ConsoleApp.csproj", "{3D24013A-21DE-4591-94E0-F3653067AE09}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7152003D-3769-4A45-8ADA-6A8AA2E6FA84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7152003D-3769-4A45-8ADA-6A8AA2E6FA84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7152003D-3769-4A45-8ADA-6A8AA2E6FA84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7152003D-3769-4A45-8ADA-6A8AA2E6FA84}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CBD7DC2-D491-485A-A26B-3C8B8D01987C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CBD7DC2-D491-485A-A26B-3C8B8D01987C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CBD7DC2-D491-485A-A26B-3C8B8D01987C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CBD7DC2-D491-485A-A26B-3C8B8D01987C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D24013A-21DE-4591-94E0-F3653067AE09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D24013A-21DE-4591-94E0-F3653067AE09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D24013A-21DE-4591-94E0-F3653067AE09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D24013A-21DE-4591-94E0-F3653067AE09}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
