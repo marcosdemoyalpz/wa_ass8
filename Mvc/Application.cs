@@ -14,14 +14,14 @@ namespace Mvc
         // Explicit interface members implementation: 
         void IPHttpApplication.Start()
         {
-            Console.WriteLine($"\tStarting {name}!");
+            Console.WriteLine("\tStarting " + name + "!");
         }
 
         void IPHttpApplication.ExecuteAction()
         {
-            Console.WriteLine($"\tExecute Action");
+            Console.WriteLine("\tExecute Action");
         }
-        
+
         string IPHttpApplication.Name
         {
             set
