@@ -22,6 +22,8 @@ namespace PHttp
         public TimeSpan ReadTimeout;
         public TimeSpan WriteTimeout;
         public TimeSpan ShutdownTimeout;
+        public object _synclock;
+        public Dictionary<HttpClient, bool> _clients;
         #endregion
 
         #region Private Properties        
@@ -157,7 +159,18 @@ namespace PHttp
             }
         }
         private void AcceptTcpClientCallback(IAsyncResult asyncResult) { throw new NotImplementedException(); }
-        private void RegisterClient(HttpClient client) { throw new NotImplementedException(); }
+        private void RegisterClient(HttpClient client)
+        {
+            if (client == null)
+            {
+                throw new ArgumentException();
+            }
+            lock (_synclock)
+            {
+                _clients.Add(client, true);
+                _clientsChangedEvent.Set();
+            }
+        }
         internal void UnregisterClient(HttpClient client) { throw new NotImplementedException(); }
         protected virtual void OnStateChanged(EventArgs args)
         {
