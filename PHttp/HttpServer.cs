@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Sockets;
 using System.Threading;
+using System.Diagnostics;
 
 namespace PHttp
 {
@@ -22,7 +23,7 @@ namespace PHttp
         public TimeSpan ReadTimeout;
         public TimeSpan WriteTimeout;
         public TimeSpan ShutdownTimeout;
-        public object _synclock;
+        public object _syncLock;
         public Dictionary<HttpClient, bool> _clients;
         #endregion
 
@@ -129,6 +130,10 @@ namespace PHttp
                     _state = HttpServerState.Started;
                     BeginAcceptTcpClient();
                 }
+                catch (PHttpException)
+                {
+                    throw new PHttpException("Failed to start HTTP server");
+                }
                 catch (Exception e)
                 {
                     _state = HttpServerState.Stopped;
@@ -136,7 +141,20 @@ namespace PHttp
                 }
             }
         }
-        public void Stop() { throw new NotImplementedException(); }
+        public void Stop()
+        {
+            VerifyState(HttpServerState.Started);
+            try
+            {
+                _state = HttpServerState.Stopping;
+                _listener.Stop();
+                StopClients();
+            }
+            catch (PHttpException)
+            {
+                throw new PHttpException("Failed to stop HTTP server");
+            }
+        }
         private void VerifyState(HttpServerState state)
         {
             if (_disposed == true)
@@ -148,7 +166,6 @@ namespace PHttp
                 throw new InvalidOperationException("Expected server to be in the " + state + " state.");
             }
         }
-        private void StopClients() { throw new NotImplementedException(); }
         private void BeginAcceptTcpClient()
         {
             TcpListener listener = _listener;
@@ -158,20 +175,154 @@ namespace PHttp
 
             }
         }
-        private void AcceptTcpClientCallback(IAsyncResult asyncResult) { throw new NotImplementedException(); }
+        private void AcceptTcpClientCallback(IAsyncResult asyncResult)
+        {
+            TcpListener listener = _listener;
+            if (listener == null)
+            {
+                return;
+            }
+            try
+            {
+                var tcpClient = listener.EndAcceptTcpClient(asyncResult);
+                if (_state == HttpServerState.Stopped)
+                {
+                    tcpClient.Close();
+                }
+                HttpClient newClient = new HttpClient();
+                RegisterClient(newClient);
+                newClient.BeginRequest();
+                BeginAcceptTcpClient();
+            }
+            catch (ObjectDisposedException objDispEx)
+            {
+                Console.WriteLine(objDispEx);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+        }
         private void RegisterClient(HttpClient client)
         {
             if (client == null)
             {
-                throw new ArgumentException();
+                throw new ArgumentNullException();
             }
-            lock (_synclock)
+            lock (_syncLock)
             {
                 _clients.Add(client, true);
                 _clientsChangedEvent.Set();
             }
         }
-        internal void UnregisterClient(HttpClient client) { throw new NotImplementedException(); }
+        internal void UnregisterClient(HttpClient client)
+        {
+            if (client == null)
+            {
+                throw new ArgumentNullException();
+            }
+            try
+            {
+                lock (_syncLock)
+                {
+                    Debug.Assert(_clients.ContainsKey(client));
+                    _clients.Remove(client);
+                    _clientsChangedEvent.Set();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+        }
+        internal void RaiseRequest(HttpContext context)
+        {
+            if (context == null)
+                throw new ArgumentNullException("context");
+            OnRequestReceived(new HttpRequestEventArgs(context));
+        }
+
+        private void OnRequestReceived(HttpRequestEventArgs httpRequestEventArgs)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal bool RaiseUnhandledException(HttpContext context, Exception exception)
+        {
+            if (context == null)
+                throw new ArgumentNullException("context");
+            var e = new HttpExceptionEventArgs(context, exception);
+            OnUnhandledException(e);
+            return e.Handled;
+        }
+
+        private void OnUnhandledException(HttpExceptionEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void StopClients()
+        {
+            var shutdownStarted = DateTime.Now;
+            bool forceShutdown = false;
+            // Clients that are waiting for new requests are closed.
+
+            List<HttpClient> clients;
+            lock (_syncLock)
+            {
+                clients = new List<HttpClient>(_clients.Keys);
+            }
+
+            foreach (var client in clients)
+            {
+                client.RequestClose();
+            }
+
+            // First give all clients a chance to complete their running requests.
+            while (true)
+            {
+                lock (_syncLock)
+                {
+                    if (_clients.Count == 0)
+                        break;
+                }
+
+                var shutdownRunning = DateTime.Now - shutdownStarted;
+
+                if (shutdownRunning >= ShutdownTimeout)
+                {
+                    forceShutdown = true;
+                    break;
+                }
+                _clientsChangedEvent.WaitOne(ShutdownTimeout - shutdownRunning);
+            }
+
+            if (!forceShutdown)
+                return;
+
+            // If there are still clients running after the timeout, their
+            // connections will be forcibly closed.
+            lock (_syncLock)
+            {
+                clients = new List<HttpClient>(_clients.Keys);
+            }
+
+            foreach (var client in clients)
+            {
+                client.ForceClose();
+            }
+
+            // Wait for the registered clients to be cleared.
+            while (true)
+            {
+                lock (_syncLock)
+                {
+                    if (_clients.Count == 0)
+                        break;
+                }
+                _clientsChangedEvent.WaitOne();
+            }
+        }
         protected virtual void OnStateChanged(EventArgs args)
         {
             StateChanged.Invoke(this, args);

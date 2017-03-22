@@ -380,7 +380,7 @@ namespace PHttp
                 Dispose();
             }
         }
-        private void BeginRequest()
+        public void BeginRequest()
         {
             Reset();
             BeginRead();
