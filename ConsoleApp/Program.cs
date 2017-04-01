@@ -11,9 +11,9 @@ namespace ConsoleApp
 {
     class Program
     {
-        static void Main(string[] args)
-        {
-            Startup.LoadApps();
-        }
+        //static void Main(string[] args)
+        //{
+        //    Startup.LoadApps();
+        //}
     }
 }

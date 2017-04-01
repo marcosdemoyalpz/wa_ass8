@@ -1,0 +1,23 @@
+[
+    {
+        "RoomID": 3006,
+        "HouseID": 2003,
+        "Name": "Habitación 1",
+        "RaspberryIP": "raspberrypi",
+        "Port": 3000
+    },
+    {
+        "RoomID": 3007,
+        "HouseID": 2003,
+        "Name": "Habitacion Marcos",
+        "RaspberryIP": "marcospi",
+        "Port": 3000
+    }
+]
+// {
+// 	"RoomID": 3006,
+// 	"HouseID": 2003,
+// 	"Name": "Habitación 1",
+// 	"RaspberryIP": "raspberrypi",
+// 	"Port": 3000
+// }
