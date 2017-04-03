@@ -397,7 +397,9 @@
 //    }
 //}
 //#endregion
+
 #region Raul Code
+
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -1068,9 +1070,12 @@ namespace PHttp
                     string filePath = resources + "/InternalServerError.html";
                     if (File.Exists(filePath) == true)
                     {
+                        ErrorHandler errorHandler = new ErrorHandler();
+                        errorHandler.RenderErrorPage(404, _context);
                         using (var stream = File.Open(filePath, FileMode.Open))
                         {
-                            _context.Response.ContentType = Server.GetMimeType(Path.GetExtension(filePath));
+                            MimeTypes mimeTypes = new MimeTypes();
+                            _context.Response.ContentType = mimeTypes.GetMimeType(Path.GetExtension(filePath));
                             byte[] buffer = new byte[4096];
                             int read;
                             while ((read = stream.Read(buffer, 0, buffer.Length)) != 0)
@@ -1140,4 +1145,5 @@ namespace PHttp
         }
     }
 }
-#endregion
+
+#endregion Raul Code

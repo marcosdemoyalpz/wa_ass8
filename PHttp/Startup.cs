@@ -3,23 +3,41 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using System.Web.Http;
+using System.Web.Routing;
 
 namespace PHttp
 {
     public class Startup
     {
-        public static void LoadApps()
+        public static void RegisterRoutes(RouteCollection routes)
         {
+            routes.Ignore("{resource}.axd/{*pathInfo}");
+            routes.MapHttpRoute(
+                "Default",                                              // Route name
+                "{controller}/{action}/{id}",                           // URL with parameters
+                new { controller = "Home", action = "Index", id = "" }  // Parameter defaults
+            );
+        }
+
+        protected void Application_Start()
+        {
+            RegisterRoutes(RouteTable.Routes);
+        }
+
+        public static List<IPHttpApplication> LoadApps()
+        {
+            string replacePath = ConfigurationManager.AppSettings["ReplacePath"]; ;
+            string userprofile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
             string path = ConfigurationManager.AppSettings["ApplicationsDir"];
+            path = path.Replace(replacePath, userprofile);
 
             Console.WriteLine("\n\tLooking for apps in " + path + "\n");
 
-            if (string.IsNullOrEmpty(path)) { return; } //sanity check
+            if (string.IsNullOrEmpty(path)) { return new List<IPHttpApplication>(); } //sanity check
 
             DirectoryInfo info = new DirectoryInfo(path);
-            if (!info.Exists) { return; } //make sure directory exists
+            if (!info.Exists) { return new List<IPHttpApplication>(); } //make sure directory exists
 
             var impl = new List<IPHttpApplication>();
 
@@ -47,17 +65,18 @@ namespace PHttp
                     }
                 }
             }
-
             Console.WriteLine();
 
-            foreach (var el in impl)
-            {
-                Console.WriteLine("\tExecuting " + el + "...\n");
-                Console.WriteLine("\tName: " + el.Name);
-                el.Start();
-            }
+            //foreach (var el in impl)
+            //{
+            //    Console.WriteLine("\tExecuting " + el + "...\n");
+            //    Console.WriteLine("\tName: " + el.Name);
+            //    el.Start(virtualPath);
+            //    Console.WriteLine();
+            //}
 
-            Console.ReadKey();
+            //Console.ReadKey();
+            return impl;
         }
     }
 }

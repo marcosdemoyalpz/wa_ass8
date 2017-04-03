@@ -1,16 +1,16 @@
-using System;
-using System.Diagnostics;
-using System.IO;
+#region Demo
 using PHttp;
-using System.Drawing;
-using System.Configuration;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Demo
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Demo(string[] args)
         {
+            List<IPHttpApplication> impl = Startup.LoadApps();
             using (var server = new HttpServer(8080))
             {
                 // New requests are signaled through the RequestReceived
@@ -23,8 +23,8 @@ namespace Demo
                     //using (var writer = new StreamWriter(e.Response.OutputStream))
                     //{
                     //    writer.Write(query);
-                    //}                                
-                    server.ProcessRequest(e);
+                    //}
+                    server.ProcessRequest(e, impl);
                 };
 
                 // Start the server on a random port. Use server.EndPoint
@@ -48,3 +48,4 @@ namespace Demo
         }
     }
 }
+#endregion
