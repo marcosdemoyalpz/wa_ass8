@@ -487,15 +487,15 @@ namespace PHttp
 
                 ServerUtility = new HttpServerUtility();
 
-                Console.WriteLine("HTTP server running at {0}", EndPoint);
+                Console.WriteLine("\tHTTP server running at " + EndPoint + Environment.NewLine);
             }
             catch (Exception ex)
             {
                 State = HttpServerState.Stopped;
 
-                Console.WriteLine("Failed to start HTTP server", ex);
+                Console.WriteLine("Failed to start HTTP server" + Environment.NewLine + ex);
 
-                throw new PHttpException("Failed to start HTTP server", ex);
+                throw new PHttpException("Failed to start HTTP server" + Environment.NewLine + ex);
             }
 
             State = HttpServerState.Started;
@@ -774,24 +774,15 @@ namespace PHttp
             {
                 if (el.Name.ToUpper() == appName.Replace("/", "").ToUpper())
                 {
-                    Console.WriteLine("\n\tExecuting " + el + "...\n");
-                    if (path.Split('?')[0].Split('/').Length >= 3)
+                    foreach (var a in methods.AppInfoList)
                     {
-                        foreach (var ctrl in methods.Controllers)
+                        if (el.Name.ToUpper() == a.name.ToUpper())
                         {
-                            var controllerName = ctrl.ToString().Replace("Mvc.Controllers.", "");
-                            controllerName = controllerName.Replace("Controller", "");
-                            if (path.Split('?')[0].Split('/')[2].ToUpper() == controllerName.ToUpper())
-                            {
-                                el.ExecuteAction(methods, e);
-                                return true;
-                            }
+                            Console.WriteLine("\n\tExecuting " + el + "...\n");
+                            el.ExecuteAction(e, a.applicationsDir);
+                            return true;
                         }
                     }
-                    defaultURL = defaultURL + "404";
-                    errorHandler.RenderErrorPage(404, e);
-                    e.Response.Redirect(defaultURL);
-                    return false;
                 }
             }
             if (File.Exists(filePath) == true)
@@ -808,7 +799,9 @@ namespace PHttp
                     return true;
                 }
             }
+            defaultURL = defaultURL + "404";
             errorHandler.RenderErrorPage(404, e);
+            e.Response.Redirect(defaultURL);
             return false;
         }
     }

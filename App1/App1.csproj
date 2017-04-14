@@ -4,14 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7152003D-3769-4A45-8ADA-6A8AA2E6FA84}</ProjectGuid>
+    <ProjectGuid>{D5DEEFD8-9D8B-44CE-BFF3-D9E86C481EB7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PHttp</RootNamespace>
-    <AssemblyName>PHttp</AssemblyName>
+    <RootNamespace>App1</RootNamespace>
+    <AssemblyName>App1</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -42,13 +41,10 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Net" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Net.Http.WebRequest" />
-    <Reference Include="System.Web" />
     <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
       <Private>True</Private>
@@ -65,39 +61,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Application\IPHttpApplication.cs" />
-    <Compile Include="ErrorHandler.cs" />
-    <Compile Include="HttpContext.cs" />
-    <Compile Include="HttpCookie.cs" />
-    <Compile Include="HttpCookieCollection.cs" />
-    <Compile Include="HttpExceptionEventHandler.cs" />
-    <Compile Include="HttpFileCollection.cs" />
-    <Compile Include="HttpMultiPartItem.cs" />
-    <Compile Include="HttpMultiPartRequestParser.cs" />
-    <Compile Include="HttpOutputStream.cs" />
-    <Compile Include="HttpPostedFile.cs" />
-    <Compile Include="HttpReadBuffer.cs" />
-    <Compile Include="HttpRequest.cs" />
-    <Compile Include="HttpRequestEventHandler.cs" />
-    <Compile Include="HttpRequestParser.cs" />
-    <Compile Include="HttpResponse.cs" />
-    <Compile Include="HttpServerState.cs" />
-    <Compile Include="HttpClient.cs" />
-    <Compile Include="HttpServer.cs" />
-    <Compile Include="HttpServerUtility.cs" />
-    <Compile Include="HttpTimeoutManager.cs" />
-    <Compile Include="HttpUnknownRequestParser.cs" />
-    <Compile Include="HttpUrlEncodedRequestParser.cs" />
-    <Compile Include="HttpUtil.cs" />
-    <Compile Include="MimeTypes.cs" />
-    <Compile Include="PHttpException.cs" />
-    <Compile Include="ProtocolException.cs" />
-    <Compile Include="Startup.cs" />
+    <Compile Include="Application.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Virtual\img\wavebird.jpg" />
-    <Content Include="Virtual\InternalServerError.html" />
+    <ProjectReference Include="..\Mvc\Mvc.csproj">
+      <Project>{9CBD7DC2-D491-485A-A26B-3C8B8D01987C}</Project>
+      <Name>Mvc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PHttp\PHttp.csproj">
+      <Project>{7152003d-3769-4a45-8ada-6a8aa2e6fa84}</Project>
+      <Name>PHttp</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

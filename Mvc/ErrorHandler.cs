@@ -1,9 +1,10 @@
 ﻿using HandlebarsDotNet;
+using PHttp;
 using System;
 using System.Configuration;
 using System.IO;
 
-namespace PHttp
+namespace Mvc
 {
     public class ErrorHandler
     {

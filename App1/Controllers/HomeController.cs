@@ -1,19 +1,19 @@
 ﻿using HandlebarsDotNet;
-using PHttp;
-using PHttp.Application;
 using System;
 using System.Configuration;
 using System.IO;
-using System.Web.Http;
+using Mvc.Attributes;
+using PHttp;
 
-namespace Mvc.Controllers
+namespace App1.Controllers
 {
-    internal class HomeController : ControllerBase
+    internal class HomeController : Mvc.ControllerBase
     {
-        private MimeTypes mimeTypes = new MimeTypes();
         private string name = "Home";
 
         [HttpGet]
+        //[HttpPost]
+        //[HttpPost, HttpGet]
         public void Index(HttpRequestEventArgs e = null)
         {
             string replacePath = ConfigurationManager.AppSettings["ReplacePath"]; ;

@@ -1,7 +1,6 @@
 #region Demo
 using PHttp;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using static PHttp.Startup;
 

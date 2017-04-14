@@ -1,5 +1,14 @@
 {
     "connectionString": "",
     "layout": "layout.hbs",
-    "errorTemplate": "error.hbs"
+    "errorTemplate": "error.hbs",
+    "defaultDir": "\\Documents\\GitHub\\wa_ass8\\Mvc\\bin\\Debug\\",
+    "sites": [{
+        "name": "App1",
+        "applicationsDir": "\\Documents\\GitHub\\wa_ass8\\App1\\bin\\Debug\\",
+        "virtualPath": "app",
+        "directoryBrowsing": false,
+        "defaultDocument": [],
+        "errorPages": []
+    }]
 }

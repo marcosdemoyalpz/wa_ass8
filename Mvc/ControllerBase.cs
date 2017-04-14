@@ -1,10 +1,8 @@
-﻿using System;
+﻿using PHttp;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace PHttp.Application
+namespace Mvc
 {
     public class ControllerBase
     {
