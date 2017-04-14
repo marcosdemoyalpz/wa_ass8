@@ -1,0 +1,5 @@
+{
+    "connectionString": "",
+    "layout": "layout.hbs",
+    "errorTemplate": "error.hbs"
+}

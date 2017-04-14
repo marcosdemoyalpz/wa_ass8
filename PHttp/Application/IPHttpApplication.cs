@@ -1,4 +1,5 @@
 ﻿using System;
+using static PHttp.Startup;
 
 namespace PHttp
 {
@@ -10,9 +11,9 @@ namespace PHttp
     {
         #region Methods
 
-        void Start(string path, HttpRequestEventArgs e);
+        void Start();
 
-        void ExecuteAction(HttpRequestEventArgs e);
+        void ExecuteAction(LoadDLLs loadDLLs, HttpRequestEventArgs e);
 
         event PreApplicationStartMethod PreApplicationStart;
 

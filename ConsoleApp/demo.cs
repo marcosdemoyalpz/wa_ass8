@@ -3,6 +3,7 @@ using PHttp;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using static PHttp.Startup;
 
 namespace Demo
 {
@@ -10,7 +11,7 @@ namespace Demo
     {
         private static void Demo(string[] args)
         {
-            List<IPHttpApplication> impl = Startup.LoadApps();
+            LoadDLLs loadDLLs = Startup.LoadApps();
             using (var server = new HttpServer(8080))
             {
                 // New requests are signaled through the RequestReceived
@@ -24,7 +25,7 @@ namespace Demo
                     //{
                     //    writer.Write(query);
                     //}
-                    server.ProcessRequest(e, impl);
+                    server.ProcessRequest(e, loadDLLs);
                 };
 
                 // Start the server on a random port. Use server.EndPoint

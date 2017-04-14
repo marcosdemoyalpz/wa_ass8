@@ -366,6 +366,7 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using static PHttp.Startup;
 
 namespace PHttp
 {
@@ -730,9 +731,14 @@ namespace PHttp
             return e.Handled;
         }
 
-        public bool ProcessRequest(HttpRequestEventArgs e, List<IPHttpApplication> impl)
+        public bool ProcessRequest(HttpRequestEventArgs e, LoadDLLs methods)
         {
+            ErrorHandler errorHandler = new ErrorHandler();
             List<string> IgnorePathList = new List<string>();
+            string errorDetails = "";
+            string defaultPath = "App1/Home/Index";
+            string defaultURL = e.Request.Url.Scheme + "://" + e.Request.Url.Host.ToString()
+                        + ":" + e.Request.Url.Port.ToString() + "/";
 
             IgnorePathList.Add("/css/mainStyle.css");
             IgnorePathList.Add("/favicon.ico");
@@ -745,75 +751,47 @@ namespace PHttp
             HttpResponse res = e.Response;
             foreach (var p in IgnorePathList)
             {
-                if (p == path)
-                {
-                    return false;
-                }
+                if (p == path) { return false; }
             }
             if (path == "" || path == "/")
             {
-                path = "App1/Index";
+                path = defaultPath;
                 e.Response.Redirect(e.Request.Url.ToString() + path);
                 return false;
             }
-            string controllerName = path.Split('?')[0].Split('/')[1];
+            if (path[path.Length - 1] != '/') path = path + "/";
+            string appName = path.Split('?')[0].Split('/')[1];
             string resources = ConfigurationManager.AppSettings["Virtual"];
             resources = resources.Replace(replacePath, userprofile);
             DirectoryInfo info = new DirectoryInfo(resources);
             if (!info.Exists) { return false; } //make sure directory exists
-            string filePath = resources + controllerName;
+            string filePath = resources + appName;
             Console.WriteLine("\tFull Path = " + e.Request.Url);
             Console.WriteLine("\tPath = " + path);
-            Console.WriteLine("\tApp Name = " + controllerName);
+            Console.WriteLine("\tApp Name = " + appName);
 
-            #region Read package.json
-
-            //string config = "package.json";
-            //string jsonPath = resources + config;
-            //if (File.Exists(jsonPath) == true)
-            //{
-            //    var json_str = File.ReadAllText(resources + config);
-            //    if (json_str[0] == '[')
-            //    {
-            //        try
-            //        {
-            //            List<JObject> jsonObject = (List<JObject>)Newtonsoft.Json.JsonConvert.DeserializeObject(json_str, typeof(List<JObject>));
-            //            foreach (var elem in jsonObject)
-            //            {
-            //                //Console.WriteLine(elem.SelectToken("Name"));
-            //                Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(elem));
-            //            }
-            //        }
-            //        catch (Exception ex)
-            //        {
-            //            if (ex.GetType().IsSubclassOf(typeof(Exception)))
-            //                throw;
-
-            //            //Handle the case when e is the base Exception
-            //            Console.WriteLine("Unable to parse jsonObject.");
-            //            return false;
-            //        }
-            //    }
-            //    else
-            //    {
-            //        var jsonObject = JObject.Parse(json_str);
-            //        //Console.WriteLine(jsonObject.SelectToken("Name"));
-            //        Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(jsonObject));
-            //    }
-            //}
-
-            #endregion Read package.json
-
-            foreach (var el in impl)
+            foreach (var el in methods.Applications)
             {
-                if (el.Name.ToUpper() == controllerName.Replace("/", "").ToUpper())
+                if (el.Name.ToUpper() == appName.Replace("/", "").ToUpper())
                 {
-                    Console.WriteLine("\tExecuting " + el + "...\n");
-                    Console.WriteLine("\tName: " + el.Name);
-                    el.Start(path, e);
-                    el.ExecuteAction(e);
-                    Console.WriteLine();
-                    return true;
+                    Console.WriteLine("\n\tExecuting " + el + "...\n");
+                    if (path.Split('?')[0].Split('/').Length >= 3)
+                    {
+                        foreach (var ctrl in methods.Controllers)
+                        {
+                            var controllerName = ctrl.ToString().Replace("Mvc.Controllers.", "");
+                            controllerName = controllerName.Replace("Controller", "");
+                            if (path.Split('?')[0].Split('/')[2].ToUpper() == controllerName.ToUpper())
+                            {
+                                el.ExecuteAction(methods, e);
+                                return true;
+                            }
+                        }
+                    }
+                    defaultURL = defaultURL + "404";
+                    errorHandler.RenderErrorPage(404, e);
+                    e.Response.Redirect(defaultURL);
+                    return false;
                 }
             }
             if (File.Exists(filePath) == true)
@@ -830,7 +808,6 @@ namespace PHttp
                     return true;
                 }
             }
-            ErrorHandler errorHandler = new ErrorHandler();
             errorHandler.RenderErrorPage(404, e);
             return false;
         }

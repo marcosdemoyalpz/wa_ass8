@@ -7,7 +7,7 @@ namespace PHttp
 {
     public class ErrorHandler
     {
-        public void RenderErrorPage(int error, HttpRequestEventArgs e)
+        public void RenderErrorPage(int error, HttpRequestEventArgs e, string message = "")
         {
             string replacePath = ConfigurationManager.AppSettings["ReplacePath"]; ;
             string userprofile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
@@ -22,7 +22,7 @@ namespace PHttp
                         title = "401 Unauthorized",
                         mainH1 = "Oops!",
                         mainH2 = "401 Unauthorized",
-                        errorDetails = "The user does not have the necessary credentials.",
+                        errorDetails = (message != "") ? message : "The user does not have the necessary credentials.",
                         homeAddress = "/"
                     };
                     Console.WriteLine("\tError 401 - Unauthorized!");
@@ -34,7 +34,7 @@ namespace PHttp
                         title = "403 Forbidden",
                         mainH1 = "Oops!",
                         mainH2 = "403 Forbidden",
-                        errorDetails = "The user might not have the necessary permissions for a resource.",
+                        errorDetails = (message != "") ? message : "The user might not have the necessary permissions for a resource.",
                         homeAddress = "/"
                     };
                     Console.WriteLine("\tError 403 - Forbidden!");
@@ -46,7 +46,7 @@ namespace PHttp
                         title = "404 Not Found",
                         mainH1 = "Oops!",
                         mainH2 = "404 Not Found",
-                        errorDetails = "Sorry, an error has occured, Requested page not found!",
+                        errorDetails = (message != "") ? message : "Sorry, an error has occured, Requested page not found!",
                         homeAddress = "/"
                     };
                     Console.WriteLine("\tError 404 - Not Found!");
@@ -58,7 +58,7 @@ namespace PHttp
                         title = "405 Method Not Allowed",
                         mainH1 = "Oops!",
                         mainH2 = "405 Method Not Allowed",
-                        errorDetails = "Request method is not supported for the requested resource!",
+                        errorDetails = (message != "") ? message : "Request method is not supported for the requested resource!",
                         homeAddress = "/"
                     };
                     Console.WriteLine("\tError 405 - Method Not Allowed!");
@@ -70,7 +70,7 @@ namespace PHttp
                         title = "406 Not Acceptable",
                         mainH1 = "Oops!",
                         mainH2 = "406 Not Acceptable",
-                        errorDetails = "Requested resource is not acceptable,\naccording to the Accept headers sent in the request",
+                        errorDetails = (message != "") ? message : "Requested resource is not acceptable,\naccording to the Accept headers sent in the request",
                         homeAddress = "/"
                     };
                     Console.WriteLine("\tError 406 - Not Acceptable!");
@@ -82,7 +82,7 @@ namespace PHttp
                         title = "412 Precondition Failed",
                         mainH1 = "Oops!",
                         mainH2 = "412 Precondition Failed",
-                        errorDetails = "The server does not meet one of the preconditions that the requester put on the request.",
+                        errorDetails = (message != "") ? message : "The server does not meet one of the preconditions that the requester put on the request.",
                         homeAddress = "/"
                     };
                     Console.WriteLine("\tError 412 - Precondition Failed!");
@@ -94,7 +94,7 @@ namespace PHttp
                         title = "500 Internal Server Error",
                         mainH1 = "Oops!",
                         mainH2 = "500 Internal Server Error",
-                        errorDetails = "An internal server error occurred while processing the request.",
+                        errorDetails = (message != "") ? message : "An internal server error occurred while processing the request.",
                         homeAddress = "/"
                     };
                     Console.WriteLine("\tError 500 - Internal Server Error!");
@@ -106,7 +106,7 @@ namespace PHttp
                         title = "501 Not Implemented",
                         mainH1 = "Oops!",
                         mainH2 = "501 Not Implemented",
-                        errorDetails = "The server either does not recognize the request method,\nor it lacks the ability to fulfill the request..",
+                        errorDetails = (message != "") ? message : "The server either does not recognize the request method,\nor it lacks the ability to fulfill the request..",
                         homeAddress = "/"
                     };
                     Console.WriteLine("\tError 501 - Not Implemented!");
@@ -118,7 +118,7 @@ namespace PHttp
                         title = "502 Bad Gateway",
                         mainH1 = "Oops!",
                         mainH2 = "502 Bad Gateway",
-                        errorDetails = "The server was acting as a gateway or proxy and received an invalid response from the upstream server.",
+                        errorDetails = (message != "") ? message : "The server was acting as a gateway or proxy and received an invalid response from the upstream server.",
                         homeAddress = "/"
                     };
                     Console.WriteLine("\tError 502 - Bad Gateway!");
@@ -130,7 +130,7 @@ namespace PHttp
                         title = "500 Internal Server Error",
                         mainH1 = "Oops!",
                         mainH2 = "500 Internal Server Error",
-                        errorDetails = "An internal server error occurred while processing the request.",
+                        errorDetails = (message != "") ? message : "An internal server error occurred while processing the request.",
                         homeAddress = "/"
                     };
                     Console.WriteLine("\tError 500 - Internal Server Error!");
@@ -146,7 +146,7 @@ namespace PHttp
             e.Response.Status = error.ToString();
         }
 
-        public void RenderErrorPage(int error, HttpContext e)
+        public void RenderErrorPage(int error, HttpContext e, string message = "")
         {
             string replacePath = ConfigurationManager.AppSettings["ReplacePath"]; ;
             string userprofile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
@@ -161,7 +161,7 @@ namespace PHttp
                         title = "401 Unauthorized",
                         mainH1 = "Oops!",
                         mainH2 = "401 Unauthorized",
-                        errorDetails = "The user does not have the necessary credentials.",
+                        errorDetails = (message != "") ? message : "The user does not have the necessary credentials.",
                         homeAddress = "/"
                     };
                     Console.WriteLine("\tError 401 - Unauthorized!");
@@ -173,7 +173,7 @@ namespace PHttp
                         title = "403 Forbidden",
                         mainH1 = "Oops!",
                         mainH2 = "403 Forbidden",
-                        errorDetails = "The user might not have the necessary permissions for a resource.",
+                        errorDetails = (message != "") ? message : "The user might not have the necessary permissions for a resource.",
                         homeAddress = "/"
                     };
                     Console.WriteLine("\tError 403 - Forbidden!");
@@ -185,7 +185,7 @@ namespace PHttp
                         title = "404 Not Found",
                         mainH1 = "Oops!",
                         mainH2 = "404 Not Found",
-                        errorDetails = "Sorry, an error has occured, Requested page not found!",
+                        errorDetails = (message != "") ? message : "Sorry, an error has occured, Requested page not found!",
                         homeAddress = "/"
                     };
                     Console.WriteLine("\tError 404 - Not Found!");
@@ -197,7 +197,7 @@ namespace PHttp
                         title = "405 Method Not Allowed",
                         mainH1 = "Oops!",
                         mainH2 = "405 Method Not Allowed",
-                        errorDetails = "Request method is not supported for the requested resource!",
+                        errorDetails = (message != "") ? message : "Request method is not supported for the requested resource!",
                         homeAddress = "/"
                     };
                     Console.WriteLine("\tError 405 - Method Not Allowed!");
@@ -209,7 +209,7 @@ namespace PHttp
                         title = "406 Not Acceptable",
                         mainH1 = "Oops!",
                         mainH2 = "406 Not Acceptable",
-                        errorDetails = "Requested resource is not acceptable,\naccording to the Accept headers sent in the request",
+                        errorDetails = (message != "") ? message : "Requested resource is not acceptable,\naccording to the Accept headers sent in the request",
                         homeAddress = "/"
                     };
                     Console.WriteLine("\tError 406 - Not Acceptable!");
@@ -221,7 +221,7 @@ namespace PHttp
                         title = "412 Precondition Failed",
                         mainH1 = "Oops!",
                         mainH2 = "412 Precondition Failed",
-                        errorDetails = "The server does not meet one of the preconditions that the requester put on the request.",
+                        errorDetails = (message != "") ? message : "The server does not meet one of the preconditions that the requester put on the request.",
                         homeAddress = "/"
                     };
                     Console.WriteLine("\tError 412 - Precondition Failed!");
@@ -233,7 +233,7 @@ namespace PHttp
                         title = "500 Internal Server Error",
                         mainH1 = "Oops!",
                         mainH2 = "500 Internal Server Error",
-                        errorDetails = "An internal server error occurred while processing the request.",
+                        errorDetails = (message != "") ? message : "An internal server error occurred while processing the request.",
                         homeAddress = "/"
                     };
                     Console.WriteLine("\tError 500 - Internal Server Error!");
@@ -245,7 +245,7 @@ namespace PHttp
                         title = "501 Not Implemented",
                         mainH1 = "Oops!",
                         mainH2 = "501 Not Implemented",
-                        errorDetails = "The server either does not recognize the request method,\nor it lacks the ability to fulfill the request..",
+                        errorDetails = (message != "") ? message : "The server either does not recognize the request method,\nor it lacks the ability to fulfill the request..",
                         homeAddress = "/"
                     };
                     Console.WriteLine("\tError 501 - Not Implemented!");
@@ -257,7 +257,7 @@ namespace PHttp
                         title = "502 Bad Gateway",
                         mainH1 = "Oops!",
                         mainH2 = "502 Bad Gateway",
-                        errorDetails = "The server was acting as a gateway or proxy and received an invalid response from the upstream server.",
+                        errorDetails = (message != "") ? message : "The server was acting as a gateway or proxy and received an invalid response from the upstream server.",
                         homeAddress = "/"
                     };
                     Console.WriteLine("\tError 502 - Bad Gateway!");
@@ -269,7 +269,7 @@ namespace PHttp
                         title = "500 Internal Server Error",
                         mainH1 = "Oops!",
                         mainH2 = "500 Internal Server Error",
-                        errorDetails = "An internal server error occurred while processing the request.",
+                        errorDetails = (message != "") ? message : "An internal server error occurred while processing the request.",
                         homeAddress = "/"
                     };
                     Console.WriteLine("\tError 500 - Internal Server Error!");

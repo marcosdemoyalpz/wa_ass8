@@ -9,21 +9,28 @@ namespace ConsoleApp
     {
         private static void Main(string[] args)
         {
-            List<IPHttpApplication> impl = Startup.LoadApps();
+            Startup.LoadDLLs loadDLLs = Startup.LoadApps();
             using (var server = new HttpServer(8080))
             {
-                // New requests are signaled through the RequestReceived
-                // event.
-                server.RequestReceived += (s, e) =>
+                try
                 {
-                    server.ProcessRequest(e, impl);
-                };
-                server.Start();
+                    // New requests are signaled through the RequestReceived
+                    // event.
+                    server.RequestReceived += (s, e) =>
+                    {
+                        server.ProcessRequest(e, loadDLLs);
+                    };
+                    server.Start();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
 
                 // Start the default web browser.
 
                 Process.Start("http://" + server.EndPoint + "/");
-                Console.WriteLine("Press any key to continue...");
+                //Console.WriteLine("Press any key to continue...");
                 Console.ReadKey();
 
                 // When the HttpServer is disposed, all opened connections

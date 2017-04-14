@@ -1,5 +1,6 @@
 ﻿using HandlebarsDotNet;
 using PHttp;
+using PHttp.Application;
 using System;
 using System.Configuration;
 using System.IO;
@@ -7,21 +8,20 @@ using System.Web.Http;
 
 namespace Mvc.Controllers
 {
-    internal class HomeController
+    internal class HomeController : ControllerBase
     {
         private MimeTypes mimeTypes = new MimeTypes();
         private string name = "Home";
 
-        // Explicit interface members implementation:
         [HttpGet]
         public void Index(HttpRequestEventArgs e = null)
         {
             string replacePath = ConfigurationManager.AppSettings["ReplacePath"]; ;
             string userprofile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-            string path = ConfigurationManager.AppSettings["Virtual"];
-            path = path.Replace(replacePath, userprofile);
+            string views = ConfigurationManager.AppSettings["Views"];
+            views = views.Replace(replacePath, userprofile);
             HttpResponse res = e.Response;
-            string filePath = path + "\\Views\\layout.hbs";
+            string filePath = views + ConfigurationManager.AppSettings["Layout"];
             Console.WriteLine("\tStarting " + name + "!");
             Console.WriteLine("\tLoading file on " + filePath + "!");
 
@@ -40,10 +40,12 @@ namespace Mvc.Controllers
                 {
                     writer.Write(result);
                 }
+                Console.WriteLine("\n\tErrorTemplate = " + ConfigurationManager.AppSettings["ErrorTemplate"]);
+                Console.WriteLine("\tconnectionString = " + ConfigurationManager.AppSettings["connectionString"]);
             }
             else
             {
-                var source = File.ReadAllText(path + "\\Views\\error.hbs");
+                var source = File.ReadAllText(views + ConfigurationManager.AppSettings["ErrorTemplate"]);
                 var template = Handlebars.Compile(source);
                 var data = new
                 {
