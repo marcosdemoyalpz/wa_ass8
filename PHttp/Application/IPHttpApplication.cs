@@ -2,9 +2,9 @@
 
 namespace PHttp
 {
-    public delegate void PreApplicationStartMethod(Type type, string method);
+    //public delegate void PreApplicationStartMethod(Type type, string method);
 
-    public delegate void ApplicationStartMethod(Type type, string method);
+    //public delegate void ApplicationStartMethod(Type type, string method);
 
     public interface IPHttpApplication
     {
@@ -14,9 +14,9 @@ namespace PHttp
 
         void ExecuteAction(HttpRequestEventArgs e, string applicationsDir);
 
-        event PreApplicationStartMethod PreApplicationStart;
+        //event PreApplicationStartMethod PreApplicationStart;
 
-        event ApplicationStartMethod ApplicationStart;
+        //event ApplicationStartMethod ApplicationStart;
 
         #endregion Methods
 

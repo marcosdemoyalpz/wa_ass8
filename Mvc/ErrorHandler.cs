@@ -8,12 +8,10 @@ namespace Mvc
 {
     public class ErrorHandler
     {
+        string errorTemplate = ConfigurationManager.AppSettings["ErrorTemplate"];
         public void RenderErrorPage(int errorCode, HttpRequestEventArgs e, string message = "")
         {
-            string replacePath = ConfigurationManager.AppSettings["ReplacePath"]; ;
-            string userprofile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
             string resources = ConfigurationManager.AppSettings["Virtual"];
-            resources = resources.Replace(replacePath, userprofile);
             object data = new object();
             switch (errorCode)
             {
@@ -137,7 +135,7 @@ namespace Mvc
                     Console.WriteLine("\tError 500 - Internal Server Error!");
                     break;
             }
-            var source = File.ReadAllText(resources + "\\Views\\error.hbs");
+            var source = File.ReadAllText(resources + "\\Views\\" + errorTemplate);
             var template = Handlebars.Compile(source);
             var result = template(data);
             using (var writer = new StreamWriter(e.Response.OutputStream))
@@ -150,10 +148,7 @@ namespace Mvc
 
         public void RenderErrorPage(int errorCode, HttpContext e, string message = "")
         {
-            string replacePath = ConfigurationManager.AppSettings["ReplacePath"]; ;
-            string userprofile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
             string resources = ConfigurationManager.AppSettings["Virtual"];
-            resources = resources.Replace(replacePath, userprofile);
             object data = new object();
             switch (errorCode)
             {
@@ -277,7 +272,7 @@ namespace Mvc
                     Console.WriteLine("\tError 500 - Internal Server Error!");
                     break;
             }
-            var source = File.ReadAllText(resources + "\\Views\\error.hbs");
+            var source = File.ReadAllText(resources + "\\Views\\" + errorTemplate);
             var template = Handlebars.Compile(source);
             var result = template(data);
             using (var writer = new StreamWriter(e.Response.OutputStream))

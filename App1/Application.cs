@@ -49,9 +49,9 @@ namespace App1
             }
         }
 
-        public event PreApplicationStartMethod PreApplicationStart;
+        //public event PreApplicationStartMethod PreApplicationStart;
 
-        public event ApplicationStartMethod ApplicationStart;
+        //public event ApplicationStartMethod ApplicationStart;
 
     }
 }

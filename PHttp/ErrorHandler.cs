@@ -9,10 +9,7 @@ namespace PHttp
     {
         public void RenderErrorPage(int errorCode, HttpRequestEventArgs e, string message = "")
         {
-            string replacePath = ConfigurationManager.AppSettings["ReplacePath"]; ;
-            string userprofile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
             string resources = ConfigurationManager.AppSettings["Virtual"];
-            resources = resources.Replace(replacePath, userprofile);
             object data = new object();
             switch (errorCode)
             {
@@ -149,10 +146,7 @@ namespace PHttp
 
         public void RenderErrorPage(int errorCode, HttpContext e, string message = "")
         {
-            string replacePath = ConfigurationManager.AppSettings["ReplacePath"]; ;
-            string userprofile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
             string resources = ConfigurationManager.AppSettings["Virtual"];
-            resources = resources.Replace(replacePath, userprofile);
             object data = new object();
             switch (errorCode)
             {

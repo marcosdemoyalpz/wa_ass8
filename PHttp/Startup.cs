@@ -2,224 +2,234 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data.SQLite;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Web.Http;
-using System.Web.Routing;
 
 namespace PHttp
 {
     public class Startup
     {
-        public class LoadDLLs
+        LoadApps _loadApps;
+        List<IPHttpApplication> _impl;
+        List<AppInfo> _apps;
+        JArray _jArray;
+        private bool LoadApps()
         {
-            List<AppInfo> _apps;
-            List<IPHttpApplication> _impl;
-            public List<IPHttpApplication> Applications
-            {
-                get { return _impl; }
-                set { _impl = value; }
-            }
-            public List<AppInfo> AppInfoList
-            {
-                get { return _apps; }
-                set { _apps = value; }
-            }
-            public LoadDLLs()
-            {
-                _apps = new List<AppInfo>();
-                _impl = new List<IPHttpApplication>();
-            }
-            public LoadDLLs(List<IPHttpApplication> impl, List<AppInfo> apps)
-            {
-                _apps = apps;
-                _impl = impl;
-            }
-        }
-
-        public class AppInfo
-        {
-            string _name;
-            string _applicationsDir;
-
-            public AppInfo(string name, string applicationsDir)
-            {
-                _name = name;
-                _applicationsDir = applicationsDir;
-            }
-            public string name
-            {
-                get { return _name; }
-                set { _name = value; }
-            }
-            public string applicationsDir
-            {
-                get { return _applicationsDir; }
-                set { _applicationsDir = value; }
-            }
-        }
-
-        public static LoadDLLs LoadApps()
-        {
-            List<AppInfo> apps = new List<AppInfo>();
+            _impl = new List<IPHttpApplication>();
+            _apps = new List<AppInfo>();
             try
             {
-                string jsonString = ReadJSON();
-                apps = UpdateAppConfig(jsonString);
-            }
-            catch
-            {
-                throw new Exception("Failed to load config.json!");
-            }
+                Console.WriteLine("\tStarting to load apps...");
+                _jArray = ReadJSON();
+                UpdateAppConfig(_jArray);
+                string database = _jArray[0].SelectToken("database").ToString();
+                string connectionString = _jArray[0].SelectToken("connectionString").ToString();
+                Console.WriteLine("\n\tconfig.json read successfully!\n");
 
-            var impl = new List<IPHttpApplication>();
+                SQLiteConnection m_dbConnection;
+                Console.WriteLine("\tAttempting to load Database " + database + " ...");
 
-            foreach (var a in apps)
-            {
-                string replacePath = ConfigurationManager.AppSettings["ReplacePath"];
-                a.applicationsDir = replacePath + a.applicationsDir;
-                string userprofile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-                string path = a.applicationsDir;
-                path = path.Replace(replacePath, userprofile);
-
-                Console.WriteLine("\n\tLooking for apps in " + path + "\n");
-
-                if (string.IsNullOrEmpty(path)) { return new LoadDLLs(); } //sanity check
-
-                DirectoryInfo info = new DirectoryInfo(path);
-                if (!info.Exists) { return new LoadDLLs(); } //make sure directory exists                
-
-                foreach (FileInfo file in info.GetFiles("*.dll")) //loop through all dll files in directory
+                if (File.Exists(database))
                 {
-                    Console.WriteLine("\tdll = " + file);
-                    Assembly currentAssembly = null;
-                    try
-                    {
-                        var name = AssemblyName.GetAssemblyName(file.FullName);
-                        currentAssembly = Assembly.Load(name);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("\n\t" + ex);
-                        continue;
-                    }
-
-                    var types = currentAssembly.GetTypes();
-                    foreach (var type in types)
-                    {
-                        if (type != typeof(IPHttpApplication) && typeof(IPHttpApplication).IsAssignableFrom(type))
-                        {
-                            var temp = (IPHttpApplication)Activator.CreateInstance(type);
-                            if (!impl.Contains(temp))
-                            {
-                                impl.Add(temp);
-                            }
-                        }
-                    }
-                }
-                Console.WriteLine();
-                foreach (var el in impl)
-                {
-                    el.Start();
-                    Console.WriteLine("\tLoading " + el + "...\n");
-                }
-            }
-            LoadDLLs loadDLLs = new LoadDLLs(impl, apps);
-            return loadDLLs;
-        }
-
-        #region Read package.json
-        static string ReadJSON()
-        {
-            string config = "config.json";
-
-            string replacePath = ConfigurationManager.AppSettings["ReplacePath"]; ;
-            string userprofile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-            string path = ConfigurationManager.AppSettings["Virtual"];
-            path = path.Replace(replacePath, userprofile);
-            string jsonPath = path + config;
-            object jsonObject = new object();
-            if (File.Exists(jsonPath) == true)
-            {
-                Console.WriteLine("\tReading JSON object from: " + config);
-                var jsonString = File.ReadAllText(jsonPath);
-                if (jsonString[0] == '[')
-                {
-                    try
-                    {
-                        List<JObject> jsonObjectList = (List<JObject>)Newtonsoft.Json.JsonConvert.DeserializeObject(jsonString, typeof(List<JObject>));
-                        foreach (var elem in jsonObjectList)
-                        {
-                            //Console.WriteLine(elem.SelectToken("Name"));
-                            jsonObject = elem;
-                            Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(elem));
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        if (ex.GetType().IsSubclassOf(typeof(Exception)))
-                            throw;
-
-                        //Handle the case when e is the base Exception
-                        Console.WriteLine("Unable to parse jsonObject.");
-                    }
+                    Console.WriteLine("\tDatabase " + database + " already exists!");
                 }
                 else
                 {
-                    jsonObject = JObject.Parse(jsonString);
-                    //Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(jsonObject));
+                    // http://blog.tigrangasparian.com/2012/02/09/getting-started-with-sqlite-in-c-part-one/
+                    // 
+                    //### Create the database
+                    SQLiteConnection.CreateFile(database);
+
+                    // ### Connect to the database
+                    m_dbConnection = new SQLiteConnection(connectionString);
+                    m_dbConnection.Open();
+
+                    // ### Create a table
+                    string sql = "CREATE TABLE users (username VARCHAR(128) PRIMARY KEY UNIQUE, password VARCHAR(128), name VARCHAR(128), lastname VARCHAR(128), token VARCHAR(256) NULL)";
+                    SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
+                    command.ExecuteNonQuery();
+
+                    // ### Add some data to the table
+                    sql = "insert into users (username, password, name, lastname) values ('admin', '1234', 'Marcos', 'De Moya')";
+                    command = new SQLiteCommand(sql, m_dbConnection);
+                    command.ExecuteNonQuery();
+
+                    // ### select the data
+                    sql = "select * from users order by username desc";
+                    command = new SQLiteCommand(sql, m_dbConnection);
+                    SQLiteDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        Console.WriteLine("\tUsername: " + reader["username"] + "\tPassword: " + reader["password"]);
+                    }
+                    Console.WriteLine("\tDatabase " + database + " has been created!");
                 }
             }
-            return Newtonsoft.Json.JsonConvert.SerializeObject(jsonObject);
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            Console.WriteLine("\tDatabase read successfully!");
+            try
+            {
+                foreach (var a in _apps)
+                {
+                    string path = a.applicationsDir;
+
+                    Console.WriteLine("\n\tLooking for apps in " + path + "\n");
+
+                    if (string.IsNullOrEmpty(path)) { return false; } //sanity check
+
+                    DirectoryInfo info = new DirectoryInfo(path);
+                    if (!info.Exists) { return false; } //make sure directory exists                
+
+                    foreach (FileInfo file in info.GetFiles("*.dll")) //loop through all dll files in directory
+                    {
+                        Console.WriteLine("\tdll = " + file);
+                        Assembly currentAssembly = null;
+                        try
+                        {
+                            var name = AssemblyName.GetAssemblyName(file.FullName);
+                            currentAssembly = Assembly.Load(name);
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine("\n\t" + ex);
+                            continue;
+                        }
+
+                        var types = currentAssembly.GetTypes();
+                        foreach (var type in types)
+                        {
+                            if (type != typeof(IPHttpApplication) && typeof(IPHttpApplication).IsAssignableFrom(type))
+                            {
+                                var temp = (IPHttpApplication)Activator.CreateInstance(type);
+                                if (!_impl.Contains(temp))
+                                {
+                                    _impl.Add(temp);
+                                }
+                            }
+                        }
+                    }
+                    Console.WriteLine();
+                    foreach (var el in _impl)
+                    {
+                        el.Start();
+                        Console.WriteLine("\tLoading " + el + "...");
+                    }
+                }
+                _loadApps = new LoadApps(_impl, _apps);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
-        static List<AppInfo> UpdateAppConfig(string jsonString)
+
+        #region Read package.json
+        JArray ReadJSON()
         {
-            System.Configuration.Configuration config =
-                ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            var jsonObject = JObject.Parse(jsonString);
-            var errorTemplate = jsonObject.SelectToken("errorTemplate").ToString();
-            var connectionString = jsonObject.SelectToken("connectionString").ToString();
-            var layout = jsonObject.SelectToken("layout").ToString();
+            try
+            {
+                string config = "config.json";
+                Console.WriteLine("\t" + config);
+                string path = ConfigurationManager.AppSettings["Virtual"];
+                Console.WriteLine("\t" + path);
+                string jsonPath = path + config;
+                Console.WriteLine("\t" + jsonPath);
+                if (File.Exists(jsonPath) == true)
+                {
+                    Console.WriteLine("\tReading JSON object from: " + config);
+                    var jsonString = File.ReadAllText(jsonPath);
+                    if (jsonString[0] != '[')
+                    {
+                        try
+                        {
+                            jsonString = "[" + jsonString;
+                            if (jsonString[jsonString.Length - 1] != ']')
+                            {
+                                jsonString = jsonString + "]";
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            throw new Exception(ex.Message);
+                        }
+                    }
+                    JArray jArray = JArray.Parse(jsonString);
+                    //foreach (JObject obj in jArray.Children<JObject>())
+                    //{
+                    //    Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(obj));
+                    //}
+                    return jArray;
+                }
+                else
+                {
+                    throw new FileNotFoundException(config + " not found!");
+                }
+            }
+            catch (Newtonsoft.Json.JsonReaderException ex)
+            {
+                throw new Newtonsoft.Json.JsonReaderException(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        void UpdateAppConfig(JArray jArray)
+        {
+            _apps = new List<AppInfo>();
+            try
+            {
+                System.Configuration.Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+                var errorTemplate = jArray[0].SelectToken("errorTemplate").ToString();
+                var connectionString = jArray[0].SelectToken("connectionString").ToString();
+                var layout = jArray[0].SelectToken("layout").ToString();
+                var database = jArray[0].SelectToken("database").ToString();
+                var applicationsDir = jArray[0].SelectToken("defaultDir").ToString();
 
-            var sytes = jsonObject
-            .Descendants()
-            .Where(x => x is JObject)
-            .Where(x => x["name"] != null && x["applicationsDir"] != null)
-            .Select(x => new { Name = (string)x["name"], ApplicationsDir = (string)x["applicationsDir"] })
-            .ToList();
+                //var sytes = jArray[0]
+                //.Descendants()
+                //.Where(x => x is JObject)
+                //.Where(x => x["name"] != null && x["applicationsDir"] != null)
+                //.Select(x => new { Name = (string)x["name"], ApplicationsDir = (string)x["applicationsDir"] })
+                //.ToList();
 
-            List<AppInfo> apps = new List<AppInfo>();
-            foreach (var a in sytes)
-            {
-                apps.Add(new AppInfo(a.Name, a.ApplicationsDir.Replace(
-                    ConfigurationManager.AppSettings["ReplacePath"], "")));
-            }
+                //foreach (var a in sytes)
+                //{
+                //    apps.Add(new AppInfo(a.Name, a.ApplicationsDir.Replace));
+                //}
 
-            var applicationsDir = jsonObject.SelectToken("defaultDir").ToString();
+                _apps.Add(new AppInfo("App1", "../../../App1/bin/Debug/"));
 
-            if (errorTemplate != null)
-            {
-                config.AppSettings.Settings["ErrorTemplate"].Value = errorTemplate;
+                if (errorTemplate != null)
+                {
+                    config.AppSettings.Settings["ErrorTemplate"].Value = errorTemplate;
+                    Console.WriteLine("\tErrorTemplate = " + errorTemplate);
+                }
+                config.Save(ConfigurationSaveMode.Modified);
+                ConfigurationManager.RefreshSection("appSettings");
+
             }
-            if (connectionString != null)
+            catch (Exception ex)
             {
-                config.AppSettings.Settings["connectionString"].Value = connectionString;
+                throw new Exception(ex.Message);
             }
-            if (layout != null)
-            {
-                config.AppSettings.Settings["Layout"].Value = layout;
-            }
-            if (applicationsDir != null)
-            {
-                config.AppSettings.Settings["ApplicationsDir"].Value =
-                    ConfigurationManager.AppSettings["ReplacePath"] + applicationsDir;
-            }
-            config.Save(ConfigurationSaveMode.Modified);
-            ConfigurationManager.RefreshSection("appSettings");
-            Console.WriteLine("\tLayout = " + layout);
-            return apps;
         }
         #endregion Read package.json
+        public LoadApps loadApps
+        {
+            get { return _loadApps; }
+            private set { _loadApps = value; }
+        }
+        public Startup()
+        {
+            _impl = new List<IPHttpApplication>();
+            _apps = new List<AppInfo>();
+            LoadApps();
+        }
     }
 }

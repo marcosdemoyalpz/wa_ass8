@@ -1,0 +1,15 @@
+{
+    "database": "marcos_db.sqlite",
+    "connectionString": "Data Source=marcos_db.sqlite;Version=3;",
+    "layout": "layout.hbs",
+    "errorTemplate": "error.hbs",
+    "defaultDir": "../../../Mvc/bin/Debug/",
+    "sites": [{
+        "name": "App1",
+        "applicationsDir": "../../../App1/bin/Debug/",
+        "virtualPath": "../../../Virtual/App1/",
+        "directoryBrowsing": false,
+        "defaultDocument": [],
+        "errorPages": []
+    }]
+}

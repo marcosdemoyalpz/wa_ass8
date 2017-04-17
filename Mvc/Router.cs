@@ -32,10 +32,6 @@ namespace Mvc
 
         public static Controllers loadControllers(string path, string appName)
         {
-            string replacePath = ConfigurationManager.AppSettings["ReplacePath"]; ;
-            string userprofile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-            path = path.Replace(replacePath, userprofile);
-
             Console.WriteLine("\n\tLooking for apps in " + path + "\n");
 
             if (string.IsNullOrEmpty(path)) { throw new FileNotFoundException(); } //sanity check

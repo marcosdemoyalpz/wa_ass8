@@ -52,9 +52,9 @@ namespace Mvc
             }
         }
 
-        public event PreApplicationStartMethod PreApplicationStart;
+        //public event PreApplicationStartMethod PreApplicationStart;
 
-        public event ApplicationStartMethod ApplicationStart;
+        //public event ApplicationStartMethod ApplicationStart;
 
         //#region Read package.json
         //string ReadJSON()
