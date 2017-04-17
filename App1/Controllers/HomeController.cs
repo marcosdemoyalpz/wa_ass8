@@ -247,7 +247,7 @@ namespace App1.Controllers
             }
             else
             {
-                e.Response.Redirect(url + "Login");
+                errorHandler.RenderErrorPage(401, e);
             }
         }
 
