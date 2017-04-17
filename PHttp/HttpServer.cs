@@ -412,10 +412,25 @@ namespace PHttp
             string resources = ConfigurationManager.AppSettings["Virtual"];
             DirectoryInfo info = new DirectoryInfo(resources);
             if (!info.Exists) { return false; } //make sure directory exists
-            string filePath = resources + appName;
+            string filePath = resources + path;
             Console.WriteLine("\tFull Path = " + e.Request.Url);
             Console.WriteLine("\tPath = " + path);
             Console.WriteLine("\tApp Name = " + appName);
+
+            if (File.Exists(filePath) == true)
+            {
+                using (var stream = File.Open(filePath, FileMode.Open))
+                {
+                    res.ContentType = mimeTypes.GetMimeType(Path.GetExtension(filePath));
+                    byte[] buffer = new byte[4096];
+                    int read;
+                    while ((read = stream.Read(buffer, 0, buffer.Length)) != 0)
+                    {
+                        res.OutputStream.Write(buffer, 0, read);
+                    }
+                    return true;
+                }
+            }
 
             foreach (var el in methods.Applications)
             {
@@ -430,20 +445,6 @@ namespace PHttp
                             return true;
                         }
                     }
-                }
-            }
-            if (File.Exists(filePath) == true)
-            {
-                using (var stream = File.Open(filePath, FileMode.Open))
-                {
-                    res.ContentType = mimeTypes.GetMimeType(Path.GetExtension(filePath));
-                    byte[] buffer = new byte[4096];
-                    int read;
-                    while ((read = stream.Read(buffer, 0, buffer.Length)) != 0)
-                    {
-                        res.OutputStream.Write(buffer, 0, read);
-                    }
-                    return true;
                 }
             }
             defaultURL = defaultURL + "404";

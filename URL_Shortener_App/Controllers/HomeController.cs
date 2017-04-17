@@ -247,7 +247,7 @@ namespace URL_Shortener_App.Controllers
             }
             else
             {
-                e.Response.Redirect(url + "Login");
+                errorHandler.RenderErrorPage(401, e);
             }
         }
 
