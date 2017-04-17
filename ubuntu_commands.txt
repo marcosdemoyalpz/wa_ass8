@@ -1,6 +1,6 @@
 cd /
 cd mnt/c/Users/Marcos\ De\ Moya/Documents/GitHub/wa_ass8/
 
-xbuild wa_ass8.sln
+sudo xbuild wa_ass8.sln
 
-mono ConsoleApp/bin/Debug/ConsoleApp.exe
+sudo mono ConsoleApp/bin/Debug/ConsoleApp.exe

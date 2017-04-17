@@ -11,5 +11,12 @@
         "directoryBrowsing": false,
         "defaultDocument": [],
         "errorPages": []
+    }, {
+        "name": "URL_Shortener_App",
+        "applicationsDir": "../../../URL_Shortener_App/bin/Debug/",
+        "virtualPath": "../../../Virtual/URL_Shortener_App/",
+        "directoryBrowsing": false,
+        "defaultDocument": [],
+        "errorPages": []
     }]
 }

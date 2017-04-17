@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SQLite;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
 namespace PHttp
@@ -191,19 +192,17 @@ namespace PHttp
                 var database = jArray[0].SelectToken("database").ToString();
                 var applicationsDir = jArray[0].SelectToken("defaultDir").ToString();
 
-                //var sytes = jArray[0]
-                //.Descendants()
-                //.Where(x => x is JObject)
-                //.Where(x => x["name"] != null && x["applicationsDir"] != null)
-                //.Select(x => new { Name = (string)x["name"], ApplicationsDir = (string)x["applicationsDir"] })
-                //.ToList();
+                var sites = jArray
+                .Descendants()
+                .Where(x => x is JObject)
+                .Where(x => x["name"] != null && x["applicationsDir"] != null)
+                .Select(x => new { Name = (string)x["name"], ApplicationsDir = (string)x["applicationsDir"] })
+                .ToList();
 
-                //foreach (var a in sytes)
-                //{
-                //    apps.Add(new AppInfo(a.Name, a.ApplicationsDir.Replace));
-                //}
-
-                _apps.Add(new AppInfo("App1", "../../../App1/bin/Debug/"));
+                foreach (var a in sites)
+                {
+                    _apps.Add(new AppInfo(a.Name, a.ApplicationsDir));
+                }
 
                 if (errorTemplate != null)
                 {
