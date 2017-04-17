@@ -1,0 +1,12 @@
+[
+    {
+        "name": "App1",
+        "applicationsDir": "../../../App1/bin/Debug/",
+        "directoryBrowsing": false,
+        "database": "App1_DB.sqlite",
+        "connectionString": "Data Source=App1_DB.sqlite;Version=3;",
+        "virtualPath": "../../../Virtual/App1/",
+        "layout": "layout.hbs",
+        "defaultDocument": "Index"
+    }
+]

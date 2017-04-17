@@ -1,0 +1,81 @@
+<html>
+
+<head>
+  <title> Captcha </title>
+  <style>
+    #randomfield {
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      width: 200px;
+      color: black;
+      border-color: black;
+      text-align: center;
+      font-size: 40px;
+      background-image: url('http://4.bp.blogspot.com/-EEMSa_GTgIo/UpAgBQaE6-I/AAAAAAAACUE/jdcxZVXelzA/s1600/ca.png');
+    }
+  </style>
+</head>
+
+<body onLoad="ChangeCaptcha()">
+
+  <div class="row">
+    <div class="col-lg-12">
+      <input type="text" id="IndexURL" disabled hidden>
+      <input type="text" id="randomfield" disabled>
+      <br><br>
+    </div>
+  </div>
+
+  <script>
+    // Do not remove this (it's just a comment and won't effect the functions)
+    // SimpleCaptcha v1.0 © Anudeep Tubati
+    function ChangeCaptcha() {
+      var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
+      var string_length = 6;
+      var ChangeCaptcha = '';
+      for (var i = 0; i < string_length; i++) {
+        var rnum = Math.floor(Math.random() * chars.length);
+        ChangeCaptcha += chars.substring(rnum, rnum + 1);
+      }
+      document.getElementById('randomfield').value = ChangeCaptcha;
+    }
+    function check() {
+      var IndexURL = document.getElementById('IndexURL').value;
+      if (document.getElementById('CaptchaEnter').value == document.getElementById('randomfield').value) {
+        document.getElementById('submitMaster').click();
+      }
+      else {
+        alert('Please re-check the captcha');
+      }
+    }
+  </script>
+  <div class="row">
+    <div class="col-lg-12">
+      <label for="CaptchaEnter">Enter Captcha:</label>
+      <input type="text" id="CaptchaEnter" size="20" maxlength="6" style="width: 100%" class="form-control" placeholder="Enter Captcha..."
+      />
+    </div>
+  </div>
+  <br>
+  <form class="form" method="post">
+    <div class="row">
+      <div class="col-lg-12 form-group">
+        <label for="longURL">Original URL:</label>
+        <input type="url" id="longURL" name="longURL" class="form-control" placeholder="Enter URL..." required="" autofocus="" maxlength="256">
+        <br>
+      </div>
+    </div>
+    <div class="row">
+      <button class="btn btn-lg btn-primary btn-block" type="button" onclick="check()">Shorten URL</button>
+    </div>
+    <div class="row" hidden>
+      <button class="btn btn-lg btn-primary btn-block" type="submit" id="submitMaster">Shorten URL</button>
+    </div>
+  </form>
+</body>
+
+</html>

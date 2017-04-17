@@ -18,12 +18,13 @@ namespace App1.Controllers
         string resource = ConfigurationManager.AppSettings["Virtual"];
         string layout = ConfigurationManager.AppSettings["Layout"];
 
-        string database = ConfigurationManager.AppSettings["Database"];
-        string connectionString = ConfigurationManager.AppSettings["ConnectionString"];
+        AppInfo _app;
+
         SQLiteConnection m_dbConnection;
 
-        float loginTimeout = 1.25f;
+        LoadConfig loadConfig = new LoadConfig();
 
+        float loginTimeout = 1.25f;
         int expiration = 7200;
 
         string cookieName = "App1_JWT";
@@ -78,6 +79,7 @@ namespace App1.Controllers
         {
             try
             {
+                _app = loadConfig.InitApp(resource + _appName, "/config.json");
                 HttpCookie cookie = e.Request.Cookies.Get(cookieName);
                 JArray jArray = new JArray();
                 string decoded;
@@ -93,7 +95,7 @@ namespace App1.Controllers
                 bool success = false;
 
                 // ### Connect to the database
-                m_dbConnection = new SQLiteConnection(connectionString);
+                m_dbConnection = new SQLiteConnection(_app.connectionString);
                 m_dbConnection.Open();
 
                 // ### select the data

@@ -22,50 +22,12 @@ namespace PHttp
             try
             {
                 Console.WriteLine("\tStarting to load apps...");
-                _jArray = ReadJSON();
-                UpdateAppConfig(_jArray);
-                string database = _jArray[0].SelectToken("database").ToString();
-                string connectionString = _jArray[0].SelectToken("connectionString").ToString();
-                Console.WriteLine("\n\tconfig.json read successfully!\n");
-
-                SQLiteConnection m_dbConnection;
-                Console.WriteLine("\tAttempting to load Database " + database + " ...");
-
-                if (File.Exists(database))
-                {
-                    Console.WriteLine("\tDatabase " + database + " already exists!");
-                }
-                else
-                {
-                    // http://blog.tigrangasparian.com/2012/02/09/getting-started-with-sqlite-in-c-part-one/
-                    // 
-                    //### Create the database
-                    SQLiteConnection.CreateFile(database);
-
-                    // ### Connect to the database
-                    m_dbConnection = new SQLiteConnection(connectionString);
-                    m_dbConnection.Open();
-
-                    // ### Create a table
-                    string sql = "CREATE TABLE users (username VARCHAR(128) PRIMARY KEY UNIQUE, password VARCHAR(128), name VARCHAR(128), lastname VARCHAR(128), token VARCHAR(256) NULL)";
-                    SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
-                    command.ExecuteNonQuery();
-
-                    // ### Add some data to the table
-                    sql = "insert into users (username, password, name, lastname) values ('admin', '1234', 'Marcos', 'De Moya')";
-                    command = new SQLiteCommand(sql, m_dbConnection);
-                    command.ExecuteNonQuery();
-
-                    // ### select the data
-                    sql = "select * from users order by username desc";
-                    command = new SQLiteCommand(sql, m_dbConnection);
-                    SQLiteDataReader reader = command.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        Console.WriteLine("\tUsername: " + reader["username"] + "\tPassword: " + reader["password"]);
-                    }
-                    Console.WriteLine("\tDatabase " + database + " has been created!");
-                }
+                LoadConfig loadConfig = new LoadConfig();
+                loadConfig.InitServer(ConfigurationManager.AppSettings["Virtual"], "config.json");
+                _jArray = loadConfig.JsonArray;
+                _apps = loadConfig.apps;
+                var DbHelper = new DatabaseHelper(_apps);
+                DbHelper.Init();
             }
             catch (Exception ex)
             {
@@ -129,96 +91,6 @@ namespace PHttp
             }
         }
 
-        #region Read package.json
-        JArray ReadJSON()
-        {
-            try
-            {
-                string config = "config.json";
-                Console.WriteLine("\t" + config);
-                string path = ConfigurationManager.AppSettings["Virtual"];
-                Console.WriteLine("\t" + path);
-                string jsonPath = path + config;
-                Console.WriteLine("\t" + jsonPath);
-                if (File.Exists(jsonPath) == true)
-                {
-                    Console.WriteLine("\tReading JSON object from: " + config);
-                    var jsonString = File.ReadAllText(jsonPath);
-                    if (jsonString[0] != '[')
-                    {
-                        try
-                        {
-                            jsonString = "[" + jsonString;
-                            if (jsonString[jsonString.Length - 1] != ']')
-                            {
-                                jsonString = jsonString + "]";
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            throw new Exception(ex.Message);
-                        }
-                    }
-                    JArray jArray = JArray.Parse(jsonString);
-                    //foreach (JObject obj in jArray.Children<JObject>())
-                    //{
-                    //    Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(obj));
-                    //}
-                    return jArray;
-                }
-                else
-                {
-                    throw new FileNotFoundException(config + " not found!");
-                }
-            }
-            catch (Newtonsoft.Json.JsonReaderException ex)
-            {
-                throw new Newtonsoft.Json.JsonReaderException(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-        void UpdateAppConfig(JArray jArray)
-        {
-            _apps = new List<AppInfo>();
-            try
-            {
-                System.Configuration.Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-                var errorTemplate = jArray[0].SelectToken("errorTemplate").ToString();
-                var connectionString = jArray[0].SelectToken("connectionString").ToString();
-                var layout = jArray[0].SelectToken("layout").ToString();
-                var database = jArray[0].SelectToken("database").ToString();
-                var applicationsDir = jArray[0].SelectToken("defaultDir").ToString();
-
-                var sites = jArray
-                .Descendants()
-                .Where(x => x is JObject)
-                .Where(x => x["name"] != null && x["applicationsDir"] != null)
-                .Select(x => new { Name = (string)x["name"], ApplicationsDir = (string)x["applicationsDir"] })
-                .ToList();
-
-                foreach (var a in sites)
-                {
-                    _apps.Add(new AppInfo(a.Name, a.ApplicationsDir));
-                }
-
-                if (errorTemplate != null)
-                {
-                    config.AppSettings.Settings["ErrorTemplate"].Value = errorTemplate;
-                    Console.WriteLine("\tErrorTemplate = " + errorTemplate);
-                }
-                config.Save(ConfigurationSaveMode.Modified);
-                ConfigurationManager.RefreshSection("appSettings");
-
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-        #endregion Read package.json
         public LoadApps loadApps
         {
             get { return _loadApps; }

@@ -18,20 +18,23 @@ namespace URL_Shortener_App.Controllers
         string resource = ConfigurationManager.AppSettings["Virtual"];
         string layout = ConfigurationManager.AppSettings["Layout"];
 
-        string database = ConfigurationManager.AppSettings["Database"];
-        string connectionString = ConfigurationManager.AppSettings["ConnectionString"];
+        AppInfo _app;
+
         SQLiteConnection m_dbConnection;
 
-        float loginTimeout = 1.25f;
+        LoadConfig loadConfig = new LoadConfig();
 
+        float loginTimeout = 1.25f;
         int expiration = 7200;
 
-        string cookieName = "URL_Shortener_App_JWT";
+        string cookieName1 = "URL_Shortener_App_JWT";
+        string cookieName2 = "URL_Shortener_App_List";
 
         private string _appName = "URL_Shortener_App";
         private string _controllerName = "Home";
         ErrorHandler errorHandler = new ErrorHandler();
 
+        #region Private Methods
         JArray GetJArray(string jsonString)
         {
             if (jsonString[0] != '[')
@@ -74,11 +77,74 @@ namespace URL_Shortener_App.Controllers
             return json;
         }
 
+        string CreateTable(HttpRequestEventArgs e)
+        {
+            string table = "";
+            try
+            {
+                if (DbLogin(e, true))
+                {
+                    _app = loadConfig.InitApp(resource + _appName, "/config.json");
+                    HttpCookie cookie = e.Request.Cookies.Get(cookieName1);
+                    JArray jArray = new JArray();
+                    string decoded;
+                    if (cookie != null && cookie.Value != "")
+                    {
+                        decoded = DecodeToken(cookie.Value);
+                        jArray = GetJArray(decoded);
+                    }
+
+                    string username = jArray[0].SelectToken("username").ToString();
+
+                    table = "<table class=\"table\">";
+                    table = table + "<thead><tr><th>Short URL</th><th>Long URL</th></tr></thead><tbody>";
+
+                    var trOpen = "<tr>";
+                    var trClose = "</tr>";
+                    var tdOpen = "<td>";
+                    var tdClose = "</td>";
+
+                    // ### Connect to the database
+                    m_dbConnection = new SQLiteConnection(_app.connectionString);
+                    m_dbConnection.Open();
+
+                    // ### select the data
+                    string sql = "SELECT * FROM urls";
+                    SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
+                    SQLiteDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        if (reader["username"].ToString().ToLower() == username.ToLower())
+                        {
+                            var shortUrl = reader["shortURL"].ToString();
+                            var longURL = reader["longURL"].ToString();
+                            var link1 = "<a href=\"" + shortUrl + "\">" + shortUrl + "</a>";
+                            var link2 = "<a href=\"" + longURL + "\">" + longURL + "</a>";
+
+                            table = table + trOpen + tdOpen + link1 + tdClose + tdOpen + link2 + tdClose + trClose;
+                        }
+                    }
+
+                    table = table + "</tbody></table>";
+                    return table;
+                }
+            }
+            catch
+            {
+                table = "";
+            }
+            table = "<table class=\"table\">";
+            table = table + "<thead><tr><th>Short URL</th><th>Long URL</th></tr></thead><tbody>";
+            table = table + "</tbody></table>";
+            return table;
+        }
+
         bool DbLogin(HttpRequestEventArgs e, bool fromCookie = false)
         {
             try
             {
-                HttpCookie cookie = e.Request.Cookies.Get(cookieName);
+                _app = loadConfig.InitApp(resource + _appName, "/config.json");
+                HttpCookie cookie = e.Request.Cookies.Get(cookieName1);
                 JArray jArray = new JArray();
                 string decoded;
                 if (cookie != null && cookie.Value != "")
@@ -93,7 +159,7 @@ namespace URL_Shortener_App.Controllers
                 bool success = false;
 
                 // ### Connect to the database
-                m_dbConnection = new SQLiteConnection(connectionString);
+                m_dbConnection = new SQLiteConnection(_app.connectionString);
                 m_dbConnection.Open();
 
                 // ### select the data
@@ -130,7 +196,7 @@ namespace URL_Shortener_App.Controllers
                 var template = Handlebars.Compile(source);
                 var data = new
                 {
-                    title = "Default Web Site",
+                    title = "Marcos URL Shortener",
                     mainH1 = message,
                     body = "Redirecting, please wait..."
                 };
@@ -146,8 +212,9 @@ namespace URL_Shortener_App.Controllers
                 Console.WriteLine("\tFile not found!");
             }
         }
+        #endregion
 
-        [HttpGet]
+        [HttpGet, HttpPost]
         public void Index(HttpRequestEventArgs e)
         {
             string protocol = (e.Request.Url.Scheme.ToString() == "https") ? "https://" : "http://";
@@ -155,32 +222,55 @@ namespace URL_Shortener_App.Controllers
                     + e.Request.Url.Port + "/" + _appName
                     + "/" + _controllerName + "/";
 
-            if (DbLogin(e, true))
+            if (e.Request.RequestType == "GET")
             {
-
                 string views = resource + _appName + "/Views/";
                 HttpResponse res = e.Response;
-                string filePath = views + layout;
+                string filePath = views + "Main.hbs";
                 Console.WriteLine("\tStarting " + _appName + "!");
                 Console.WriteLine("\tLoading file on " + filePath + "!");
+                object data;
 
-                if (File.Exists(filePath) == true)
+                if (DbLogin(e, true))
                 {
-                    var source = File.ReadAllText(filePath);
-                    var template = Handlebars.Compile(source);
-                    var data = new
+                    var table = CreateTable(e);
+                    data = new
                     {
                         showNavButtons = true,
+                        login = true,
                         btn1 = "Home",
                         btn2 = "About",
                         btn3 = "Sign Out",
                         link1 = url + "Index",
                         link2 = url + "About",
                         link3 = url + "Login",
-                        title = "Default Web Site",
-                        mainH1 = "Home",
-                        body = File.ReadAllText(views + "LoremIpsum.txt")
+                        title = "Marcos URL Shortener",
+                        mainH1 = "Marcos's URL Shortener",
+                        body = table
                     };
+                }
+                else
+                {
+                    data = new
+                    {
+                        showNavButtons = true,
+                        login = false,
+                        btn1 = "Home",
+                        btn2 = "About",
+                        btn3 = "Sign In",
+                        link1 = url + "Index",
+                        link2 = url + "About",
+                        link3 = url + "Login",
+                        title = "Marcos URL Shortener",
+                        mainH1 = "Marcos's URL Shortener",
+                        body = File.ReadAllText(views + "/partials/captcha.hbs")
+                    };
+                }
+                if (File.Exists(filePath) == true)
+                {
+                    var source = File.ReadAllText(filePath);
+                    var template = Handlebars.Compile(source);
+
                     var result = template(data);
                     using (var writer = new StreamWriter(e.Response.OutputStream))
                     {
@@ -193,9 +283,9 @@ namespace URL_Shortener_App.Controllers
                     Console.WriteLine("\tFile not found!");
                 }
             }
-            else
+            else if (e.Request.RequestType == "POST")
             {
-                e.Response.Redirect(url + "Login");
+
             }
         }
 
@@ -229,7 +319,7 @@ namespace URL_Shortener_App.Controllers
                         link1 = url + "Index",
                         link2 = url + "About",
                         link3 = url + "Login",
-                        title = "Default Web Site",
+                        title = "Marcos URL Shortener",
                         mainH1 = "About",
                         body = File.ReadAllText(views + "/partials/about.hbs")
                     };
@@ -247,6 +337,7 @@ namespace URL_Shortener_App.Controllers
             }
             else
             {
+                e.Response.Headers.Add("REFRESH", loginTimeout.ToString() + ";URL=" + url + "Index");
                 errorHandler.RenderErrorPage(401, e);
             }
         }
@@ -261,7 +352,7 @@ namespace URL_Shortener_App.Controllers
             {
                 if (DbLogin(e, true))
                 {
-                    e.Response.Cookies.Get(cookieName).Expires = DateTime.Now;
+                    e.Response.Cookies.Get(cookieName1).Expires = DateTime.Now;
                     e.Response.Redirect(url + "Login");
                 }
                 else
@@ -285,7 +376,7 @@ namespace URL_Shortener_App.Controllers
                             link1 = url + "Index",
                             link2 = url + "About",
                             link3 = url + "Login",
-                            title = "Default Web Site",
+                            title = "Marcos URL Shortener",
                             mainH1 = "Login",
                             body = File.ReadAllText(views + "/partials/login.hbs")
                         };
@@ -302,7 +393,7 @@ namespace URL_Shortener_App.Controllers
                     }
                 }
             }
-            else
+            else if (e.Request.RequestType == "POST")
             {
                 string username = e.Request.Form.Get("username");
                 string password = e.Request.Form.Get("password");
@@ -324,7 +415,6 @@ namespace URL_Shortener_App.Controllers
                             { "exp", exp }
                         };
 
-
                     IJwtAlgorithm algorithm = new JWT.Algorithms.HMACSHA256Algorithm();
                     IJsonSerializer serializer = new JsonNetSerializer();
                     IBase64UrlEncoder urlEncoder = new JwtBase64UrlEncoder();
@@ -334,9 +424,9 @@ namespace URL_Shortener_App.Controllers
 
                     Console.WriteLine(token);
 
-                    HttpCookie cookie = new HttpCookie(cookieName, token);
+                    HttpCookie cookie = new HttpCookie(cookieName1, token);
                     e.Response.Cookies.Add(cookie);
-                    e.Response.Cookies.Get(cookieName).Expires = DateTime.Now.AddDays(30);
+                    e.Response.Cookies.Get(cookieName1).Expires = DateTime.Now.AddDays(30);
 
                     e.Response.Headers.Add("REFRESH", loginTimeout.ToString() + ";URL=" + url + "Index");
                     e.Response.StatusCode = 200;

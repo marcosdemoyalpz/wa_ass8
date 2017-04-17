@@ -1,0 +1,12 @@
+[
+    {
+        "name": "URL_Shortener_App",
+        "applicationsDir": "../../../URL_Shortener_App/bin/Debug/",
+        "directoryBrowsing": false,
+        "database": "URL_Shortener_App_DB.sqlite",
+        "connectionString": "Data Source=URL_Shortener_App_DB.sqlite;Version=3;",
+        "virtualPath": "../../../Virtual/URL_Shortener_App/",
+        "layout": "layout.hbs",
+        "defaultDocument": "Index"
+    }
+]

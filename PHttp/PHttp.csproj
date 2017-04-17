@@ -94,6 +94,7 @@
   <ItemGroup>
     <Compile Include="AppInfo.cs" />
     <Compile Include="Application\IPHttpApplication.cs" />
+    <Compile Include="DatabaseHelper.cs" />
     <Compile Include="ErrorHandler.cs" />
     <Compile Include="HttpContext.cs" />
     <Compile Include="HttpCookie.cs" />
@@ -118,6 +119,7 @@
     <Compile Include="HttpUrlEncodedRequestParser.cs" />
     <Compile Include="HttpUtil.cs" />
     <Compile Include="LoadApps.cs" />
+    <Compile Include="LoadConfig.cs" />
     <Compile Include="MimeTypes.cs" />
     <Compile Include="PHttpException.cs" />
     <Compile Include="ProtocolException.cs" />

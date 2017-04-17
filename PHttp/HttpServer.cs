@@ -383,6 +383,9 @@ namespace PHttp
             IgnorePathList.Add("/css/mainStyle.css");
             IgnorePathList.Add("/favicon.ico");
             IgnorePathList.Add("/assets/js/ie10-viewport-bug-workaround.js");
+            IgnorePathList.Add("/App1/Home/signin.css");
+            IgnorePathList.Add("/404");
+            IgnorePathList.Add("/404/");
 
             MimeTypes mimeTypes = new MimeTypes();
 
@@ -398,6 +401,7 @@ namespace PHttp
             {
                 if (p == e.Request.Url.ToString().Replace(ignoreString, ""))
                 {
+                    Console.WriteLine("\tIgnored path " + p + "!");
                     return false;
                 }
             }
@@ -411,11 +415,14 @@ namespace PHttp
             string appName = path.Split('?')[0].Split('/')[1];
             string resources = ConfigurationManager.AppSettings["Virtual"];
             DirectoryInfo info = new DirectoryInfo(resources);
-            if (!info.Exists) { return false; } //make sure directory exists
+            if (!info.Exists) { return false; } //make sure directory exists            
             string filePath = resources + path;
+            filePath = filePath.Replace("//", "/");
+            if (filePath[filePath.Length - 1] == '/') filePath = filePath.Remove(filePath.Length - 1);
             Console.WriteLine("\tFull Path = " + e.Request.Url);
             Console.WriteLine("\tPath = " + path);
             Console.WriteLine("\tApp Name = " + appName);
+            Console.WriteLine("\tFile Path = " + filePath);
 
             if (File.Exists(filePath) == true)
             {
@@ -447,9 +454,7 @@ namespace PHttp
                     }
                 }
             }
-            defaultURL = defaultURL + "404";
             errorHandler.RenderErrorPage(404, e);
-            e.Response.Redirect(defaultURL);
             return false;
         }
     }
