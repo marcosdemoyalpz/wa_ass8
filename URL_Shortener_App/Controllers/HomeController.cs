@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using JWT;
 using JWT.Serializers;
 using Newtonsoft.Json.Linq;
+using NReco.PhantomJS;
 
 namespace URL_Shortener_App.Controllers
 {
@@ -76,8 +77,23 @@ namespace URL_Shortener_App.Controllers
             return json;
         }
 
+        string GetAppURL(HttpRequestEventArgs e, string controllerName = "")
+        {
+            if (controllerName == "")
+            {
+                controllerName = _controllerName;
+            }
+
+            string protocol = (e.Request.Url.Scheme.ToString() == "https") ? "https://" : "http://";
+            string url = protocol + e.Request.Url.Host + ":"
+            + e.Request.Url.Port + "/" + _appName
+            + "/" + controllerName + "/";
+            return url;
+        }
+
         string CreateTable(HttpRequestEventArgs e)
         {
+            string url = GetAppURL(e, "Short") + "Path";
             string table = "";
             try
             {
@@ -95,17 +111,21 @@ namespace URL_Shortener_App.Controllers
 
                     string username = jArray[0].SelectToken("username").ToString();
 
-                    table = "<table class=\"table\">";
-                    table = table + "<thead><tr><th>Short URL</th><th>Long URL</th></tr></thead><tbody>";
+                    table = "<table class=\"table\" style=\"vertical-align: middle;\">";
+                    table = table + "<thead><tr><th>Image</th><th>Short URL</th><th>Long URL</th></tr></thead><tbody>";
 
-                    var trOpen = "<tr>";
+                    var trOpen = "<tr style=\"vertical-align: middle;\">";
                     var trClose = "</tr>";
-                    var tdOpen = "<td>";
+                    var tdOpen = "<td style=\"vertical-align: middle;\">";
                     var tdClose = "</td>";
+
+                    var phantomJS = new PhantomJS();
 
                     // ### Connect to the database
                     m_dbConnection = new SQLiteConnection(_app.connectionString);
                     m_dbConnection.Open();
+
+                    string img = "<img src=\"";
 
                     // ### select the data
                     string sql = "SELECT * FROM urls";
@@ -115,12 +135,17 @@ namespace URL_Shortener_App.Controllers
                     {
                         if (reader["username"].ToString().ToLower() == username.ToLower())
                         {
-                            var shortUrl = reader["shortURL"].ToString();
+                            var imgSource = resource + _appName + "/img/" + reader["shortURL"].ToString() + ".png";
+                            var shortUrl = url + "?go=" + reader["shortURL"].ToString();
                             var longURL = reader["longURL"].ToString();
                             var link1 = "<a href=\"" + shortUrl + "\">" + shortUrl + "</a>";
                             var link2 = "<a href=\"" + longURL + "\">" + longURL + "</a>";
 
-                            table = table + trOpen + tdOpen + link1 + tdClose + tdOpen + link2 + tdClose + trClose;
+                            phantomJS.Run(resource + _appName + "/" + "rasterize.js", new[] { longURL, imgSource });
+
+                            img = img + GetAppURL(e, "img") + reader["shortURL"].ToString() + ".png\"" + " alt=\"URL Image\" + style=\"max-width:100%; max-height:100px;\">";
+                            Console.WriteLine(img);
+                            table = table + trOpen + tdOpen + img + tdClose + tdOpen + link1 + tdClose + tdOpen + link2 + tdClose + trClose;
                         }
                     }
 
@@ -143,11 +168,11 @@ namespace URL_Shortener_App.Controllers
             try
             {
                 _app = loadConfig.InitApp(resource + _appName, "/config.json");
-                HttpCookie cookie = e.Request.Cookies.Get(cookieName1);
                 JArray jArray = new JArray();
                 string decoded;
-                if (cookie != null && cookie.Value != "")
+                if (fromCookie)
                 {
+                    HttpCookie cookie = e.Request.Cookies.Get(cookieName1);
                     decoded = DecodeToken(cookie.Value);
                     jArray = GetJArray(decoded);
                 }
@@ -216,10 +241,7 @@ namespace URL_Shortener_App.Controllers
         [HttpGet, HttpPost]
         public void Index(HttpRequestEventArgs e)
         {
-            string protocol = (e.Request.Url.Scheme.ToString() == "https") ? "https://" : "http://";
-            string url = protocol + e.Request.Url.Host + ":"
-                    + e.Request.Url.Port + "/" + _appName
-                    + "/" + _controllerName + "/";
+            string url = GetAppURL(e);
 
             if (e.Request.RequestType == "GET")
             {
@@ -344,9 +366,7 @@ namespace URL_Shortener_App.Controllers
         [HttpGet, HttpPost]
         public void Login(HttpRequestEventArgs e)
         {
-            string url = "http://" + e.Request.Url.Host + ":"
-                            + e.Request.Url.Port + "/" + _appName
-                            + "/" + _controllerName + "/";
+            string url = GetAppURL(e);
             if (e.Request.RequestType == "GET")
             {
                 if (DbLogin(e, true))

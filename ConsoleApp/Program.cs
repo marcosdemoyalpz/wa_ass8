@@ -16,7 +16,7 @@ namespace ConsoleApp
                 Console.WriteLine("\tFinished Startup!");
 
                 //using (var server = new HttpServer(8080))
-                using (var server = new HttpServer("0.0.0.0", 8080))
+                using (var server = new HttpServer(8080))
                 {
                     try
                     {

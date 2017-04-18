@@ -23,7 +23,7 @@ namespace PHttp
                 SQLiteConnection m_dbConnection;
                 Console.WriteLine("\tAttempting to load Database " + app.database + " ...");
 
-                if (File.Exists(app.applicationsDir + app.database))
+                if (File.Exists(app.virtualPath + app.database))
                 {
                     Console.WriteLine("\tDatabase " + app.database + " already exists!");
                 }
@@ -32,7 +32,7 @@ namespace PHttp
                     // http://blog.tigrangasparian.com/2012/02/09/getting-started-with-sqlite-in-c-part-one/
                     // 
                     //### Create the database
-                    SQLiteConnection.CreateFile(app.applicationsDir + app.database);
+                    SQLiteConnection.CreateFile(app.virtualPath + app.database);
 
                     // ### Connect to the database
                     m_dbConnection = new SQLiteConnection(app.connectionString);
@@ -56,7 +56,7 @@ namespace PHttp
                         command.ExecuteNonQuery();
 
                         // ### Add some data to the table
-                        sql = "insert into urls (shortURL, longURL, username) values ('hello', 'world!', 'admin')";
+                        sql = "insert into urls (shortURL, longURL, username) values ('hello', 'https://www.google.com', 'admin')";
                         command = new SQLiteCommand(sql, m_dbConnection);
                         command.ExecuteNonQuery();
                     }

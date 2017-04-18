@@ -105,7 +105,7 @@ namespace PHttp
 
                 foreach (var a in sites)
                 {
-                    string connectionString = "Data Source=" + a.ApplicationsDir + a.Database + ";Version=3;";
+                    string connectionString = "Data Source=" + a.VirtualPath + a.Database + ";Version=3;";
                     _apps.Add(new AppInfo(a.Name, a.ApplicationsDir, a.Database, connectionString,
                         a.VirtualPath, layout, a.DefaultDocument));
                 }
@@ -136,7 +136,7 @@ namespace PHttp
                 var virtualPath = jArray[0].SelectToken("virtualPath").ToString();
                 var defaultDocument = jArray[0].SelectToken("defaultDocument").ToString();
 
-                var connectionString = "Data Source=" + applicationsDir + database + ";Version=3;";
+                var connectionString = "Data Source=" + virtualPath + database + ";Version=3;";
 
                 return new AppInfo(name, applicationsDir, database, connectionString,
                         virtualPath, layout, defaultDocument);

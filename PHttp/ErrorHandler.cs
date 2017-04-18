@@ -1,5 +1,7 @@
 ﻿using HandlebarsDotNet;
+using PHttp;
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 
@@ -7,6 +9,34 @@ namespace PHttp
 {
     public class ErrorHandler
     {
+        #region Properties
+        string _resources = ConfigurationManager.AppSettings["Virtual"];
+        string errorTemplate = ConfigurationManager.AppSettings["ErrorTemplate"];
+        List<ErrorPage> _errorPages;
+
+        class ErrorPage
+        {
+            public int StatusCode { get; set; }
+            public string Title { get; set; }
+            public string MainH1 { get; set; }
+            public string MainH2 { get; set; }
+            public string ErrorDetails { get; set; }
+        }
+        #endregion
+
+        #region Constructor
+        public ErrorHandler()
+        {
+            _errorPages = new List<ErrorPage>();
+        }
+        public ErrorHandler(string resources)
+        {
+            _resources = resources;
+            _errorPages = new List<ErrorPage>();
+        }
+        #endregion
+
+        #region Methods
         public void RenderErrorPage(int errorCode, HttpRequestEventArgs e, string message = "")
         {
             string resources = ConfigurationManager.AppSettings["Virtual"];
@@ -133,7 +163,7 @@ namespace PHttp
                     Console.WriteLine("\tError 500 - Internal Server Error!");
                     break;
             }
-            var source = File.ReadAllText(resources + "\\Views\\error.hbs");
+            var source = File.ReadAllText(resources + "\\Views\\" + errorTemplate);
             var template = Handlebars.Compile(source);
             var result = template(data);
             using (var writer = new StreamWriter(e.Response.OutputStream))
@@ -270,7 +300,7 @@ namespace PHttp
                     Console.WriteLine("\tError 500 - Internal Server Error!");
                     break;
             }
-            var source = File.ReadAllText(resources + "\\Views\\error.hbs");
+            var source = File.ReadAllText(resources + "\\Views\\" + errorTemplate);
             var template = Handlebars.Compile(source);
             var result = template(data);
             using (var writer = new StreamWriter(e.Response.OutputStream))
@@ -280,5 +310,6 @@ namespace PHttp
             e.Response.StatusCode = errorCode;
             e.Response.Status = errorCode.ToString();
         }
+        #endregion
     }
 }
