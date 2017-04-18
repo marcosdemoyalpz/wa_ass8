@@ -14,25 +14,30 @@ namespace App1.Controllers
 {
     internal class HomeController : Mvc.ControllerBase
     {
-        string secret = ConfigurationManager.AppSettings["Secret"];
-        string resource = ConfigurationManager.AppSettings["Virtual"];
-        string layout = ConfigurationManager.AppSettings["Layout"];
+        string secret = ConfigurationManager.AppSettings["Secret"]; // Gets the JWT Secret
+        string resource = ConfigurationManager.AppSettings["Virtual"]; // Resource/Virtual Path
+        string layout = ConfigurationManager.AppSettings["Layout"]; // Layout File
 
-        AppInfo _app;
+        AppInfo _app; // Stores current App info.
 
         SQLiteConnection m_dbConnection;
 
-        LoadConfig loadConfig = new LoadConfig();
+        LoadConfig loadConfig = new LoadConfig(); // Instance of LoadConfig used to load App Info.
 
-        float loginTimeout = 1.25f;
-        int expiration = 7200;
+        float loginTimeout = 1.25f; // JWT Token Timeout
+        int expiration = 7200; // Cookie Expiration time
 
-        string cookieName = "App1_JWT";
+        string cookieName = "App1_JWT"; // Name of the Cookie
 
-        private string _appName = "App1";
-        private string _controllerName = "Home";
-        ErrorHandler errorHandler = new ErrorHandler();
+        private string _appName = "App1"; // App Name
+        private string _controllerName = "Home"; // Controller Name
+        ErrorHandler errorHandler = new ErrorHandler(); // Instance of ErrorHandler used to render Error Pages.
 
+        /// <summary>
+        /// Method used to obtain a JArray(JSON Array) from a selialized JSON string.
+        /// </summary>
+        /// <param name="jsonString"></param>
+        /// <returns>Deserialized JArray(JSON Array)</returns>
         JArray GetJArray(string jsonString)
         {
             if (jsonString[0] != '[')
@@ -50,6 +55,11 @@ namespace App1.Controllers
             return JArray.Parse(jsonString);
         }
 
+        /// <summary>
+        /// Method used to decode JWT Token
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns> string json (Serialized JWT Payload)</returns>
         private string DecodeToken(string token)
         {
             string json = "";
@@ -80,11 +90,11 @@ namespace App1.Controllers
             try
             {
                 _app = loadConfig.InitApp(resource + _appName, "/config.json");
-                HttpCookie cookie = e.Request.Cookies.Get(cookieName);
                 JArray jArray = new JArray();
                 string decoded;
-                if (cookie != null && cookie.Value != "")
+                if (fromCookie)
                 {
+                    HttpCookie cookie = e.Request.Cookies.Get(cookieName);
                     decoded = DecodeToken(cookie.Value);
                     jArray = GetJArray(decoded);
                 }

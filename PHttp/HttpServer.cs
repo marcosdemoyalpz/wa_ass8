@@ -93,7 +93,7 @@ namespace PHttp
 
         public HttpServer(int port)
         {
-            EndPoint = new IPEndPoint(IPAddress.Loopback, port);
+            EndPoint = new IPEndPoint(IPAddress.Parse("0.0.0.0"), port);
 
             ReadBufferSize = 4096;
             WriteBufferSize = 4096;
@@ -107,17 +107,13 @@ namespace PHttp
         public void Start()
         {
             VerifyState(HttpServerState.Stopped);
-
             State = HttpServerState.Starting;
-
             TimeoutManager = new HttpTimeoutManager(this);
-
             // Start the listener.
-
-            var listener = new TcpListener(EndPoint);
-
             try
             {
+                Console.WriteLine("\tEndPoint = " + EndPoint);
+                var listener = new TcpListener(EndPoint);
                 listener.Start();
 
                 EndPoint = (IPEndPoint)listener.LocalEndpoint;

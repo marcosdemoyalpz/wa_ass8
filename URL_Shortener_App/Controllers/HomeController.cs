@@ -28,7 +28,6 @@ namespace URL_Shortener_App.Controllers
         int expiration = 7200;
 
         string cookieName1 = "URL_Shortener_App_JWT";
-        string cookieName2 = "URL_Shortener_App_List";
 
         private string _appName = "URL_Shortener_App";
         private string _controllerName = "Home";
