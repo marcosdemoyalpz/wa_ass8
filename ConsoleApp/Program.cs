@@ -14,13 +14,15 @@ namespace ConsoleApp
                 Startup startup = new Startup();
                 LoadApps loadDLLs = startup.loadApps;
                 Console.WriteLine("\tFinished Startup!");
-                using (var server = new HttpServer(8080))
+
+                //using (var server = new HttpServer(8080))
+                using (var server = new HttpServer("0.0.0.0", 8080))
                 {
                     try
                     {
                         // New requests are signaled through the RequestReceived
                         // event.
-                        server.RequestReceived += (s, e) =>
+                        server.RequestReceived += (sender, e) =>
                         {
                             server.ProcessRequest(e, loadDLLs);
                         };

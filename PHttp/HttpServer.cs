@@ -73,6 +73,8 @@ namespace PHttp
                 ev(this, e);
         }
 
+        public int Port { get; private set; }
+
         public IPEndPoint EndPoint { get; set; }
 
         public int ReadBufferSize { get; set; }
@@ -91,16 +93,28 @@ namespace PHttp
 
         internal HttpTimeoutManager TimeoutManager { get; private set; }
 
-        public HttpServer(int port)
-        {
-            EndPoint = new IPEndPoint(IPAddress.Parse("0.0.0.0"), port);
 
+        public HttpServer() : this(0)
+        {
+        }
+
+        public HttpServer(int port) : this(IPAddress.Loopback, port)
+        {
+        }
+
+        public HttpServer(string ipAddress, int port) : this(IPAddress.Parse(ipAddress), port)
+        {
+        }
+        public HttpServer(IPAddress ipAddress, int port)
+        {
+            Port = port;
+            State = HttpServerState.Stopped;
+            EndPoint = new IPEndPoint(ipAddress, Port);
             ReadBufferSize = 4096;
             WriteBufferSize = 4096;
             ShutdownTimeout = TimeSpan.FromSeconds(30);
             ReadTimeout = TimeSpan.FromSeconds(90);
             WriteTimeout = TimeSpan.FromSeconds(90);
-
             ServerBanner = String.Format("PHttp/{0}", GetType().Assembly.GetName().Version);
         }
 
@@ -108,66 +122,58 @@ namespace PHttp
         {
             VerifyState(HttpServerState.Stopped);
             State = HttpServerState.Starting;
+            Console.WriteLine("\tEndPoint = " + EndPoint);
             TimeoutManager = new HttpTimeoutManager(this);
-            // Start the listener.
+
             try
             {
-                Console.WriteLine("\tEndPoint = " + EndPoint);
-                var listener = new TcpListener(EndPoint);
-                listener.Start();
-
+                TcpListener listener = new TcpListener(EndPoint);
+                Console.WriteLine("\tWOW");
+                listener.Start(); // Start the listener.
                 EndPoint = (IPEndPoint)listener.LocalEndpoint;
-
                 _listener = listener;
-
                 ServerUtility = new HttpServerUtility();
-
                 Console.WriteLine("\tHTTP server running at " + EndPoint + Environment.NewLine);
+            }
+            catch (SocketException ex)
+            {
+                System.IO.StreamWriter file = new System.IO.StreamWriter("SocketException.txt");
+                file.WriteLine(ex.TargetSite);
+                file.Close();
             }
             catch (Exception ex)
             {
                 State = HttpServerState.Stopped;
-
-                Console.WriteLine("Failed to start HTTP server" + Environment.NewLine + ex);
-
                 throw new PHttpException("Failed to start HTTP server" + Environment.NewLine + ex);
             }
-
             State = HttpServerState.Started;
-
             BeginAcceptTcpClient();
         }
 
         public void Stop()
         {
             VerifyState(HttpServerState.Started);
-
             Console.WriteLine("Stopping HTTP server");
-
             State = HttpServerState.Stopping;
 
             try
             {
                 // Prevent any new connections.
-
                 _listener.Stop();
 
                 // Wait for all clients to complete.
-
                 StopClients();
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Failed to stop HTTP server", ex);
-
-                throw new PHttpException("Failed to stop HTTP server", ex);
+                //Console.WriteLine("Failed to stop HTTP server", ex.Message);
+                State = HttpServerState.Stopped;
+                throw new PHttpException("Failed to stop HTTP server" + ex.Message);
             }
             finally
             {
                 _listener = null;
-
                 State = HttpServerState.Stopped;
-
                 Console.WriteLine("Stopped HTTP server");
             }
         }
@@ -329,21 +335,20 @@ namespace PHttp
             {
                 if (_state == HttpServerState.Started)
                     Stop();
-
                 if (_clientsChangedEvent != null)
                 {
                     ((IDisposable)_clientsChangedEvent).Dispose();
                     _clientsChangedEvent = null;
                 }
-
-                if (TimeoutManager != null)
-                {
-                    TimeoutManager.Dispose();
-                    TimeoutManager = null;
-                }
-
-                _disposed = true;
             }
+
+            if (TimeoutManager != null)
+            {
+                TimeoutManager.Dispose();
+                TimeoutManager = null;
+            }
+
+            _disposed = true;
         }
 
         internal void RaiseRequest(HttpContext context)
