@@ -2,12 +2,12 @@
     {
         "layout": "layout.hbs",
         "errorTemplate": "error.hbs",
-        "defaultDir": "../../../Mvc/bin/Release/",
+        "defaultDir": "/home/marcos/wa_ass8/Mvc/bin/Release/",
         "sites": [
             {
                 "name": "App1",
-                "applicationsDir": "../../../App1/bin/Release/",
-                "virtualPath": "../../../Virtual/App1/",
+                "applicationsDir": "/home/marcos/wa_ass8/App1/bin/Release/",
+                "virtualPath": "/home/marcos/wa_ass8/Virtual/App1/",
                 "directoryBrowsing": false,
                 "database": "App1_DB.sqlite",
                 "connectionString": "Data Source=App1_DB.sqlite;Version=3;",
@@ -15,8 +15,8 @@
             },
             {
                 "name": "URL_Shortener_App",
-                "applicationsDir": "../../../URL_Shortener_App/bin/Release/",
-                "virtualPath": "../../../Virtual/URL_Shortener_App/",
+                "applicationsDir": "/home/marcos/wa_ass8/URL_Shortener_App/bin/Release/",
+                "virtualPath": "/home/marcos/wa_ass8/Virtual/URL_Shortener_App/",
                 "directoryBrowsing": false,
                 "database": "URL_Shortener_App_DB.sqlite",
                 "connectionString": "Data Source=URL_Shortener_App_DB.sqlite;Version=3;",

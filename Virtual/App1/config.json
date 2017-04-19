@@ -1,11 +1,11 @@
 [
     {
         "name": "App1",
-        "applicationsDir": "../../../App1/bin/Debug/",
+        "applicationsDir": "/home/marcos/wa_ass8/App1//bin/Release/",
         "directoryBrowsing": false,
         "database": "App1_DB.sqlite",
         "connectionString": "Data Source=App1_DB.sqlite;Version=3;",
-        "virtualPath": "../../../Virtual/App1/",
+        "virtualPath": "/home/marcos/wa_ass8/Virtual/App1/",
         "layout": "layout.hbs",
         "defaultDocument": "Index"
     }
