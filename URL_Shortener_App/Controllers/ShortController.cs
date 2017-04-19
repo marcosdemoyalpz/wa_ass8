@@ -32,7 +32,7 @@ namespace URL_Shortener_App.Controllers
         string cookieName2 = "AnonTemp";
 
         private string _appName = "URL_Shortener_App";
-        private string _controllerName = "Home";
+        private string _controllerName = "Short";
         ErrorHandler errorHandler = new ErrorHandler();
 
         #region Private Methods
@@ -222,8 +222,108 @@ namespace URL_Shortener_App.Controllers
                 Console.WriteLine("\tFile not found!");
             }
         }
-        #endregion        
 
+        bool DbCheckURLDetails(HttpRequestEventArgs e)
+        {
+            try
+            {
+                if (DbLogin(e, true))
+                {
+                    _app = loadConfig.InitApp(resource + _appName, "/config.json");
+                    HttpCookie cookie = e.Request.Cookies.Get(cookieName1);
+                    JArray jArray = new JArray();
+                    string decoded;
+                    if (cookie != null && cookie.Value != "")
+                    {
+                        decoded = DecodeToken(cookie.Value);
+                        jArray = GetJArray(decoded);
+                    }
+
+                    string username = jArray[0].SelectToken("username").ToString();
+
+                    // ### Connect to the database
+                    m_dbConnection = new SQLiteConnection(_app.connectionString);
+                    m_dbConnection.Open();
+
+                    // ### select the data
+                    string sql = "SELECT * FROM urls";
+                    SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
+                    SQLiteDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        if (reader["username"].ToString().ToLower() == username.ToLower())
+                        {
+                            var shortUrl = reader["shortURL"].ToString();
+                            var longURL = reader["longURL"].ToString();
+
+                            if (e.Request.Params["go"] == shortUrl)
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                    return false;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+            return false;
+        }
+
+        string GetClicksInfo(HttpRequestEventArgs e)
+        {
+            string results = "";
+            try
+            {
+                if (DbLogin(e, true))
+                {
+                    _app = loadConfig.InitApp(resource + _appName, "/config.json");
+                    HttpCookie cookie = e.Request.Cookies.Get(cookieName1);
+                    JArray jArray = new JArray();
+                    string decoded;
+                    if (cookie != null && cookie.Value != "")
+                    {
+                        decoded = DecodeToken(cookie.Value);
+                        jArray = GetJArray(decoded);
+                    }
+
+                    string username = jArray[0].SelectToken("username").ToString();
+
+                    // ### Connect to the database
+                    m_dbConnection = new SQLiteConnection(_app.connectionString);
+                    m_dbConnection.Open();
+
+                    // ### select the data
+                    string sql = "SELECT * FROM urls";
+                    SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
+                    SQLiteDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        if (reader["username"].ToString().ToLower() == username.ToLower())
+                        {
+                            var shortUrl = reader["shortURL"].ToString();
+                            var longURL = reader["longURL"].ToString();
+
+                            if (e.Request.Params["go"] == shortUrl)
+                            {
+                                results = results + reader["clicks"].ToString();
+                            }
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                return "";
+            }
+            return results;
+        }
+
+        #endregion
+
+        #region Controller Methods
         [HttpGet]
         public void Path(HttpRequestEventArgs e)
         {
@@ -234,5 +334,56 @@ namespace URL_Shortener_App.Controllers
                 Console.WriteLine("\tFile not found!");
             }
         }
-    }
+
+        [HttpGet]
+        public void Details(HttpRequestEventArgs e)
+        {
+            string url = GetAppURL(e, "Home");
+            //if (DbCheckURLDetails(e))
+            //{
+            string views = resource + _appName + "/Views/";
+            HttpResponse res = e.Response;
+            string filePath = views + "detallesURL.hbs";
+            Console.WriteLine("\tStarting " + _appName + "!");
+            Console.WriteLine("\tLoading file on " + filePath + "!");
+
+            if (File.Exists(filePath) == true)
+            {
+                var source = File.ReadAllText(filePath);
+                var template = Handlebars.Compile(source);
+                var data = new
+                {
+                    noTitle = true,
+                    showNavButtons = true,
+                    clicks = "5",
+                    btn1 = "Home",
+                    btn2 = "About",
+                    btn3 = "Sign Out",
+                    link1 = url + "Index",
+                    link2 = url + "About",
+                    link3 = url + "Login",
+                    title = "Marcos URL Shortener",
+                    mainH1 = "About",
+                    body = ""
+                };
+                var result = template(data);
+                using (var writer = new StreamWriter(e.Response.OutputStream))
+                {
+                    writer.Write(result);
+                }
+            }
+            else
+            {
+                errorHandler.RenderErrorPage(404, e);
+                Console.WriteLine("\tFile not found!");
+            }
+        }
+            //else
+            //{
+            //    errorHandler.RenderErrorPage(404, e);
+            //    Console.WriteLine("\tFile not found!");
+            //}
+    //}
+    #endregion
+}
 }

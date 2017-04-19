@@ -558,10 +558,7 @@ namespace URL_Shortener_App.Controllers
         [Authorize, HttpGet]
         public void About(HttpRequestEventArgs e)
         {
-            string protocol = (e.Request.Url.Scheme.ToString() == "https") ? "https://" : "http://";
-            string url = protocol + e.Request.Url.Host + ":"
-                    + e.Request.Url.Port + "/" + _appName
-                    + "/" + _controllerName + "/";
+            string url = GetAppURL(e);
 
             string views = resource + _appName + "/Views/";
             HttpResponse res = e.Response;

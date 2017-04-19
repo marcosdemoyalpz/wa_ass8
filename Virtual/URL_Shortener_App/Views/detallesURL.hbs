@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<style>
+		body {
+			background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABZ0RVh0Q3JlYXRpb24gVGltZQAxMC8yOS8xMiKqq3kAAAAcdEVYdFNvZnR3YXJlAEFkb2JlIEZpcmV3b3JrcyBDUzVxteM2AAABHklEQVRIib2Vyw6EIAxFW5idr///Qx9sfG3pLEyJ3tAwi5EmBqRo7vHawiEEERHS6x7MTMxMVv6+z3tPMUYSkfTM/R0fEaG2bbMv+Gc4nZzn+dN4HAcREa3r+hi3bcuu68jLskhVIlW073tWaYlQ9+F9IpqmSfq+fwskhdO/AwmUTJXrOuaRQNeRkOd5lq7rXmS5InmERKoER/QMvUAPlZDHcZRhGN4CSeGY+aHMqgcks5RrHv/eeh455x5KrMq2yHQdibDO6ncG/KZWL7M8xDyS1/MIO0NJqdULLS81X6/X6aR0nqBSJcPeZnlZrzN477NKURn2Nus8sjzmEII0TfMiyxUuxphVWjpJkbx0btUnshRihVv70Bv8ItXq6Asoi/ZiCbU6YgAAAABJRU5ErkJggg==);
+		}
+		
+		.error-template {
+			padding: 40px 15px;
+			text-align: center;
+		}
+		
+		.error-actions {
+			margin-top: 15px;
+			margin-bottom: 15px;
+		}
+		
+		.error-actions .btn {
+			margin-right: 10px;
+		}
+		
+		.thumbnail {
+			position: relative;
+			width: 100px;
+			height: 100px;
+			overflow: hidden;
+			margin-top: 20px;
+		}
+		
+		.thumbnail img {
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			height: 100%;
+			width: auto;
+			-webkit-transform: translate(-50%, -50%);
+			-ms-transform: translate(-50%, -50%);
+			transform: translate(-50%, -50%);
+		}
+		
+		.thumbnail img.portrait {
+			width: 100%;
+			height: auto;
+		}
+	</style>
+
+	<meta charset="utf-8">
+	<link href="/css/mainStyle.css" rel="stylesheet" type="text/css">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput-typeahead.css" rel="stylesheet">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css" rel="stylesheet">
+	<script type="text/javascript" src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+	 crossorigin="anonymous">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+	 crossorigin="anonymous"></script>
+	<title>{{title}}</title>
+</head>
+
+<body>
+	<script>
+		$(document).ready(function () {
+			$.getScript('http://www.chartjs.org/assets/Chart.js', function () {
+				var clicksData = document.getElementById("clicks").value;
+				function DrawClicksGraph() {
+					var data = {
+						labels: ["Clicks"],
+						datasets: [
+							{
+								fillColor: "rgba(151,187,205,0.5)",
+								strokeColor: "rgba(151,187,205,1)",
+								pointColor: "rgba(151,187,205,1)",
+								pointStrokeColor: "#fff",
+								data: [clicksData]
+							}
+						]
+					}
+
+					var options = {
+						animation: true
+					};
+
+					//Get the context of the canvas element we want to select
+					var c = $('#clicksChart');
+					var ct = c.get(0).getContext('2d');
+					var ctx = document.getElementById("clicksChart").getContext("2d");
+					/*********************/
+					new Chart(ctx).Bar(data, options);
+				}
+				DrawClicksGraph();
+			})
+		});
+	</script>
+	<div class="row" hidden>
+		<input type="text" id="clicks" name="clicks" maxlength="256" value="{{clicks}}" hidden>
+	</div>
+	<div class="row">
+		<div class="container">
+			{{#if showNavButtons}}
+			<div class="row">
+				<div class="col-lg-4" style="margin-top: 30px">
+					{{#if link1}}
+					<a href="{{link1}}" role="button" class="btn btn-lg btn-default btn-block">{{btn1}}</a> {{else}}
+					<a href="#" role="button" class="btn btn-lg btn-default btn-block">{{btn1}}</a> {{/if}}
+				</div>
+				<div class="col-lg-4" style="margin-top: 30px">
+					{{#if link2}}
+					<a href="{{link2}}" role="button" class="btn btn-lg btn-info btn-block">{{btn2}}</a> {{else}}
+					<a href="#" role="button" class="btn btn-lg btn-info btn-block">{{btn2}}</a> {{/if}}
+				</div>
+				<div class="col-lg-4" style="margin-top: 30px">
+					{{#if link3}}
+					<a href="{{link3}}" role="button" class="btn btn-lg btn-danger btn-block">{{btn3}}</a> {{else}}
+					<a href="#" role="button" class="btn btn-lg btn-danger btn-block">{{btn3}}</a> {{/if}}
+				</div>
+			</div>
+			{{/if}}
+			<div class="row">
+				<div class="col-lg-12">
+					{{#unless noTitle}}
+					<h1>{{mainH1}}</h1>
+					{{/unless}}
+				</div>
+			</div>
+			{{#if login}}
+			<form class="form" method="post">
+				<div class="row">
+					<div class="col-lg-12 form-group">
+						<label for="longURL" class="sr-only">Original URL</label>
+						<input type="url" id="longURL" name="longURL" class="form-control" placeholder="Enter URL..." required="" autofocus="" maxlength="256">
+					</div>
+				</div>
+				<div class="row">
+					<button class="btn btn-lg btn-primary btn-block" type="submit">Shorten URL</button>
+				</div>
+			</form>
+			<div class="row">
+				<div class="col-lg-12">
+					<h1>URLs List</h1>
+				</div>
+			</div>
+			{{/if}}
+			<div class="row">
+				<div class="col-lg-12" style="text-align: justify">
+					{{{body}}}
+					<div class="container">
+						<h2>Clicks - Line Chart</h2>
+						<canvas id="clicksChart" width="400" height="200" class="well"></canvas>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.js"></script>
+</body>
+
+</html>
