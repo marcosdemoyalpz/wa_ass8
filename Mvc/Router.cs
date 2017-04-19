@@ -92,6 +92,7 @@ namespace Mvc
                         }
                     }
                 }
+                reader.Close();
                 return success;
             }
             catch

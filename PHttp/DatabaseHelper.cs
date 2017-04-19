@@ -69,6 +69,7 @@ namespace PHttp
                             string lastClicked = reader["lastClicked"].ToString();
                             Console.WriteLine("\n\tUsername: " + username + "\n\tClicks: " + clicks + "\n\tLast Clicked: " + lastClicked + "\n");
                         }
+                        reader.Close();
 
                     }
                     Console.WriteLine("\tDatabase " + app.database + " has been created!");

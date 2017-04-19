@@ -140,6 +140,7 @@ namespace URL_Shortener_App.Controllers
                             }
                         }
                     }
+                    reader.Close();
                     return false;
                 }
             }
@@ -187,6 +188,7 @@ namespace URL_Shortener_App.Controllers
                         }
                     }
                 }
+                reader.Close();
                 return success;
             }
             catch
@@ -263,6 +265,7 @@ namespace URL_Shortener_App.Controllers
                             }
                         }
                     }
+                    reader.Close();
                     return false;
                 }
             }
@@ -313,6 +316,7 @@ namespace URL_Shortener_App.Controllers
                             }
                         }
                     }
+                    reader.Close();
                 }
             }
             catch

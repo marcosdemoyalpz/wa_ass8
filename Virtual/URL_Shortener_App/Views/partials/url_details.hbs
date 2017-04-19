@@ -26,6 +26,19 @@
         }
     </script>
 
+    {{#unless noTitle}}
+    <div class="jumbotron text-center" style="margin-bottom:0;">
+        <div class="row">
+            <h1>{{mainH1}}</h1>
+        </div>
+        {{#if mainH2}}
+        <div class="row">
+            <h2>{{mainH2}}</h2>
+        </div>
+        {{/if}}
+    </div>
+    {{/unless}}
+
     <div class="container">
         <form class="form" method="post">
             <div class="row">

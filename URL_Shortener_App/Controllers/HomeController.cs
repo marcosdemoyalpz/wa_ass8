@@ -178,7 +178,7 @@ namespace URL_Shortener_App.Controllers
                                 trClose;
                         }
                     }
-
+                    reader.Close();
                     table = table + "</tbody></table>";
                     return table;
                 }
@@ -231,6 +231,7 @@ namespace URL_Shortener_App.Controllers
                         }
                     }
                 }
+                reader.Close();
                 return success;
             }
             catch
@@ -268,12 +269,10 @@ namespace URL_Shortener_App.Controllers
                 {
                     if (reader["username"].ToString().ToLower() == username)
                     {
-                        if (reader["password"].ToString() == password)
-                        {
-                            return false;
-                        }
+                        return false;
                     }
                 }
+                reader.Close();
                 // ### Add some data to the table
                 sql = "insert into users (username, password, name, lastname) values ('"
                     + username + "','"
@@ -383,6 +382,7 @@ namespace URL_Shortener_App.Controllers
                             }
                         }
                     }
+                    reader.Close();
                     // ### Add some data to the table
                     sql = "insert into urls (shortURL, longURL, username, dateCreated, clicks, lastClicked) values ('"
                         + shortURL + "','"
@@ -497,7 +497,8 @@ namespace URL_Shortener_App.Controllers
                         link2 = url + "About",
                         link3 = url + "Login",
                         title = "Marcos URL Shortener",
-                        mainH1 = "Marcos's URL Shortener",
+                        mainH1 = "Marcos's App",
+                        mainH2 = "Home",
                         body = table
                     };
                 }
@@ -514,7 +515,8 @@ namespace URL_Shortener_App.Controllers
                         link2 = url + "About",
                         link3 = url + "Login",
                         title = "Marcos URL Shortener",
-                        mainH1 = "Marcos's URL Shortener",
+                        mainH1 = "Marcos's App",
+                        mainH2 = "Home",
                         body = File.ReadAllText(views + "/partials/captcha.hbs")
                     };
                 }
@@ -573,7 +575,6 @@ namespace URL_Shortener_App.Controllers
                 var template = Handlebars.Compile(source);
                 var data = new
                 {
-                    noTitle = true,
                     showNavButtons = true,
                     btn1 = "Home",
                     btn2 = "About",
@@ -582,7 +583,8 @@ namespace URL_Shortener_App.Controllers
                     link2 = url + "About",
                     link3 = url + "Login",
                     title = "Marcos URL Shortener",
-                    mainH1 = "About",
+                    mainH1 = "Marcos's App",
+                    mainH2 = "About",
                     body = File.ReadAllText(views + "/partials/about.hbs")
                 };
                 var result = template(data);
@@ -631,7 +633,8 @@ namespace URL_Shortener_App.Controllers
                             link2 = url + "About",
                             link3 = url + "Register",
                             title = "Marcos URL Shortener",
-                            mainH1 = _appName.Replace("_", " ") + " Login",
+                            mainH1 = "Marcos's App",
+                            mainH2 = "Login",
                             body = File.ReadAllText(views + "/partials/login.hbs")
                         };
                         var result = template(data);
@@ -685,7 +688,8 @@ namespace URL_Shortener_App.Controllers
                             link2 = url + "About",
                             link3 = url + "Login",
                             title = "Marcos URL Shortener",
-                            mainH1 = _appName.Replace("_", " ") + " Register",
+                            mainH1 = "Marcos's App",
+                            mainH2 = "Register",
                             body = File.ReadAllText(views + "/partials/register.hbs")
                         };
                         var result = template(data);
@@ -725,7 +729,7 @@ namespace URL_Shortener_App.Controllers
                     {
                         e.Response.Headers.Add("REFRESH", loginTimeout.ToString() + ";URL=" + url + "Register");
                         e.Response.StatusCode = 401;
-                        RenderMessage(e, "Username already taken!");
+                        RenderMessage(e, "Username exists!");
                     }
                 }
             }

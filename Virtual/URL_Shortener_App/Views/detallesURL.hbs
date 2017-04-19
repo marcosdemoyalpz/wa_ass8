@@ -96,57 +96,69 @@
 		<input type="text" id="clicks" name="clicks" maxlength="256" value="{{clicks}}" hidden>
 	</div>
 	<div class="row">
+		{{#unless noTitle}}
+		<div class="jumbotron text-center" style="margin-bottom:0;">
+			<div class="row">
+				<h1>{{mainH1}}</h1>
+			</div>
+			{{#if mainH2}}
+			<div class="row">
+				<h2>{{mainH2}}</h2>
+			</div>
+			{{/if}}
+		</div>
+		{{/unless}}
 		<div class="container">
 			{{#if showNavButtons}}
 			<div class="row">
-				<div class="col-lg-4" style="margin-top: 30px">
-					{{#if link1}}
-					<a href="{{link1}}" role="button" class="btn btn-lg btn-default btn-block">{{btn1}}</a> {{else}}
-					<a href="#" role="button" class="btn btn-lg btn-default btn-block">{{btn1}}</a> {{/if}}
-				</div>
-				<div class="col-lg-4" style="margin-top: 30px">
-					{{#if link2}}
-					<a href="{{link2}}" role="button" class="btn btn-lg btn-info btn-block">{{btn2}}</a> {{else}}
-					<a href="#" role="button" class="btn btn-lg btn-info btn-block">{{btn2}}</a> {{/if}}
-				</div>
-				<div class="col-lg-4" style="margin-top: 30px">
-					{{#if link3}}
-					<a href="{{link3}}" role="button" class="btn btn-lg btn-danger btn-block">{{btn3}}</a> {{else}}
-					<a href="#" role="button" class="btn btn-lg btn-danger btn-block">{{btn3}}</a> {{/if}}
-				</div>
-			</div>
-			{{/if}}
-			<div class="row">
 				<div class="col-lg-12">
-					{{#unless noTitle}}
-					<h1>{{mainH1}}</h1>
-					{{/unless}}
-				</div>
-			</div>
-			{{#if login}}
-			<form class="form" method="post">
-				<div class="row">
-					<div class="col-lg-12 form-group">
-						<label for="longURL" class="sr-only">Original URL</label>
-						<input type="url" id="longURL" name="longURL" class="form-control" placeholder="Enter URL..." required="" autofocus="" maxlength="256">
+					<div class="col-lg-4" style="margin-top: 20px">
+						{{#if link1}}
+						<a href="{{link1}}" role="button" class="btn btn-lg btn-default btn-block">{{btn1}}</a> {{else}}
+						<a href="#" role="button" class="btn btn-lg btn-default btn-block">{{btn1}}</a> {{/if}}
+					</div>
+					<div class="col-lg-4" style="margin-top: 20px">
+						{{#if link2}}
+						<a href="{{link2}}" role="button" class="btn btn-lg btn-info btn-block">{{btn2}}</a> {{else}}
+						<a href="#" role="button" class="btn btn-lg btn-info btn-block">{{btn2}}</a> {{/if}}
+					</div>
+					<div class="col-lg-4" style="margin-top: 20px">
+						{{#if link3}}
+						<a href="{{link3}}" role="button" class="btn btn-lg btn-danger btn-block">{{btn3}}</a> {{else}}
+						<a href="#" role="button" class="btn btn-lg btn-danger btn-block">{{btn3}}</a> {{/if}}
 					</div>
 				</div>
-				<div class="row">
-					<button class="btn btn-lg btn-primary btn-block" type="submit">Shorten URL</button>
-				</div>
-			</form>
+			</div>
+			{{/if}} {{#if login}}
 			<div class="row">
 				<div class="col-lg-12">
-					<h1>URLs List</h1>
+					<form class="form" method="post">
+						<div class="row">
+							<div class="col-lg-12 form-group">
+								<label for="longURL" class="sr-only">Original URL</label>
+								<input type="url" id="longURL" name="longURL" class="form-control" placeholder="Enter URL..." required="" autofocus="" maxlength="256">
+							</div>
+						</div>
+						<div class="row">
+							<button class="btn btn-lg btn-primary btn-block" type="submit">Shorten URL</button>
+						</div>
+					</form>
+					<div class="row">
+						<div class="col-lg-12">
+							<h1>URLs List</h1>
+						</div>
+					</div>
 				</div>
 			</div>
 			{{/if}}
 			<div class="row">
-				<div class="col-lg-12" style="text-align: justify">
-					{{{body}}}
-					<div class="container">
-						<h2>Clicks - Line Chart</h2>
-						<canvas id="clicksChart" width="400" height="200" class="well"></canvas>
+				<div class="col-lg-12">
+					<div class="col-lg-12" style="text-align: justify">
+						{{{body}}}
+						<div class="container">
+							<h2>Clicks - Line Chart</h2>
+							<canvas id="clicksChart" width="400" height="200" class="well"></canvas>
+						</div>
 					</div>
 				</div>
 			</div>

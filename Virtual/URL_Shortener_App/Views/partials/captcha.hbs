@@ -21,15 +21,6 @@
 </head>
 
 <body onLoad="ChangeCaptcha()">
-
-  <div class="row">
-    <div class="col-lg-12">
-      <input type="text" id="IndexURL" disabled hidden>
-      <input type="text" id="randomfield" disabled>
-      <br><br>
-    </div>
-  </div>
-
   <script>
     // Do not remove this (it's just a comment and won't effect the functions)
     // SimpleCaptcha v1.0 © Anudeep Tubati
@@ -58,6 +49,13 @@
   <div class="row">
     <div class="col-lg-12">
       <label for="CaptchaEnter">Enter Captcha:</label>
+      <div class="row">
+        <div class="col-lg-12">
+          <input type="text" id="IndexURL" disabled hidden>
+          <input type="text" id="randomfield" disabled>
+          <br><br>
+        </div>
+      </div>
       <input type="text" id="CaptchaEnter" size="20" maxlength="6" style="width: 100%" class="form-control" placeholder="Enter Captcha..."
       />
     </div>
@@ -72,10 +70,14 @@
       </div>
     </div>
     <div class="row">
-      <button class="btn btn-lg btn-primary btn-block" type="button" onclick="check()">Shorten URL</button>
+      <div class="col-lg-12 form-group">
+        <button class="btn btn-lg btn-primary btn-block" type="button" onclick="check()">Shorten URL</button>
+      </div>
     </div>
     <div class="row" hidden>
-      <button class="btn btn-lg btn-primary btn-block" type="submit" id="submitMaster">Shorten URL</button>
+      <div class="col-lg-12 form-group">
+        <button class="btn btn-lg btn-primary btn-block" type="submit" id="submitMaster">Shorten URL</button>
+      </div>
     </div>
   </form>
 </body>
