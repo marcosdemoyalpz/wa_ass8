@@ -128,7 +128,7 @@ namespace PHttp
             try
             {
                 TcpListener listener = new TcpListener(EndPoint);
-                Console.WriteLine("\tWOW");
+                Console.WriteLine("\tListener has been instantiated on EndPoint = " + EndPoint);
                 listener.Start(); // Start the listener.
                 EndPoint = (IPEndPoint)listener.LocalEndpoint;
                 _listener = listener;
@@ -377,7 +377,7 @@ namespace PHttp
 
             ErrorHandler errorHandler = new ErrorHandler();
             List<string> IgnorePathList = new List<string>();
-            string defaultPath = "App1/Home/Index";
+            string defaultPath = "URL_Shortener_App/Home/Index";
             string defaultURL = e.Request.Url.Scheme + "://" + e.Request.Url.Host.ToString()
                         + ":" + e.Request.Url.Port.ToString() + "/";
 

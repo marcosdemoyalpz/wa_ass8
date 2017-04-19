@@ -46,9 +46,11 @@
     function check() {
       var IndexURL = document.getElementById('IndexURL').value;
       if (document.getElementById('CaptchaEnter').value == document.getElementById('randomfield').value) {
+        document.getElementById('submitMaster').removeAttribute("disabled");
         document.getElementById('submitMaster').click();
       }
       else {
+        document.getElementById('submitMaster').setAttribute("disabled", "disabled");
         alert('Please re-check the captcha');
       }
     }

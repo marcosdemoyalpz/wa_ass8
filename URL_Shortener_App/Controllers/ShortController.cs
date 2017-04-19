@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using JWT;
 using JWT.Serializers;
 using Newtonsoft.Json.Linq;
+using NReco.PhantomJS;
 
 namespace URL_Shortener_App.Controllers
 {
@@ -28,6 +29,7 @@ namespace URL_Shortener_App.Controllers
         int expiration = 7200;
 
         string cookieName1 = "URL_Shortener_App_JWT";
+        string cookieName2 = "AnonTemp";
 
         private string _appName = "URL_Shortener_App";
         private string _controllerName = "Home";
@@ -125,6 +127,13 @@ namespace URL_Shortener_App.Controllers
 
                             if (e.Request.Params["go"] == shortUrl)
                             {
+                                // ### Update clicks on table
+                                sql = "UPDATE urls SET "
+                                    + "clicks = " + (int.Parse(reader["clicks"].ToString()) + 1)
+                                    + ", lastClicked = DATETIME('NOW')"
+                                    + "WHERE shortURL = '" + reader["shortURL"].ToString() + "'";
+                                command = new SQLiteCommand(sql, m_dbConnection);
+                                command.ExecuteNonQuery();
                                 e.Response.Redirect(longURL);
                                 return true;
                             }
@@ -213,7 +222,7 @@ namespace URL_Shortener_App.Controllers
                 Console.WriteLine("\tFile not found!");
             }
         }
-        #endregion
+        #endregion        
 
         [HttpGet]
         public void Path(HttpRequestEventArgs e)

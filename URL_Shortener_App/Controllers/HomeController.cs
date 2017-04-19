@@ -25,10 +25,13 @@ namespace URL_Shortener_App.Controllers
 
         LoadConfig loadConfig = new LoadConfig();
 
+        string _shortURL;
+        string _longURL;
         float loginTimeout = 1.25f;
         int expiration = 7200;
 
         string cookieName1 = "URL_Shortener_App_JWT";
+        string cookieName2 = "AnonTemp";
 
         private string _appName = "URL_Shortener_App";
         private string _controllerName = "Home";
@@ -112,20 +115,24 @@ namespace URL_Shortener_App.Controllers
                     string username = jArray[0].SelectToken("username").ToString();
 
                     table = "<table class=\"table\" style=\"vertical-align: middle;\">";
-                    table = table + "<thead><tr><th>Image</th><th>Short URL</th><th>Long URL</th></tr></thead><tbody>";
+                    table = table + "<thead>" + "<tr>"
+                        + "<th style=\"text-align: center;\">" + "Image" + "</th>"
+                        + "<th style=\"text-align: center;\">" + "Short URL" + "</th>"
+                        + "<th style=\"text-align: center;\">" + "Long URL" + "</th>"
+                        + "<th style=\"text-align: center;\">" + "Date Created" + "</th>"
+                        + "<th style=\"text-align: center;\">" + "Clicks" + "</th>"
+                        + "<th style=\"text-align: center;\">" + "Last Click" + "</th>"
+                        + "</tr>" + "</thead>"
+                        + "<tbody>";
 
-                    var trOpen = "<tr style=\"vertical-align: middle;\">";
+                    var trOpen = "<tr style=\"vertical-align: middle;\" align=\"center\">";
                     var trClose = "</tr>";
-                    var tdOpen = "<td style=\"vertical-align: middle;\">";
+                    var tdOpen = "<td style=\"vertical-align: middle;\" align=\"center\">";
                     var tdClose = "</td>";
-
-                    var phantomJS = new PhantomJS();
 
                     // ### Connect to the database
                     m_dbConnection = new SQLiteConnection(_app.connectionString);
                     m_dbConnection.Open();
-
-                    string img = "<img src=\"";
 
                     // ### select the data
                     string sql = "SELECT * FROM urls";
@@ -135,17 +142,39 @@ namespace URL_Shortener_App.Controllers
                     {
                         if (reader["username"].ToString().ToLower() == username.ToLower())
                         {
-                            var imgSource = resource + _appName + "/img/" + reader["shortURL"].ToString() + ".png";
+                            string img = "<img src=\"";
                             var shortUrl = url + "?go=" + reader["shortURL"].ToString();
                             var longURL = reader["longURL"].ToString();
                             var link1 = "<a href=\"" + shortUrl + "\">" + shortUrl + "</a>";
                             var link2 = "<a href=\"" + longURL + "\">" + longURL + "</a>";
+                            var dateCreated = reader["dateCreated"].ToString();
+                            var clicks = reader["clicks"].ToString();
+                            var lastClicked = reader["lastClicked"].ToString();
 
-                            phantomJS.Run(resource + _appName + "/" + "rasterize.js", new[] { longURL, imgSource });
-
-                            img = img + GetAppURL(e, "img") + reader["shortURL"].ToString() + ".png\"" + " alt=\"URL Image\" + style=\"max-width:100%; max-height:100px;\">";
+                            img = img + GetAppURL(e, "img") + reader["shortURL"].ToString() + ".png\"" + "class=\"portrait\"" + " alt=\"URL Image\" + "
+                                + "style=\"max-width:100px; max-height:100%; display:inline-block; overflow: hidden;\">";
                             Console.WriteLine(img);
-                            table = table + trOpen + tdOpen + img + tdClose + tdOpen + link1 + tdClose + tdOpen + link2 + tdClose + trClose;
+                            table = table +
+                                trOpen +
+                                    "<td class=\"thumbnail\" align=\"center\">" +
+                                        img +
+                                    tdClose +
+                                    tdOpen +
+                                        link1 +
+                                    tdClose +
+                                    tdOpen +
+                                        link2 +
+                                    tdClose +
+                                    tdOpen +
+                                        dateCreated +
+                                    tdClose +
+                                    tdOpen +
+                                        clicks +
+                                    tdClose +
+                                    tdOpen +
+                                        lastClicked +
+                                    tdClose +
+                                trClose;
                         }
                     }
 
@@ -153,9 +182,10 @@ namespace URL_Shortener_App.Controllers
                     return table;
                 }
             }
-            catch
+            catch (Exception ex)
             {
                 table = "";
+                return ex.ToString();
             }
             table = "<table class=\"table\">";
             table = table + "<thead><tr><th>Short URL</th><th>Long URL</th></tr></thead><tbody>";
@@ -201,6 +231,206 @@ namespace URL_Shortener_App.Controllers
                     }
                 }
                 return success;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        bool DbRegister(HttpRequestEventArgs e)
+        {
+            try
+            {
+                _app = loadConfig.InitApp(resource + _appName, "/config.json");
+
+                string username = e.Request.Form.Get("username");
+                string password = e.Request.Form.Get("password");
+                string confirm_password = e.Request.Form.Get("confirm_password");
+                string name = e.Request.Form.Get("name");
+                string lastname = e.Request.Form.Get("lastname");
+
+                if (password != confirm_password)
+                {
+                    return false;
+                }
+
+                // ### Connect to the database
+                m_dbConnection = new SQLiteConnection(_app.connectionString);
+                m_dbConnection.Open();
+
+                // ### select the data
+                string sql = "select * from users order by username desc";
+                SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
+                SQLiteDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    if (reader["username"].ToString().ToLower() == username)
+                    {
+                        if (reader["password"].ToString() == password)
+                        {
+                            return false;
+                        }
+                    }
+                }
+                // ### Add some data to the table
+                sql = "insert into users (username, password, name, lastname) values ('"
+                    + username + "','"
+                    + password + "','"
+                    + name + "','"
+                    + lastname + "')";
+                command = new SQLiteCommand(sql, m_dbConnection);
+                command.ExecuteNonQuery();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        bool LoginProcess(HttpRequestEventArgs e)
+        {
+            string url = GetAppURL(e);
+            string username = e.Request.Form.Get("username");
+            string password = e.Request.Form.Get("password");
+            if (DbLogin(e))
+            {
+                IDateTimeProvider provider = new UtcDateTimeProvider();
+                var now = provider.GetNow();
+
+                var unixEpoch = JwtValidator.UnixEpoch; // or use JwtValidator.UnixEpoch
+                var secondsSinceEpoch = Math.Round((now - unixEpoch).TotalSeconds);
+
+                var exp = secondsSinceEpoch + expiration;
+
+                // Creating and Encodin JWT token
+                var payload = new Dictionary<string, object>
+                        {
+                            { "username", username },
+                            { "password", password },
+                            { "exp", exp }
+                        };
+
+                IJwtAlgorithm algorithm = new JWT.Algorithms.HMACSHA256Algorithm();
+                IJsonSerializer serializer = new JsonNetSerializer();
+                IBase64UrlEncoder urlEncoder = new JwtBase64UrlEncoder();
+                IJwtEncoder encoder = new JwtEncoder(algorithm, serializer, urlEncoder);
+
+                string token = encoder.Encode(payload, secret);
+
+                Console.WriteLine(token);
+
+                HttpCookie cookie = new HttpCookie(cookieName1, token);
+                e.Response.Cookies.Add(cookie);
+                e.Response.Cookies.Get(cookieName1).Expires = DateTime.Now.AddDays(30);
+
+                e.Response.Headers.Add("REFRESH", loginTimeout.ToString() + ";URL=" + url + "Index");
+                e.Response.StatusCode = 200;
+                RenderMessage(e, "Login Successful!");
+                return true;
+            }
+            else
+            {
+                e.Response.Headers.Add("REFRESH", loginTimeout.ToString() + ";URL=" + url + "Login");
+                e.Response.StatusCode = 401;
+                RenderMessage(e, "Login Failed!");
+                return false;
+            }
+        }
+
+        bool CreateShortURL(HttpRequestEventArgs e)
+        {
+            try
+            {
+                _app = loadConfig.InitApp(resource + _appName, "/config.json");
+
+                string longURL = e.Request.Form.Get("longURL");
+
+                Random random = new Random();
+                string shortURL = "";
+                int i;
+                for (i = 1; i < 11; i++)
+                {
+                    shortURL += random.Next(0, 9).ToString();
+                }
+
+                if (DbLogin(e, true))
+                {
+                    string decoded;
+                    HttpCookie cookie = e.Request.Cookies.Get(cookieName1);
+                    decoded = DecodeToken(cookie.Value);
+                    JArray jArray = GetJArray(decoded);
+
+                    string username = jArray[0].SelectToken("username").ToString();
+
+                    // ### Connect to the database
+                    m_dbConnection = new SQLiteConnection(_app.connectionString);
+                    m_dbConnection.Open();
+
+                    // ### select the data
+                    string sql = "select * from urls order by username desc";
+                    SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
+                    SQLiteDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        if (reader["username"].ToString().ToLower() == username)
+                        {
+                            if (reader["shortURL"].ToString() == shortURL)
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                    // ### Add some data to the table
+                    sql = "insert into urls (shortURL, longURL, username, dateCreated, clicks, lastClicked) values ('"
+                        + shortURL + "','"
+                        + longURL + "','"
+                        + username + "',"
+                        + "DATETIME('NOW'),"
+                        + 0 + ","
+                        + "DATETIME('NOW')"
+                        + ")";
+                    command = new SQLiteCommand(sql, m_dbConnection);
+                    command.ExecuteNonQuery();
+                    _shortURL = shortURL;
+                    _longURL = longURL;
+                    return true;
+                }
+                else
+                {
+                    IDateTimeProvider provider = new UtcDateTimeProvider();
+                    var now = provider.GetNow();
+
+                    var unixEpoch = JwtValidator.UnixEpoch; // or use JwtValidator.UnixEpoch
+                    var secondsSinceEpoch = Math.Round((now - unixEpoch).TotalSeconds);
+
+                    var exp = secondsSinceEpoch + expiration;
+
+                    // Creating and Encodin JWT token
+                    var payload = new Dictionary<string, object>
+                        {
+                            { "shortURL", shortURL },
+                            { "longURL", longURL },
+                            { "exp", 30 }
+                        };
+
+                    IJwtAlgorithm algorithm = new JWT.Algorithms.HMACSHA256Algorithm();
+                    IJsonSerializer serializer = new JsonNetSerializer();
+                    IBase64UrlEncoder urlEncoder = new JwtBase64UrlEncoder();
+                    IJwtEncoder encoder = new JwtEncoder(algorithm, serializer, urlEncoder);
+
+                    string token = encoder.Encode(payload, secret);
+
+                    Console.WriteLine(token);
+
+                    HttpCookie cookie = new HttpCookie(cookieName2, token);
+                    cookie.Expires = DateTime.Now.AddMinutes(10);
+                    e.Response.Cookies.Add(cookie);
+                    _longURL = longURL;
+                    _shortURL = shortURL;
+                    return true;
+                }
             }
             catch
             {
@@ -306,11 +536,26 @@ namespace URL_Shortener_App.Controllers
             }
             else if (e.Request.RequestType == "POST")
             {
-
+                if (CreateShortURL(e))
+                {
+                    e.Response.Headers.Add("REFRESH", loginTimeout.ToString() + ";URL=" + url + "Index");
+                    e.Response.StatusCode = 200;
+                    RenderMessage(e, "Success!");
+                    var phantomJS = new PhantomJS();
+                    var imgSource = resource + _appName + "/img/" + _shortURL + ".png";
+                    phantomJS.Run(resource + _appName + "/" + "rasterize.js", new[] { _longURL, imgSource });
+                    e.Response.Redirect(url + "Index");
+                }
+                else
+                {
+                    e.Response.Headers.Add("REFRESH", loginTimeout.ToString() + ";URL=" + url + "Index");
+                    e.Response.StatusCode = 401;
+                    RenderMessage(e, "Login Failed!");
+                }
             }
         }
 
-        [HttpGet]
+        [Authorize, HttpGet]
         public void About(HttpRequestEventArgs e)
         {
             string protocol = (e.Request.Url.Scheme.ToString() == "https") ? "https://" : "http://";
@@ -318,57 +563,49 @@ namespace URL_Shortener_App.Controllers
                     + e.Request.Url.Port + "/" + _appName
                     + "/" + _controllerName + "/";
 
-            if (DbLogin(e, true))
-            {
-                string views = resource + _appName + "/Views/";
-                HttpResponse res = e.Response;
-                string filePath = views + layout;
-                Console.WriteLine("\tStarting " + _appName + "!");
-                Console.WriteLine("\tLoading file on " + filePath + "!");
+            string views = resource + _appName + "/Views/";
+            HttpResponse res = e.Response;
+            string filePath = views + layout;
+            Console.WriteLine("\tStarting " + _appName + "!");
+            Console.WriteLine("\tLoading file on " + filePath + "!");
 
-                if (File.Exists(filePath) == true)
+            if (File.Exists(filePath) == true)
+            {
+                var source = File.ReadAllText(filePath);
+                var template = Handlebars.Compile(source);
+                var data = new
                 {
-                    var source = File.ReadAllText(filePath);
-                    var template = Handlebars.Compile(source);
-                    var data = new
-                    {
-                        noTitle = true,
-                        showNavButtons = true,
-                        btn1 = "Home",
-                        btn2 = "About",
-                        btn3 = "Sign Out",
-                        link1 = url + "Index",
-                        link2 = url + "About",
-                        link3 = url + "Login",
-                        title = "Marcos URL Shortener",
-                        mainH1 = "About",
-                        body = File.ReadAllText(views + "/partials/about.hbs")
-                    };
-                    var result = template(data);
-                    using (var writer = new StreamWriter(e.Response.OutputStream))
-                    {
-                        writer.Write(result);
-                    }
-                }
-                else
+                    noTitle = true,
+                    showNavButtons = true,
+                    btn1 = "Home",
+                    btn2 = "About",
+                    btn3 = "Sign Out",
+                    link1 = url + "Index",
+                    link2 = url + "About",
+                    link3 = url + "Login",
+                    title = "Marcos URL Shortener",
+                    mainH1 = "About",
+                    body = File.ReadAllText(views + "/partials/about.hbs")
+                };
+                var result = template(data);
+                using (var writer = new StreamWriter(e.Response.OutputStream))
                 {
-                    errorHandler.RenderErrorPage(404, e);
-                    Console.WriteLine("\tFile not found!");
+                    writer.Write(result);
                 }
             }
             else
             {
-                e.Response.Headers.Add("REFRESH", loginTimeout.ToString() + ";URL=" + url + "Index");
-                errorHandler.RenderErrorPage(401, e);
+                errorHandler.RenderErrorPage(404, e);
+                Console.WriteLine("\tFile not found!");
             }
         }
 
         [HttpGet, HttpPost]
         public void Login(HttpRequestEventArgs e)
         {
-            string url = GetAppURL(e);
             if (e.Request.RequestType == "GET")
             {
+                string url = GetAppURL(e);
                 if (DbLogin(e, true))
                 {
                     e.Response.Cookies.Get(cookieName1).Expires = DateTime.Now;
@@ -391,13 +628,67 @@ namespace URL_Shortener_App.Controllers
                             showNavButtons = false,
                             btn1 = "Home",
                             btn2 = "About",
-                            btn3 = "Sign Out",
+                            btn3 = "Register",
+                            link1 = url + "Index",
+                            link2 = url + "About",
+                            link3 = url + "Register",
+                            title = "Marcos URL Shortener",
+                            mainH1 = _appName.Replace("_", " ") + " Login",
+                            body = File.ReadAllText(views + "/partials/login.hbs")
+                        };
+                        var result = template(data);
+                        using (var writer = new StreamWriter(e.Response.OutputStream))
+                        {
+                            writer.Write(result);
+                        }
+                    }
+                    else
+                    {
+                        errorHandler.RenderErrorPage(404, e);
+                        Console.WriteLine("\tFile not found!");
+                    }
+                }
+            }
+            else if (e.Request.RequestType == "POST")
+            {
+                LoginProcess(e);
+            }
+        }
+
+        [HttpGet, HttpPost]
+        public void Register(HttpRequestEventArgs e)
+        {
+            string url = GetAppURL(e);
+            if (e.Request.RequestType == "GET")
+            {
+                if (DbLogin(e, true))
+                {
+                    e.Response.Cookies.Get(cookieName1).Expires = DateTime.Now;
+                }
+                else
+                {
+                    string views = resource + _appName + "/Views/";
+                    HttpResponse res = e.Response;
+                    string filePath = views + layout;
+                    Console.WriteLine("\tStarting " + _appName + "!");
+                    Console.WriteLine("\tLoading file on " + filePath + "!");
+
+                    if (File.Exists(filePath) == true)
+                    {
+                        var source = File.ReadAllText(filePath);
+                        var template = Handlebars.Compile(source);
+                        var data = new
+                        {
+                            showNavButtons = false,
+                            btn1 = "Home",
+                            btn2 = "About",
+                            btn3 = "Sign In",
                             link1 = url + "Index",
                             link2 = url + "About",
                             link3 = url + "Login",
                             title = "Marcos URL Shortener",
-                            mainH1 = "Login",
-                            body = File.ReadAllText(views + "/partials/login.hbs")
+                            mainH1 = _appName.Replace("_", " ") + " Register",
+                            body = File.ReadAllText(views + "/partials/register.hbs")
                         };
                         var result = template(data);
                         using (var writer = new StreamWriter(e.Response.OutputStream))
@@ -416,46 +707,28 @@ namespace URL_Shortener_App.Controllers
             {
                 string username = e.Request.Form.Get("username");
                 string password = e.Request.Form.Get("password");
-                if (DbLogin(e))
+                string confirm_password = e.Request.Form.Get("confirm_password");
+                string name = e.Request.Form.Get("name");
+                string lastname = e.Request.Form.Get("lastname");
+
+                if (DbRegister(e))
                 {
-                    IDateTimeProvider provider = new UtcDateTimeProvider();
-                    var now = provider.GetNow();
-
-                    var unixEpoch = JwtValidator.UnixEpoch; // or use JwtValidator.UnixEpoch
-                    var secondsSinceEpoch = Math.Round((now - unixEpoch).TotalSeconds);
-
-                    var exp = secondsSinceEpoch + expiration;
-
-                    // Creating and Encodin JWT token
-                    var payload = new Dictionary<string, object>
-                        {
-                            { "username", username },
-                            { "password", password },
-                            { "exp", exp }
-                        };
-
-                    IJwtAlgorithm algorithm = new JWT.Algorithms.HMACSHA256Algorithm();
-                    IJsonSerializer serializer = new JsonNetSerializer();
-                    IBase64UrlEncoder urlEncoder = new JwtBase64UrlEncoder();
-                    IJwtEncoder encoder = new JwtEncoder(algorithm, serializer, urlEncoder);
-
-                    string token = encoder.Encode(payload, secret);
-
-                    Console.WriteLine(token);
-
-                    HttpCookie cookie = new HttpCookie(cookieName1, token);
-                    e.Response.Cookies.Add(cookie);
-                    e.Response.Cookies.Get(cookieName1).Expires = DateTime.Now.AddDays(30);
-
-                    e.Response.Headers.Add("REFRESH", loginTimeout.ToString() + ";URL=" + url + "Index");
-                    e.Response.StatusCode = 200;
-                    RenderMessage(e, "Login Successful!");
+                    LoginProcess(e);
                 }
                 else
                 {
-                    e.Response.Headers.Add("REFRESH", loginTimeout.ToString() + ";URL=" + url + "Index");
-                    e.Response.StatusCode = 401;
-                    RenderMessage(e, "Login Failed!");
+                    if (password != confirm_password)
+                    {
+                        e.Response.Headers.Add("REFRESH", loginTimeout.ToString() + ";URL=" + url + "Register");
+                        e.Response.StatusCode = 401;
+                        RenderMessage(e, "Passwords do not Match!");
+                    }
+                    else
+                    {
+                        e.Response.Headers.Add("REFRESH", loginTimeout.ToString() + ";URL=" + url + "Register");
+                        e.Response.StatusCode = 401;
+                        RenderMessage(e, "Username already taken!");
+                    }
                 }
             }
         }

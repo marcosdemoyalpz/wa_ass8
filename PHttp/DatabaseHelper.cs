@@ -51,24 +51,34 @@ namespace PHttp
                     if (app.database == "URL_Shortener_App_DB.sqlite")
                     {
                         // ### Create users table
-                        sql = "CREATE TABLE urls (shortURL VARCHAR(128) PRIMARY KEY UNIQUE, longURL VARCHAR(128), username VARCHAR(128), FOREIGN KEY(username) REFERENCES users(username))";
+                        sql = "CREATE TABLE urls (shortURL VARCHAR(128) PRIMARY KEY UNIQUE, longURL VARCHAR(128), username VARCHAR(128), dateCreated DATETIME, clicks INT, lastClicked DATETIME, FOREIGN KEY(username) REFERENCES users(username))";
                         command = new SQLiteCommand(sql, m_dbConnection);
                         command.ExecuteNonQuery();
 
                         // ### Add some data to the table
-                        sql = "insert into urls (shortURL, longURL, username) values ('hello', 'https://www.google.com', 'admin')";
+                        sql = "insert into urls (shortURL, longURL, username, dateCreated, clicks, lastClicked) values ('hello', 'https://www.google.com', 'admin', DATETIME('NOW'), 0, DATETIME('NOW') )";
                         command = new SQLiteCommand(sql, m_dbConnection);
                         command.ExecuteNonQuery();
+
+                        // ### select the data
+                        sql = "select * from urls order by username desc";
+                        command = new SQLiteCommand(sql, m_dbConnection);
+                        SQLiteDataReader reader = command.ExecuteReader();
+                        while (reader.Read())
+                        {
+                            Console.WriteLine("\tDate Created: " + reader["dateCreated"] + "\tLast Clicked: " + reader["lastClicked"]);
+                        }
+
                     }
 
-                    // ### select the data
-                    sql = "select * from users order by username desc";
-                    command = new SQLiteCommand(sql, m_dbConnection);
-                    SQLiteDataReader reader = command.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        Console.WriteLine("\tUsername: " + reader["username"] + "\tPassword: " + reader["password"]);
-                    }
+                    //// ### select the data
+                    //sql = "select * from users order by username desc";
+                    //command = new SQLiteCommand(sql, m_dbConnection);
+                    //SQLiteDataReader reader = command.ExecuteReader();
+                    //while (reader.Read())
+                    //{
+                    //    Console.WriteLine("\tUsername: " + reader["username"] + "\tPassword: " + reader["password"]);
+                    //}
                     Console.WriteLine("\tDatabase " + app.database + " has been created!");
                 }
             }

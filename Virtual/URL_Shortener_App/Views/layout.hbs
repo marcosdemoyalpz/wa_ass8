@@ -38,18 +38,31 @@
 	<div class="row">
 		<div class="container">
 			{{#if showNavButtons}}
-			<div class="row" style="margin-top: 30px">
-				<div class="col-lg-4">
+			<div class="row">
+				<div class="col-lg-4" style="margin-top: 30px">
 					{{#if link1}}
-					<a href="{{link1}}" role="button" class="btn btn-lg btn-primary btn-block">{{btn1}}</a> {{else}}
-					<a href="#" role="button" class="btn btn-lg btn-primary btn-block">{{btn1}}</a> {{/if}}
+					<a href="{{link1}}" role="button" class="btn btn-lg btn-default btn-block">{{btn1}}</a> {{else}}
+					<a href="#" role="button" class="btn btn-lg btn-default btn-block">{{btn1}}</a> {{/if}}
 				</div>
-				<div class="col-lg-4">
+				<div class="col-lg-4" style="margin-top: 30px">
 					{{#if link2}}
 					<a href="{{link2}}" role="button" class="btn btn-lg btn-info btn-block">{{btn2}}</a> {{else}}
 					<a href="#" role="button" class="btn btn-lg btn-info btn-block">{{btn2}}</a> {{/if}}
 				</div>
-				<div class="col-lg-4">
+				<div class="col-lg-4" style="margin-top: 30px">
+					{{#if link3}}
+					<a href="{{link3}}" role="button" class="btn btn-lg btn-danger btn-block">{{btn3}}</a> {{else}}
+					<a href="#" role="button" class="btn btn-lg btn-danger btn-block">{{btn3}}</a> {{/if}}
+				</div>
+			</div>
+			{{else}}
+			<div class="row">
+				<div class="col-lg-6" style="margin-top: 30px">
+					{{#if link1}}
+					<a href="{{link1}}" role="button" class="btn btn-lg btn-default btn-block">{{btn1}}</a> {{else}}
+					<a href="#" role="button" class="btn btn-lg btn-default btn-block">{{btn1}}</a> {{/if}}
+				</div>
+				<div class="col-lg-6" style="margin-top: 30px">
 					{{#if link3}}
 					<a href="{{link3}}" role="button" class="btn btn-lg btn-danger btn-block">{{btn3}}</a> {{else}}
 					<a href="#" role="button" class="btn btn-lg btn-danger btn-block">{{btn3}}</a> {{/if}}

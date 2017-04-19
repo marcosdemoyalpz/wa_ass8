@@ -1,7 +1,11 @@
-﻿using PHttp;
+﻿using JWT;
+using JWT.Serializers;
+using Newtonsoft.Json.Linq;
+using PHttp;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data.SQLite;
 using System.IO;
 using System.Reflection;
 using static PHttp.Startup;
@@ -28,6 +32,97 @@ namespace Mvc
             {
                 _controllers = controllers;
             }
+        }
+
+        bool _FailedAuth = false;
+
+        JArray GetJArray(string jsonString)
+        {
+            if (jsonString[0] != '[')
+            {
+                jsonString = "[" + jsonString;
+                if (jsonString[jsonString.Length - 1] != ']')
+                {
+                    jsonString = jsonString + "]";
+                }
+            }
+            if (jsonString[jsonString.Length - 1] != ']')
+            {
+                jsonString = jsonString + "]";
+            }
+            return JArray.Parse(jsonString);
+        }
+
+        bool DbLogin(HttpRequestEventArgs e)
+        {
+            try
+            {
+                string resource = ConfigurationManager.AppSettings["Virtual"];
+                LoadConfig loadConfig = new LoadConfig();
+                AppInfo _app = loadConfig.InitApp(resource + _appName, "/config.json");
+                JArray jArray = new JArray();
+                string decoded;
+
+                HttpCookie cookie = e.Request.Cookies.Get(_appName + "_JWT");
+                decoded = DecodeToken(cookie.Value);
+                jArray = GetJArray(decoded);
+
+                string username = jArray[0].SelectToken("username").ToString();
+                string password = jArray[0].SelectToken("password").ToString();
+
+                bool success = false;
+
+                // ### Connect to the database
+                SQLiteConnection m_dbConnection;
+                m_dbConnection = new SQLiteConnection(_app.connectionString);
+                m_dbConnection.Open();
+
+                // ### select the data
+                string sql = "select * from users order by username desc";
+                SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
+                SQLiteDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    if (reader["username"].ToString().ToLower() == username)
+                    {
+                        if (reader["password"].ToString() == password)
+                        {
+                            success = true;
+                        }
+                    }
+                }
+                return success;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private string DecodeToken(string token)
+        {
+            string json = "";
+            try
+            {
+                string secret = ConfigurationManager.AppSettings["Secret"];
+                IJsonSerializer serializer = new JsonNetSerializer();
+                IDateTimeProvider provider = new UtcDateTimeProvider();
+                IJwtValidator validator = new JwtValidator(serializer, provider);
+                IBase64UrlEncoder urlEncoder = new JwtBase64UrlEncoder();
+                IJwtDecoder decoder = new JwtDecoder(serializer, validator, urlEncoder);
+
+                json = decoder.Decode(token, secret, verify: true);
+                Console.WriteLine(json);
+            }
+            catch (TokenExpiredException)
+            {
+                Console.WriteLine("Token has expired");
+            }
+            catch (SignatureVerificationException)
+            {
+                Console.WriteLine("Token has invalid signature");
+            }
+            return json;
         }
 
         public static Controllers loadControllers(string path, string appName)
@@ -90,50 +185,64 @@ namespace Mvc
         private ControllerBase _controller;
         ErrorHandler _errorHandler;
 
-        private static bool IsHttpAttributeAllowed(MemberInfo member, string requestType)
+        private bool IsHttpAttributeAllowed(MemberInfo member, string requestType, HttpRequestEventArgs e)
         {
             bool allowed = false;
             foreach (object attribute in member.GetCustomAttributes(true))
             {
-                if (allowed == true)
+                if (attribute is Attributes.AuthorizeAttribute)
                 {
-                    break;
+                    _FailedAuth = !DbLogin(e);
                 }
                 else
                 {
-                    switch (requestType)
+                    if (allowed == true)
                     {
-                        case "GET":
-                            if (attribute is Attributes.HttpGet)
-                            {
-                                allowed = true;
-                            }
-                            break;
-                        case "POST":
-                            if (attribute is Attributes.HttpPost)
-                            {
-                                allowed = true;
-                            }
-                            break;
-                        case "PUT":
-                            if (attribute is Attributes.HttpPut)
-                            {
-                                allowed = true;
-                            }
-                            break;
-                        case "DELETE":
-                            if (attribute is Attributes.HttpDelete)
-                            {
-                                allowed = true;
-                            }
-                            break;
-                        default:
-                            allowed = false;
-                            break;
+                        break;
+                    }
+                    else
+                    {
+                        switch (requestType)
+                        {
+                            case "GET":
+                                if (attribute is Attributes.HttpGet)
+                                {
+                                    allowed = true;
+                                }
+                                break;
+                            case "POST":
+                                if (attribute is Attributes.HttpPost)
+                                {
+                                    allowed = true;
+                                }
+                                break;
+                            case "PUT":
+                                if (attribute is Attributes.HttpPut)
+                                {
+                                    allowed = true;
+                                }
+                                break;
+                            case "DELETE":
+                                if (attribute is Attributes.HttpDelete)
+                                {
+                                    allowed = true;
+                                }
+                                break;
+                            default:
+                                allowed = false;
+                                break;
+                        }
                     }
                 }
             }
-            return allowed;
+            if (_FailedAuth)
+            {
+                return false;
+            }
+            else
+            {
+                return allowed;
+            }
         }
 
         public void CallAction(HttpRequestEventArgs e, string directory)
@@ -168,14 +277,21 @@ namespace Mvc
                         MethodInfo method = type.GetMethod(_controller.ActionName);
                         string requestType = e.Request.RequestType;
 
-                        if (IsHttpAttributeAllowed(method, requestType))
+                        if (IsHttpAttributeAllowed(method, requestType, e))
                         {
                             Console.WriteLine("\tMethod " + method.Name + " allows " + requestType);
                             allowed = true;
                         }
                         else
                         {
-                            Console.WriteLine("\tMethod " + method.Name + " does not allow " + requestType);
+                            if (_FailedAuth)
+                            {
+                                Console.WriteLine("\tMethod requires authentication!");
+                            }
+                            else
+                            {
+                                Console.WriteLine("\tMethod " + method.Name + " does not allow " + requestType);
+                            }
                         }
 
                         Console.WriteLine();
@@ -187,7 +303,14 @@ namespace Mvc
                         }
                         else
                         {
-                            _errorHandler.RenderErrorPage(405, e);
+                            if (_FailedAuth)
+                            {
+                                _errorHandler.RenderErrorPage(401, e);
+                            }
+                            else
+                            {
+                                _errorHandler.RenderErrorPage(405, e);
+                            }
                         }
                         found = true;
                         break;

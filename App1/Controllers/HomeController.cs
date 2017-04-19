@@ -298,7 +298,7 @@ namespace App1.Controllers
                             link2 = url + "About",
                             link3 = url + "Login",
                             title = "Default Web Site",
-                            mainH1 = "Login",
+                            mainH1 = _appName.Replace("_", " ") + " Login",
                             body = File.ReadAllText(views + "/partials/login.hbs")
                         };
                         var result = template(data);
