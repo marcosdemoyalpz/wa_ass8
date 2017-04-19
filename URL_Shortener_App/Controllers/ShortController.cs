@@ -4,12 +4,13 @@ using System.Configuration;
 using System.IO;
 using Mvc.Attributes;
 using PHttp;
-using System.Data.SQLite;
+using Mono.Data.Sqlite;
 using System.Collections.Generic;
 using JWT;
 using JWT.Serializers;
 using Newtonsoft.Json.Linq;
 using NReco.PhantomJS;
+using System.Data;
 
 namespace URL_Shortener_App.Controllers
 {
@@ -21,7 +22,7 @@ namespace URL_Shortener_App.Controllers
 
         AppInfo _app;
 
-        SQLiteConnection m_dbConnection;
+        IDbConnection m_dbConnection;
 
         LoadConfig loadConfig = new LoadConfig();
 
@@ -111,13 +112,13 @@ namespace URL_Shortener_App.Controllers
                     string username = jArray[0].SelectToken("username").ToString();
 
                     // ### Connect to the database
-                    m_dbConnection = new SQLiteConnection(_app.connectionString);
+                    m_dbConnection = new SqliteConnection(_app.connectionString);
                     m_dbConnection.Open();
 
                     // ### select the data
                     string sql = "SELECT * FROM urls";
-                    SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
-                    SQLiteDataReader reader = command.ExecuteReader();
+                    IDbCommand command = m_dbConnection.CreateCommand(); command.CommandText = sql;
+                    IDataReader reader = command.ExecuteReader();
                     while (reader.Read())
                     {
                         if (reader["username"].ToString().ToLower() == username.ToLower())
@@ -132,7 +133,7 @@ namespace URL_Shortener_App.Controllers
                                     + "clicks = " + (int.Parse(reader["clicks"].ToString()) + 1)
                                     + ", lastClicked = DATETIME('NOW')"
                                     + "WHERE shortURL = '" + reader["shortURL"].ToString() + "'";
-                                command = new SQLiteCommand(sql, m_dbConnection);
+                                command.CommandText = sql;
                                 command.ExecuteNonQuery();
                                 e.Response.Redirect(longURL);
                                 return true;
@@ -169,13 +170,13 @@ namespace URL_Shortener_App.Controllers
                 bool success = false;
 
                 // ### Connect to the database
-                m_dbConnection = new SQLiteConnection(_app.connectionString);
+                m_dbConnection = new SqliteConnection(_app.connectionString);
                 m_dbConnection.Open();
 
                 // ### select the data
                 string sql = "select * from users order by username desc";
-                SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
-                SQLiteDataReader reader = command.ExecuteReader();
+                IDbCommand command = m_dbConnection.CreateCommand(); command.CommandText = sql;
+                IDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
                     if (reader["username"].ToString().ToLower() == username)
@@ -242,13 +243,13 @@ namespace URL_Shortener_App.Controllers
                     string username = jArray[0].SelectToken("username").ToString();
 
                     // ### Connect to the database
-                    m_dbConnection = new SQLiteConnection(_app.connectionString);
+                    m_dbConnection = new SqliteConnection(_app.connectionString);
                     m_dbConnection.Open();
 
                     // ### select the data
                     string sql = "SELECT * FROM urls";
-                    SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
-                    SQLiteDataReader reader = command.ExecuteReader();
+                    IDbCommand command = m_dbConnection.CreateCommand(); command.CommandText = sql;
+                    IDataReader reader = command.ExecuteReader();
                     while (reader.Read())
                     {
                         if (reader["username"].ToString().ToLower() == username.ToLower())
@@ -292,13 +293,13 @@ namespace URL_Shortener_App.Controllers
                     string username = jArray[0].SelectToken("username").ToString();
 
                     // ### Connect to the database
-                    m_dbConnection = new SQLiteConnection(_app.connectionString);
+                    m_dbConnection = new SqliteConnection(_app.connectionString);
                     m_dbConnection.Open();
 
                     // ### select the data
                     string sql = "SELECT * FROM urls";
-                    SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
-                    SQLiteDataReader reader = command.ExecuteReader();
+                    IDbCommand command = m_dbConnection.CreateCommand(); command.CommandText = sql;
+                    IDataReader reader = command.ExecuteReader();
                     while (reader.Read())
                     {
                         if (reader["username"].ToString().ToLower() == username.ToLower())
@@ -378,12 +379,12 @@ namespace URL_Shortener_App.Controllers
                 Console.WriteLine("\tFile not found!");
             }
         }
-            //else
-            //{
-            //    errorHandler.RenderErrorPage(404, e);
-            //    Console.WriteLine("\tFile not found!");
-            //}
-    //}
-    #endregion
-}
+        //else
+        //{
+        //    errorHandler.RenderErrorPage(404, e);
+        //    Console.WriteLine("\tFile not found!");
+        //}
+        //}
+        #endregion
+    }
 }

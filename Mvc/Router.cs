@@ -5,10 +5,11 @@ using PHttp;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Data.SQLite;
+using Mono.Data.Sqlite;
 using System.IO;
 using System.Reflection;
 using static PHttp.Startup;
+using System.Data;
 
 namespace Mvc
 {
@@ -73,14 +74,14 @@ namespace Mvc
                 bool success = false;
 
                 // ### Connect to the database
-                SQLiteConnection m_dbConnection;
-                m_dbConnection = new SQLiteConnection(_app.connectionString);
+                IDbConnection m_dbConnection;
+                m_dbConnection = new SqliteConnection(_app.connectionString);
                 m_dbConnection.Open();
 
                 // ### select the data
                 string sql = "select * from users order by username desc";
-                SQLiteCommand command = new SQLiteCommand(sql, m_dbConnection);
-                SQLiteDataReader reader = command.ExecuteReader();
+                IDbCommand command = m_dbConnection.CreateCommand(); command.CommandText = sql;
+                IDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
                     if (reader["username"].ToString().ToLower() == username)
