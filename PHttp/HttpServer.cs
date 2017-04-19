@@ -393,10 +393,14 @@ namespace PHttp
             string path = e.Request.Url.PathAndQuery;
             HttpResponse res = e.Response;
 
+            string appName = path.Split('?')[0].Split('/')[1];
+
             string protocol = (e.Request.Url.Scheme.ToString() == "https") ? "https://" : "http://";
 
             string ignoreString = protocol + e.Request.Url.Host + ":"
                     + e.Request.Url.Port;
+
+            IgnorePathList.Add("/" + appName + "/Home/signin.css");
 
             foreach (var p in IgnorePathList)
             {
@@ -412,8 +416,8 @@ namespace PHttp
                 e.Response.Redirect(e.Request.Url.ToString() + path);
                 return false;
             }
+            appName = path.Split('?')[0].Split('/')[1];
             if (path[path.Length - 1] != '/') path = path + "/";
-            string appName = path.Split('?')[0].Split('/')[1];
             string resources = ConfigurationManager.AppSettings["Virtual"];
             DirectoryInfo info = new DirectoryInfo(resources);
             if (!info.Exists) { return false; } //make sure directory exists            
