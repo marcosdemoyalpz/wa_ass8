@@ -16,7 +16,7 @@ namespace ConsoleApp
                 Console.WriteLine("\tFinished Startup!");
 
                 //using (var server = new HttpServer(8080))
-                using (var server = new HttpServer(8080))
+                using (var server = new HttpServer("0.0.0.0", 8080))
                 {
                     try
                     {
@@ -30,18 +30,18 @@ namespace ConsoleApp
                     }
                     catch (Exception ex)
                     {
-                        throw new Exception(ex.Message);
+                        throw new Exception(ex.ToString());
                     }
 
-                    // Start the default web browser.
-                    try
-                    {
-                        Process.Start("http://" + server.EndPoint + "/");
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception(ex.Message);
-                    }
+                    //// Start the default web browser.
+                    //try
+                    //{
+                    //    Process.Start("http://" + server.EndPoint + "/");
+                    //}
+                    //catch (Exception ex)
+                    //{
+                    //    throw new Exception(ex.Message);
+                    //}
                     //Console.WriteLine("Press any key to continue...");
                     Console.ReadKey();
 

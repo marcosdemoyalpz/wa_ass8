@@ -2,11 +2,11 @@
     {
         "layout": "layout.hbs",
         "errorTemplate": "error.hbs",
-        "defaultDir": "../../../Mvc/bin/Debug/",
+        "defaultDir": "../../../Mvc/bin/Release/",
         "sites": [
             {
                 "name": "App1",
-                "applicationsDir": "../../../App1/bin/Debug/",
+                "applicationsDir": "../../../App1/bin/Release/",
                 "virtualPath": "../../../Virtual/App1/",
                 "directoryBrowsing": false,
                 "database": "App1_DB.sqlite",
@@ -15,7 +15,7 @@
             },
             {
                 "name": "URL_Shortener_App",
-                "applicationsDir": "../../../URL_Shortener_App/bin/Debug/",
+                "applicationsDir": "../../../URL_Shortener_App/bin/Release/",
                 "virtualPath": "../../../Virtual/URL_Shortener_App/",
                 "directoryBrowsing": false,
                 "database": "URL_Shortener_App_DB.sqlite",
