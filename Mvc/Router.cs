@@ -307,10 +307,12 @@ namespace Mvc
                         {
                             if (_FailedAuth)
                             {
+                                Console.WriteLine("\t" + e.Request.Url);
                                 _errorHandler.RenderErrorPage(401, e);
                             }
                             else
                             {
+                                Console.WriteLine("\t" + e.Request.Url);
                                 _errorHandler.RenderErrorPage(405, e);
                             }
                         }
@@ -318,7 +320,11 @@ namespace Mvc
                         break;
                     }
                 }
-                if (found == false) _errorHandler.RenderErrorPage(404, e);
+                if (found == false)
+                {
+                    Console.WriteLine("\t" + e.Request.Url);
+                    _errorHandler.RenderErrorPage(404, e);
+                }
             }
         }
     }
