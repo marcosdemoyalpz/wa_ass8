@@ -163,7 +163,7 @@ namespace Mvc
                     Console.WriteLine("\tError 500 - Internal Server Error!");
                     break;
             }
-            var source = File.ReadAllText(resources + "\\Views\\" + errorTemplate);
+            var source = File.ReadAllText(resources + "Views/" + errorTemplate);
             var template = Handlebars.Compile(source);
             var result = template(data);
             using (var writer = new StreamWriter(e.Response.OutputStream))
@@ -300,7 +300,7 @@ namespace Mvc
                     Console.WriteLine("\tError 500 - Internal Server Error!");
                     break;
             }
-            var source = File.ReadAllText(resources + "\\Views\\" + errorTemplate);
+            var source = File.ReadAllText(resources + "Views/" + errorTemplate);
             var template = Handlebars.Compile(source);
             var result = template(data);
             using (var writer = new StreamWriter(e.Response.OutputStream))
