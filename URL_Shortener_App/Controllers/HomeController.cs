@@ -544,20 +544,22 @@ namespace URL_Shortener_App.Controllers
             else if (e.Request.RequestType == "POST")
             {
                 if (CreateShortURL(e))
-                {
-                    e.Response.Headers.Add("REFRESH", loginTimeout.ToString() + ";URL=" + url + "Index");
-                    e.Response.StatusCode = 200;
-                    RenderMessage(e, "Success!");
+                {                    
                     var phantomJS = new PhantomJS();
                     var imgSource = resource + _appName + "/img/" + _shortURL + ".png";
                     phantomJS.Run(resource + _appName + "/" + "rasterize.js", new[] { _longURL, imgSource });
                     if (DbLogin(e, true))
                     {
+                        e.Response.Headers.Add("REFRESH", loginTimeout.ToString() + ";URL=" + url + "Index");
+                        e.Response.StatusCode = 200;
+                        RenderMessage(e, "Success!");
                         e.Response.Redirect(url + "Index");
                     }
                     else
                     {
-                        e.Response.Redirect(GetAppURL(e, "Short") + "Anonymous?token=" + AnonToken);
+                        e.Response.Headers.Add("REFRESH", loginTimeout.ToString() + ";URL=" + GetAppURL(e, "Short") + "Anonymous?token=" + AnonToken);
+                        e.Response.StatusCode = 200;
+                        RenderMessage(e, "Success!");
                     }
                 }
                 else
