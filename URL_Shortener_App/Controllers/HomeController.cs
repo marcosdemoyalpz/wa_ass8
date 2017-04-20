@@ -156,9 +156,21 @@ namespace URL_Shortener_App.Controllers
                             var button = "<a href=\"" + GetAppURL(e, "Short") + "Details" + "?go=" + reader["shortURL"].ToString()
                                 + "\" class=\"btn btn-lg btn-info btn-block\" role=\"button\">Analytics</a>";
 
-                            img = img + GetAppURL(e, "img") + reader["shortURL"].ToString() + ".png\"" + "class=\"portrait\"" + " alt=\"URL Image\" + "
+                            //string imgURL = GetAppURL(e, "img") + reader["shortURL"].ToString() + ".png";
+                            string imgURL = "http://api.screenshotmachine.com/?key=35f0a9&url=" + longURL;
+                            img = img + imgURL + "\" class=\"portrait\"" + " alt=\"URL Image\" + "
                                 + "style=\"max-width:100px; max-height:100%; display:inline-block; overflow: hidden;\">";
-                            Console.WriteLine(img);
+
+                            var dateTemp = DateTime.Parse(dateCreated).ToLocalTime();
+                            if (dateTemp.AddDays(30) < DateTime.Now)
+                            {
+                                trOpen = "<tr class=\"warning\" style=\"vertical-align: middle;\" align=\"center\">";
+                            }
+                            else
+                            {
+                                trOpen = "<tr style=\"vertical-align: middle;\" align=\"center\">";
+                            }
+
                             table = table +
                                 trOpen +
                                     "<td class=\"thumbnail\" align=\"center\">" +
@@ -552,9 +564,9 @@ namespace URL_Shortener_App.Controllers
                         e.Response.Headers.Add("REFRESH", loginTimeout.ToString() + ";URL=" + url + "Index");
                         e.Response.StatusCode = 200;
                         RenderMessage(e, "Success!");
-                        var phantomJS = new PhantomJS();
-                        var imgSource = resource + _appName + "/img/" + _shortURL + ".png";
-                        phantomJS.Run(resource + _appName + "/" + "rasterize.js", new[] { _longURL, imgSource });
+                        //var phantomJS = new PhantomJS();
+                        //var imgSource = resource + _appName + "/img/" + _shortURL + ".png";
+                        //phantomJS.Run(resource + _appName + "/" + "rasterize.js", new[] { _longURL, imgSource });
                         e.Response.Redirect(url + "Index");
                     }
                     else
@@ -562,9 +574,9 @@ namespace URL_Shortener_App.Controllers
                         e.Response.Headers.Add("REFRESH", loginTimeout.ToString() + ";URL=" + GetAppURL(e, "Short") + "Anonymous?token=" + AnonToken);
                         e.Response.StatusCode = 200;
                         RenderMessage(e, "Success!");
-                        var phantomJS = new PhantomJS();
-                        var imgSource = resource + _appName + "/img/" + _shortURL + ".png";
-                        phantomJS.Run(resource + _appName + "/" + "rasterize.js", new[] { _longURL, imgSource });
+                        //var phantomJS = new PhantomJS();
+                        //var imgSource = resource + _appName + "/img/" + _shortURL + ".png";
+                        //phantomJS.Run(resource + _appName + "/" + "rasterize.js", new[] { _longURL, imgSource });
                         e.Response.Redirect(GetAppURL(e, "Short") + "Anonymous?token=" + AnonToken);
                     }
                 }

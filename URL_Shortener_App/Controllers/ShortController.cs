@@ -1403,8 +1403,10 @@ namespace URL_Shortener_App.Controllers
                     var link1 = "<a href=\"" + shortUrl_link + "\">" + "go=" + shortURL + "</a>";
                     var link2 = "<a href=\"" + longURL + "\">" + longURL + "</a>";
 
-                    img = img + GetAppURL(e, "img") + shortURL + ".png\"" + "class=\"portrait\"" + " alt=\"URL Image\" + "
+                    string imgURL = "http://api.screenshotmachine.com/?key=35f0a9&url=" + longURL;
+                    img = img + imgURL + "\" class=\"portrait\"" + " alt=\"URL Image\" + "
                         + "style=\"max-width:100px; max-height:100%; display:inline-block; overflow: hidden;\">";
+
                     Console.WriteLine(img);
                     table = table +
                         trOpen +
@@ -1433,6 +1435,54 @@ namespace URL_Shortener_App.Controllers
             table = table + "<thead><tr><th>Short URL</th><th>Long URL</th></tr></thead><tbody>";
             table = table + "</tbody></table></div>";
             return table;
+        }
+
+        string GetLongURL(HttpRequestEventArgs e)
+        {
+            try
+            {
+                string longURL = "";
+                if (DbLogin(e, true))
+                {
+                    _app = loadConfig.InitApp(resource + _appName, "/config.json");
+                    HttpCookie cookie = e.Request.Cookies.Get(cookieName1);
+                    JArray jArray = new JArray();
+                    string decoded;
+                    if (cookie != null && cookie.Value != "")
+                    {
+                        decoded = DecodeToken(cookie.Value);
+                        jArray = GetJArray(decoded);
+                    }
+
+                    string username = jArray[0].SelectToken("username").ToString();
+
+                    // ### Connect to the database
+                    m_dbConnection = new SqliteConnection(_app.connectionString);
+                    m_dbConnection.Open();
+
+                    // ### select the data from urls to load Click Info
+                    string sql = "SELECT * FROM urls";
+                    IDbCommand command = m_dbConnection.CreateCommand(); command.CommandText = sql;
+                    IDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        if (reader["username"].ToString().ToLower() == username.ToLower())
+                        {
+                            var shortUrl = reader["shortURL"].ToString();
+
+                            if (e.Request.Params["go"] == shortUrl)
+                            {
+                                longURL = reader["longURL"].ToString();
+                            }
+                        }
+                    }
+                }
+                return longURL;
+            }
+            catch
+            {
+                return "";
+            }
         }
 
         #endregion
@@ -1471,12 +1521,14 @@ namespace URL_Shortener_App.Controllers
 
                 if (File.Exists(filePath) == true)
                 {
+                    //string imgURL = GetAppURL(e, "img") + e.Request.Params["go"] + ".png";
+                    string imgURL = "http://api.screenshotmachine.com/?key=35f0a9&dimension=640x480&url=" + GetLongURL(e);
                     var source = File.ReadAllText(filePath);
                     var template = Handlebars.Compile(source);
                     var data = new
                     {
                         showNavButtons = true,
-                        image = GetAppURL(e, "img") + e.Request.Params["go"] + ".png",
+                        image = imgURL,
                         delete = GetAppURL(e) + "Delete?go=" + e.Request.Params["go"],
                         clicks = String.Join(",", GetClicks(e)),
                         clicksLabels = e.Request.Params["go"],
