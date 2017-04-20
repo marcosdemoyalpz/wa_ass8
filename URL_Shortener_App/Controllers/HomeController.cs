@@ -115,7 +115,8 @@ namespace URL_Shortener_App.Controllers
 
                     string username = jArray[0].SelectToken("username").ToString();
 
-                    table = "<table class=\"table\" style=\"vertical-align: middle;\">";
+                    table = "<div class=\"table-responsive\">"
+                        + "<table class=\"table table-bordered\" style=\"vertical-align: middle;\">";
                     table = table + "<thead>" + "<tr>"
                         + "<th style=\"text-align: center;\">" + "Image" + "</th>"
                         + "<th style=\"text-align: center;\">" + "Short URL" + "</th>"
@@ -185,7 +186,7 @@ namespace URL_Shortener_App.Controllers
                         }
                     }
                     reader.Close();
-                    table = table + "</tbody></table>";
+                    table = table + "</tbody></table></div>";
                     return table;
                 }
             }
@@ -194,9 +195,10 @@ namespace URL_Shortener_App.Controllers
                 table = "";
                 return ex.ToString();
             }
-            table = "<table class=\"table\">";
+            table = "<div class=\"table-responsive\">"
+                + "<table class=\"table table-bordered\" style=\"vertical-align: middle;\">";
             table = table + "<thead><tr><th>Short URL</th><th>Long URL</th></tr></thead><tbody>";
-            table = table + "</tbody></table>";
+            table = table + "</tbody></table></div>";
             return table;
         }
 
