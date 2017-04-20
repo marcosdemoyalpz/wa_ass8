@@ -32,7 +32,7 @@ namespace URL_Shortener_App.Controllers
         int expiration = 7200;
 
         string cookieName1 = "URL_Shortener_App_JWT";
-        string cookieName2 = "AnonTemp";
+        string AnonToken = "";
 
         private string _appName = "URL_Shortener_App";
         private string _controllerName = "Home";
@@ -418,8 +418,8 @@ namespace URL_Shortener_App.Controllers
                     var payload = new Dictionary<string, object>
                         {
                             { "shortURL", shortURL },
-                            { "longURL", longURL },
-                            { "exp", 30 }
+                            { "longURL", longURL }
+                            //{ "exp", 7200 }
                         };
 
                     IJwtAlgorithm algorithm = new JWT.Algorithms.HMACSHA256Algorithm();
@@ -430,10 +430,8 @@ namespace URL_Shortener_App.Controllers
                     string token = encoder.Encode(payload, secret);
 
                     Console.WriteLine(token);
+                    AnonToken = token;
 
-                    HttpCookie cookie = new HttpCookie(cookieName2, token);
-                    cookie.Expires = DateTime.Now.AddMinutes(10);
-                    e.Response.Cookies.Add(cookie);
                     _longURL = longURL;
                     _shortURL = shortURL;
                     return true;
@@ -553,7 +551,14 @@ namespace URL_Shortener_App.Controllers
                     var phantomJS = new PhantomJS();
                     var imgSource = resource + _appName + "/img/" + _shortURL + ".png";
                     phantomJS.Run(resource + _appName + "/" + "rasterize.js", new[] { _longURL, imgSource });
-                    e.Response.Redirect(url + "Index");
+                    if (DbLogin(e, true))
+                    {
+                        e.Response.Redirect(url + "Index");
+                    }
+                    else
+                    {
+                        e.Response.Redirect(GetAppURL(e, "Short") + "Anonymous?token=" + AnonToken);
+                    }
                 }
                 else
                 {

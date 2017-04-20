@@ -169,12 +169,75 @@ namespace URL_Shortener_App.Controllers
                     }
                     return false;
                 }
+                else
+                {
+                    if (e.Request.Params["go"] != null)
+                    {
+                        string decoded = DecodeToken(e.Request.Params["go"]);
+                        JArray jArray = GetJArray(decoded);
+
+                        if (jArray == null)
+                        {
+                            throw new ArgumentNullException();
+                        }
+
+                        string shortURL = jArray[0].SelectToken("shortURL").ToString();
+                        string longURL = jArray[0].SelectToken("longURL").ToString();
+                        e.Response.Redirect(longURL);
+                        return true;
+                    }
+                    return false;
+                }
             }
             catch
             {
                 return false;
             }
-            return false;
+        }
+
+        bool DbLogin(HttpRequestEventArgs e, bool fromCookie = false)
+        {
+            try
+            {
+                _app = loadConfig.InitApp(resource + _appName, "/config.json");
+                HttpCookie cookie = e.Request.Cookies.Get(cookieName1);
+                JArray jArray = new JArray();
+                if (cookie != null && cookie.Value != "")
+                {
+                    string decoded = DecodeToken(cookie.Value);
+                    jArray = GetJArray(decoded);
+                }
+
+                string username = (fromCookie == true) ? jArray[0].SelectToken("username").ToString() : e.Request.Form.Get("username");
+                string password = (fromCookie == true) ? jArray[0].SelectToken("password").ToString() : e.Request.Form.Get("password");
+
+                bool success = false;
+
+                // ### Connect to the database
+                m_dbConnection = new SqliteConnection(_app.connectionString);
+                m_dbConnection.Open();
+
+                // ### select the data
+                string sql = "select * from users order by username desc";
+                IDbCommand command = m_dbConnection.CreateCommand(); command.CommandText = sql;
+                IDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    if (reader["username"].ToString().ToLower() == username)
+                    {
+                        if (reader["password"].ToString() == password)
+                        {
+                            success = true;
+                        }
+                    }
+                }
+                reader.Close();
+                return success;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         #region Update/Create
@@ -703,52 +766,7 @@ namespace URL_Shortener_App.Controllers
                 return false;
             }
         }
-        #endregion
-
-        bool DbLogin(HttpRequestEventArgs e, bool fromCookie = false)
-        {
-            try
-            {
-                _app = loadConfig.InitApp(resource + _appName, "/config.json");
-                HttpCookie cookie = e.Request.Cookies.Get(cookieName1);
-                JArray jArray = new JArray();
-                if (cookie != null && cookie.Value != "")
-                {
-                    string decoded = DecodeToken(cookie.Value);
-                    jArray = GetJArray(decoded);
-                }
-
-                string username = (fromCookie == true) ? jArray[0].SelectToken("username").ToString() : e.Request.Form.Get("username");
-                string password = (fromCookie == true) ? jArray[0].SelectToken("password").ToString() : e.Request.Form.Get("password");
-
-                bool success = false;
-
-                // ### Connect to the database
-                m_dbConnection = new SqliteConnection(_app.connectionString);
-                m_dbConnection.Open();
-
-                // ### select the data
-                string sql = "select * from users order by username desc";
-                IDbCommand command = m_dbConnection.CreateCommand(); command.CommandText = sql;
-                IDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    if (reader["username"].ToString().ToLower() == username)
-                    {
-                        if (reader["password"].ToString() == password)
-                        {
-                            success = true;
-                        }
-                    }
-                }
-                reader.Close();
-                return success;
-            }
-            catch
-            {
-                return false;
-            }
-        }
+        #endregion        
 
         void RenderMessage(HttpRequestEventArgs e, string message)
         {
@@ -829,6 +847,7 @@ namespace URL_Shortener_App.Controllers
             return false;
         }
 
+        #region Charts
         List<int> GetClicks(HttpRequestEventArgs e)
         {
             List<int> results = new List<int>();
@@ -1270,6 +1289,76 @@ namespace URL_Shortener_App.Controllers
             }
             return results;
         }
+        #endregion
+
+        string CreateAnonTable(HttpRequestEventArgs e)
+        {
+            string url = GetAppURL(e, "Short") + "Path";
+            string table = "";
+            try
+            {
+                if (e.Request.Params["token"] != null)
+                {
+                    var token = e.Request.Params["token"];
+                    string decoded = DecodeToken(token);
+                    JArray jArray = GetJArray(decoded);
+
+                    if (jArray == null)
+                    {
+                        throw new ArgumentNullException();
+                    }
+
+                    string shortURL = jArray[0].SelectToken("shortURL").ToString();
+                    string longURL = jArray[0].SelectToken("longURL").ToString();
+
+                    table = "<table class=\"table\" style=\"vertical-align: middle;\">";
+                    table = table + "<thead>" + "<tr>"
+                        + "<th style=\"text-align: center;\">" + "Image" + "</th>"
+                        + "<th style=\"text-align: center;\">" + "Short URL" + "</th>"
+                        + "<th style=\"text-align: center;\">" + "Long URL" + "</th>"
+                        + "</tr>" + "</thead>"
+                        + "<tbody>";
+
+                    var trOpen = "<tr style=\"vertical-align: middle;\" align=\"center\">";
+                    var trClose = "</tr>";
+                    var tdOpen = "<td style=\"vertical-align: middle;\" align=\"center\">";
+                    var tdClose = "</td>";
+
+                    string img = "<img src=\"";
+                    var shortUrl_link = url + "?go=" + e.Request.Params["token"];
+                    var link1 = "<a href=\"" + shortUrl_link + "\">" + "go=" + shortURL + "</a>";
+                    var link2 = "<a href=\"" + longURL + "\">" + longURL + "</a>";
+
+                    img = img + GetAppURL(e, "img") + shortURL + ".png\"" + "class=\"portrait\"" + " alt=\"URL Image\" + "
+                        + "style=\"max-width:100px; max-height:100%; display:inline-block; overflow: hidden;\">";
+                    Console.WriteLine(img);
+                    table = table +
+                        trOpen +
+                            "<td class=\"thumbnail\" align=\"center\">" +
+                                img +
+                            tdClose +
+                            tdOpen +
+                                link1 +
+                            tdClose +
+                            tdOpen +
+                                link2 +
+                            tdClose +
+                        trClose;
+
+                    table = table + "</tbody></table>";
+                    return table;
+                }
+            }
+            catch (Exception ex)
+            {
+                table = "";
+                return ex.ToString();
+            }
+            table = "<table class=\"table\">";
+            table = table + "<thead><tr><th>Short URL</th><th>Long URL</th></tr></thead><tbody>";
+            table = table + "</tbody></table>";
+            return table;
+        }
 
         #endregion
 
@@ -1358,11 +1447,11 @@ namespace URL_Shortener_App.Controllers
         public void Anonymous(HttpRequestEventArgs e)
         {
             string url = GetAppURL(e, "Home");
-            if (DbCheckURLDetails(e))
+            if (DbLogin(e, true) == false)
             {
                 string views = resource + _appName + "/Views/";
                 HttpResponse res = e.Response;
-                string filePath = views + "detallesURL.hbs";
+                string filePath = views + "Main.hbs";
                 Console.WriteLine("\tStarting " + _appName + "!");
                 Console.WriteLine("\tLoading file on " + filePath + "!");
 
@@ -1370,29 +1459,21 @@ namespace URL_Shortener_App.Controllers
                 {
                     var source = File.ReadAllText(filePath);
                     var template = Handlebars.Compile(source);
+                    var table = CreateAnonTable(e);
                     var data = new
                     {
                         showNavButtons = true,
-                        clicks = String.Join(",", GetClicks(e)),
-                        clicksLabels = e.Request.Params["go"],
-                        referers = String.Join(",", GetReferersCount(e)),
-                        referersLabels = String.Join(",", GetReferers(e)),
-                        agents = String.Join(",", GetAgentsCount(e)),
-                        agentsLabels = String.Join(",", GetAgents(e)),
-                        locations = String.Join(",", GetLocationsCount(e)),
-                        locationsLabels = String.Join(",", GetLocations(e)),
-                        platforms = String.Join(",", GetPlatformsCount(e)),
-                        platformsLabels = String.Join(",", GetPlatforms(e)),
+                        login = false,
                         btn1 = "Home",
                         btn2 = "About",
-                        btn3 = "Sign Out",
+                        btn3 = "Sign In",
                         link1 = url + "Index",
                         link2 = url + "About",
                         link3 = url + "Login",
                         title = "Marcos URL Shortener",
                         mainH1 = "Marcos's App",
-                        mainH2 = "URL Details",
-                        body = ""
+                        mainH2 = "Home",
+                        body = File.ReadAllText(views + "/partials/captcha.hbs") + table
                     };
                     var result = template(data);
                     using (var writer = new StreamWriter(e.Response.OutputStream))
