@@ -544,15 +544,15 @@ namespace URL_Shortener_App.Controllers
             else if (e.Request.RequestType == "POST")
             {
                 if (CreateShortURL(e))
-                {                    
-                    var phantomJS = new PhantomJS();
-                    var imgSource = resource + _appName + "/img/" + _shortURL + ".png";
-                    phantomJS.Run(resource + _appName + "/" + "rasterize.js", new[] { _longURL, imgSource });
+                {
                     if (DbLogin(e, true))
                     {
                         e.Response.Headers.Add("REFRESH", loginTimeout.ToString() + ";URL=" + url + "Index");
                         e.Response.StatusCode = 200;
                         RenderMessage(e, "Success!");
+                        var phantomJS = new PhantomJS();
+                        var imgSource = resource + _appName + "/img/" + _shortURL + ".png";
+                        phantomJS.Run(resource + _appName + "/" + "rasterize.js", new[] { _longURL, imgSource });
                         e.Response.Redirect(url + "Index");
                     }
                     else
@@ -560,13 +560,17 @@ namespace URL_Shortener_App.Controllers
                         e.Response.Headers.Add("REFRESH", loginTimeout.ToString() + ";URL=" + GetAppURL(e, "Short") + "Anonymous?token=" + AnonToken);
                         e.Response.StatusCode = 200;
                         RenderMessage(e, "Success!");
+                        var phantomJS = new PhantomJS();
+                        var imgSource = resource + _appName + "/img/" + _shortURL + ".png";
+                        phantomJS.Run(resource + _appName + "/" + "rasterize.js", new[] { _longURL, imgSource });
+                        e.Response.Redirect(GetAppURL(e, "Short") + "Anonymous?token=" + AnonToken);
                     }
                 }
                 else
                 {
                     e.Response.Headers.Add("REFRESH", loginTimeout.ToString() + ";URL=" + url + "Index");
-                    e.Response.StatusCode = 401;
-                    RenderMessage(e, "Login Failed!");
+                    e.Response.StatusCode = 500;
+                    RenderMessage(e, "Process Failed!");
                 }
             }
         }
