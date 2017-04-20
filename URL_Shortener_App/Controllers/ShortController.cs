@@ -240,6 +240,85 @@ namespace URL_Shortener_App.Controllers
             }
         }
 
+        void RenderMessage(HttpRequestEventArgs e, string message)
+        {
+            string views = resource + _appName + "/Views/";
+            HttpResponse res = e.Response;
+            string filePath = views + "alert.hbs";
+
+            if (File.Exists(filePath) == true)
+            {
+                var source = File.ReadAllText(filePath);
+                var template = Handlebars.Compile(source);
+                var data = new
+                {
+                    title = "Marcos URL Shortener",
+                    mainH1 = message,
+                    body = "Redirecting, please wait..."
+                };
+                var result = template(data);
+                using (var writer = new StreamWriter(e.Response.OutputStream))
+                {
+                    writer.Write(result);
+                }
+            }
+            else
+            {
+                errorHandler.RenderErrorPage(404, e);
+                Console.WriteLine("\tFile not found!");
+            }
+        }
+
+        bool DbCheckURLDetails(HttpRequestEventArgs e)
+        {
+            try
+            {
+                if (DbLogin(e, true))
+                {
+                    _app = loadConfig.InitApp(resource + _appName, "/config.json");
+                    HttpCookie cookie = e.Request.Cookies.Get(cookieName1);
+                    JArray jArray = new JArray();
+                    string decoded;
+                    if (cookie != null && cookie.Value != "")
+                    {
+                        decoded = DecodeToken(cookie.Value);
+                        jArray = GetJArray(decoded);
+                    }
+
+                    string username = jArray[0].SelectToken("username").ToString();
+
+                    // ### Connect to the database
+                    m_dbConnection = new SqliteConnection(_app.connectionString);
+                    m_dbConnection.Open();
+
+                    // ### select the data
+                    string sql = "SELECT * FROM urls";
+                    IDbCommand command = m_dbConnection.CreateCommand(); command.CommandText = sql;
+                    IDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        var go = e.Request.Params["go"];
+                        var shortUrl = reader["shortURL"].ToString();
+                        var rowUsername = reader["username"].ToString();
+                        if (rowUsername.ToLower() == username.ToLower())
+                        {
+                            if (go == shortUrl)
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                    reader.Close();
+                    return false;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+            return false;
+        }
+
         #region Update/Create
         bool UpdateReferers(HttpRequestEventArgs e, AppInfo _app, string username)
         {
@@ -313,9 +392,10 @@ namespace URL_Shortener_App.Controllers
             m_dbConnection.Open();
 
             string agent = "";
-            if (e.Request.UserAgent != null)
+            UserAgentHelper agentHelper = new UserAgentHelper(e);
+            if (agentHelper.agent_name != null)
             {
-                agent = e.Request.UserAgent;
+                agent = agentHelper.agent_name;
             }
             string readUser = "";
             // ### select the data from agents to load Agents Info
@@ -339,7 +419,7 @@ namespace URL_Shortener_App.Controllers
                 }
             }
             reader.Close();
-            if (agentFound)
+            if (agentFound == true)
             {
                 // ### Update clicks on table
                 sql = "UPDATE agents SET "
@@ -440,6 +520,172 @@ namespace URL_Shortener_App.Controllers
             }
             return false;
         }
+        #region UpdatePlatforms_OLD
+        //bool UpdatePlatforms(HttpRequestEventArgs e, AppInfo _app, string username)
+        //{
+        //    int platformsCount = 0;
+        //    bool platformFound = false;
+
+        //    // ### Connect to the database
+        //    m_dbConnection = new SqliteConnection(_app.connectionString);
+        //    m_dbConnection.Open();
+
+        //    string platform = "Others";
+        //    string userAgent = e.Request.UserAgent;
+
+        //    if (userAgent.Contains("Windows NT 10.0"))
+        //    {
+        //        //Windows 8.1
+        //        platform = "Windows NT 10.0";
+        //    }
+        //    else if (userAgent.Contains("Windows NT 6.3"))
+        //    {
+        //        //Windows 8.1
+        //        platform = "Windows NT 6.3";
+        //    }
+        //    else if (userAgent.Contains("Windows NT 6.2"))
+        //    {
+        //        //Windows 8
+        //        platform = "Windows NT 6.2";
+        //    }
+        //    else if (userAgent.Contains("Windows NT 6.1"))
+        //    {
+        //        //Windows 7
+        //        platform = "Windows NT 6.1";
+        //    }
+        //    else if (userAgent.Contains("Windows NT 6.0"))
+        //    {
+        //        //Windows Vista
+        //        platform = "Windows NT 6.0";
+        //    }
+        //    else if (userAgent.Contains("Windows NT 5.2"))
+        //    {
+        //        //Windows Server 2003; Windows XP x64 Edition
+        //        platform = "Windows NT 5.2";
+        //    }
+        //    else if (userAgent.Contains("Windows NT 5.1"))
+        //    {
+        //        //Windows XP
+        //        platform = "Windows NT 5.1";
+        //    }
+        //    else if (userAgent.Contains("Windows NT 5.01"))
+        //    {
+        //        //Windows 2000, Service Pack 1 (SP1)
+        //        platform = "Windows NT 5.01";
+        //    }
+        //    else if (userAgent.Contains("Windows NT 5.0"))
+        //    {
+        //        //Windows 2000
+        //        platform = "Windows NT 5.0";
+        //    }
+        //    else if (userAgent.Contains("Windows NT 4.0"))
+        //    {
+        //        //Microsoft Windows NT 4.0
+        //        platform = "Windows NT 4.0";
+        //    }
+        //    else if (userAgent.Contains("Win 9x 4.90"))
+        //    {
+        //        //Windows Millennium Edition (Windows Me)
+        //        platform = "Win 9x 4.90";
+        //    }
+        //    else if (userAgent.Contains("Windows 98"))
+        //    {
+        //        //Windows 98
+        //        platform = "Windows 98";
+        //    }
+        //    else if (userAgent.Contains("Windows 95"))
+        //    {
+        //        //Windows 95
+        //        platform = "Windows 95";
+        //    }
+        //    else if (userAgent.Contains("Windows CE"))
+        //    {
+        //        //Windows CE
+        //        platform = "Windows CE";
+        //    }
+        //    else if (userAgent.Contains("Android"))
+        //    {
+        //        platform = "Android";
+        //    }
+        //    else if (userAgent.Contains("iPad"))
+        //    {
+        //        platform = "iPad OS";
+        //    }
+        //    else if (userAgent.Contains("iPhone"))
+        //    {
+        //        platform = "iPhone OS";
+        //    }
+        //    else if (userAgent.Contains("Linux") && userAgent.Contains("KFAPWI"))
+        //    {
+        //        platform = "Kindle Fire";
+        //    }
+        //    else if (userAgent.Contains("RIM Tablet") || (userAgent.Contains("BB") && userAgent.Contains("Mobile")))
+        //    {
+        //        platform = "Black Berry";
+        //    }
+        //    else if (userAgent.Contains("Windows Phone"))
+        //    {
+        //        platform = "Windows Phone";
+        //    }
+        //    else if (userAgent.Contains("Mac OS"))
+        //    {
+        //        platform = "Mac OS";
+        //    }
+        //    string readUser = "";
+        //    // ### select the data from platforms to load Platform Info
+        //    string sql = "SELECT * FROM platforms";
+        //    IDbCommand command = m_dbConnection.CreateCommand(); command.CommandText = sql;
+        //    IDataReader reader = command.ExecuteReader();
+        //    while (reader.Read())
+        //    {
+        //        readUser = reader["username"].ToString();
+        //        if (readUser.ToLower() == username.ToLower())
+        //        {
+        //            var shortUrl = reader["shortURL"].ToString();
+        //            if (shortUrl == e.Request.Params["go"])
+        //            {
+        //                if (platform == reader["platform"].ToString())
+        //                {
+        //                    platformFound = true;
+        //                    platformsCount = (int.Parse(reader["count"].ToString()) + 1);
+        //                }
+        //            }
+        //        }
+        //    }
+        //    reader.Close();
+        //    if (platformFound)
+        //    {
+        //        // ### Update clicks on table
+        //        sql = "UPDATE platforms SET "
+        //            + "count = " + platformsCount
+        //            + " WHERE shortURL = '" + e.Request.Params["go"] + "' AND "
+        //            + "agent = '" + platform + "' AND "
+        //            + "username = '" + username + "'";
+        //        command.CommandText = sql;
+        //        command.ExecuteNonQuery();
+        //        return true;
+        //    }
+        //    else
+        //    {
+        //        if (platform != "" && platform != null)
+        //        {
+        //            var shortUrl = e.Request.Params["go"];
+        //            // ### Add some data to the table
+        //            sql = "insert into platforms "
+        //                + "(platform, username, shortURL, count)"
+        //                + " values "
+        //                + "('" + platform + "',"
+        //                + "'" + username + "',"
+        //                + "'" + shortUrl + "',"
+        //                + " 1 )";
+        //            command.CommandText = sql;
+        //            command.ExecuteNonQuery();
+        //            return true;
+        //        }
+        //    }
+        //    return false;
+        //}
+        #endregion
         bool UpdatePlatforms(HttpRequestEventArgs e, AppInfo _app, string username)
         {
             int platformsCount = 0;
@@ -450,105 +696,11 @@ namespace URL_Shortener_App.Controllers
             m_dbConnection.Open();
 
             string platform = "Others";
-            string userAgent = e.Request.UserAgent;
 
-            if (userAgent.Contains("Windows NT 10.0"))
+            UserAgentHelper agentHelper = new UserAgentHelper(e);
+            if (agentHelper.os_name != null)
             {
-                //Windows 8.1
-                platform = "Windows NT 10.0";
-            }
-            else if (userAgent.Contains("Windows NT 6.3"))
-            {
-                //Windows 8.1
-                platform = "Windows NT 6.3";
-            }
-            else if (userAgent.Contains("Windows NT 6.2"))
-            {
-                //Windows 8
-                platform = "Windows NT 6.2";
-            }
-            else if (userAgent.Contains("Windows NT 6.1"))
-            {
-                //Windows 7
-                platform = "Windows NT 6.1";
-            }
-            else if (userAgent.Contains("Windows NT 6.0"))
-            {
-                //Windows Vista
-                platform = "Windows NT 6.0";
-            }
-            else if (userAgent.Contains("Windows NT 5.2"))
-            {
-                //Windows Server 2003; Windows XP x64 Edition
-                platform = "Windows NT 5.2";
-            }
-            else if (userAgent.Contains("Windows NT 5.1"))
-            {
-                //Windows XP
-                platform = "Windows NT 5.1";
-            }
-            else if (userAgent.Contains("Windows NT 5.01"))
-            {
-                //Windows 2000, Service Pack 1 (SP1)
-                platform = "Windows NT 5.01";
-            }
-            else if (userAgent.Contains("Windows NT 5.0"))
-            {
-                //Windows 2000
-                platform = "Windows NT 5.0";
-            }
-            else if (userAgent.Contains("Windows NT 4.0"))
-            {
-                //Microsoft Windows NT 4.0
-                platform = "Windows NT 4.0";
-            }
-            else if (userAgent.Contains("Win 9x 4.90"))
-            {
-                //Windows Millennium Edition (Windows Me)
-                platform = "Win 9x 4.90";
-            }
-            else if (userAgent.Contains("Windows 98"))
-            {
-                //Windows 98
-                platform = "Windows 98";
-            }
-            else if (userAgent.Contains("Windows 95"))
-            {
-                //Windows 95
-                platform = "Windows 95";
-            }
-            else if (userAgent.Contains("Windows CE"))
-            {
-                //Windows CE
-                platform = "Windows CE";
-            }
-            else if (userAgent.Contains("Android"))
-            {
-                platform = "Android";
-            }
-            else if (userAgent.Contains("iPad"))
-            {
-                platform = "iPad OS";
-            }
-            else if (userAgent.Contains("iPhone"))
-            {
-                platform = "iPhone OS";
-            }
-            else if (userAgent.Contains("Linux") && userAgent.Contains("KFAPWI"))
-            {
-                platform = "Kindle Fire";
-            }
-            else if (userAgent.Contains("RIM Tablet") || (userAgent.Contains("BB") && userAgent.Contains("Mobile")))
-            {
-                platform = "Black Berry";
-            }
-            else if (userAgent.Contains("Windows Phone"))
-            {
-                platform = "Windows Phone";
-            }
-            else if (userAgent.Contains("Mac OS"))
-            {
-                platform = "Mac OS";
+                platform = agentHelper.os_name;
             }
             string readUser = "";
             // ### select the data from platforms to load Platform Info
@@ -767,85 +919,6 @@ namespace URL_Shortener_App.Controllers
             }
         }
         #endregion        
-
-        void RenderMessage(HttpRequestEventArgs e, string message)
-        {
-            string views = resource + _appName + "/Views/";
-            HttpResponse res = e.Response;
-            string filePath = views + "alert.hbs";
-
-            if (File.Exists(filePath) == true)
-            {
-                var source = File.ReadAllText(filePath);
-                var template = Handlebars.Compile(source);
-                var data = new
-                {
-                    title = "Marcos URL Shortener",
-                    mainH1 = message,
-                    body = "Redirecting, please wait..."
-                };
-                var result = template(data);
-                using (var writer = new StreamWriter(e.Response.OutputStream))
-                {
-                    writer.Write(result);
-                }
-            }
-            else
-            {
-                errorHandler.RenderErrorPage(404, e);
-                Console.WriteLine("\tFile not found!");
-            }
-        }
-
-        bool DbCheckURLDetails(HttpRequestEventArgs e)
-        {
-            try
-            {
-                if (DbLogin(e, true))
-                {
-                    _app = loadConfig.InitApp(resource + _appName, "/config.json");
-                    HttpCookie cookie = e.Request.Cookies.Get(cookieName1);
-                    JArray jArray = new JArray();
-                    string decoded;
-                    if (cookie != null && cookie.Value != "")
-                    {
-                        decoded = DecodeToken(cookie.Value);
-                        jArray = GetJArray(decoded);
-                    }
-
-                    string username = jArray[0].SelectToken("username").ToString();
-
-                    // ### Connect to the database
-                    m_dbConnection = new SqliteConnection(_app.connectionString);
-                    m_dbConnection.Open();
-
-                    // ### select the data
-                    string sql = "SELECT * FROM urls";
-                    IDbCommand command = m_dbConnection.CreateCommand(); command.CommandText = sql;
-                    IDataReader reader = command.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        var go = e.Request.Params["go"];
-                        var shortUrl = reader["shortURL"].ToString();
-                        var rowUsername = reader["username"].ToString();
-                        if (rowUsername.ToLower() == username.ToLower())
-                        {
-                            if (go == shortUrl)
-                            {
-                                return true;
-                            }
-                        }
-                    }
-                    reader.Close();
-                    return false;
-                }
-            }
-            catch
-            {
-                return false;
-            }
-            return false;
-        }
 
         #region Charts
         List<int> GetClicks(HttpRequestEventArgs e)
@@ -1311,7 +1384,7 @@ namespace URL_Shortener_App.Controllers
                     string shortURL = jArray[0].SelectToken("shortURL").ToString();
                     string longURL = jArray[0].SelectToken("longURL").ToString();
 
-                    table = "<div class=\"table-responsive\">"
+                    table = "<br><div class=\"table-responsive\">"
                         + "<table class=\"table table-bordered\" style=\"vertical-align: middle;\">";
                     table = table + "<thead>" + "<tr>"
                         + "<th style=\"text-align: center;\">" + "Image" + "</th>"
@@ -1355,7 +1428,7 @@ namespace URL_Shortener_App.Controllers
                 table = "";
                 return ex.ToString();
             }
-            table = "<div class=\"table-responsive\">"
+            table = "<br><div class=\"table-responsive\">"
                 + "<table class=\"table table-bordered\" style=\"vertical-align: middle;\">";
             table = table + "<thead><tr><th>Short URL</th><th>Long URL</th></tr></thead><tbody>";
             table = table + "</tbody></table></div>";

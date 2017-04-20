@@ -1,10 +1,10 @@
 [{
     "name": "URL_Shortener_App",
-    "applicationsDir": "/home/marcos/wa_ass8/URL_Shortener_App//bin/Release/",
+    "applicationsDir": "../../../URL_Shortener_App//bin/Release/",
     "directoryBrowsing": false,
     "database": "URL_Shortener_App_DB.sqlite",
     "connectionString": "Data Source=URL_Shortener_App_DB.sqlite;Version=3;",
-    "virtualPath": "/home/marcos/wa_ass8/Virtual/URL_Shortener_App/",
+    "virtualPath": "../../../Virtual/URL_Shortener_App/",
     "layout": "layout.hbs",
     "defaultDocument": "Index"
 }]

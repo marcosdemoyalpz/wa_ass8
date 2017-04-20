@@ -31,7 +31,7 @@
 		
 		.screenshot {
 			position: relative;
-			width: 52vw;
+			width: 300px;
 			height: auto;
 			overflow: hidden;
 			border: 1px solid black;
@@ -78,9 +78,9 @@
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css" rel="stylesheet">
 	<script type="text/javascript" src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
 	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
-	crossorigin="anonymous">
+	 crossorigin="anonymous">
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-	crossorigin="anonymous"></script>
+	 crossorigin="anonymous"></script>
 	<title>{{title}}</title>
 </head>
 
@@ -129,13 +129,13 @@
 					var data = {
 						labels: clicksLabels,
 						datasets: [
-						{
-							fillColor: "rgba(151,187,205,0.5)",
-							strokeColor: "rgba(151,187,205,1)",
-							pointColor: "rgba(151,187,205,1)",
-							pointStrokeColor: "#fff",
-							data: clicksData
-						}
+							{
+								fillColor: "rgba(151,187,205,0.5)",
+								strokeColor: "rgba(151,187,205,1)",
+								pointColor: "rgba(151,187,205,1)",
+								pointStrokeColor: "#fff",
+								data: clicksData
+							}
 						]
 					}
 
@@ -154,13 +154,13 @@
 					var data = {
 						labels: referersLabels,
 						datasets: [
-						{
-							fillColor: "rgba(151,187,205,0.5)",
-							strokeColor: "rgba(151,187,205,1)",
-							pointColor: "rgba(151,187,205,1)",
-							pointStrokeColor: "#fff",
-							data: referersData
-						}
+							{
+								fillColor: "rgba(151,187,205,0.5)",
+								strokeColor: "rgba(151,187,205,1)",
+								pointColor: "rgba(151,187,205,1)",
+								pointStrokeColor: "#fff",
+								data: referersData
+							}
 						]
 					}
 
@@ -179,13 +179,13 @@
 					var data = {
 						labels: agentsLabels,
 						datasets: [
-						{
-							fillColor: "rgba(151,187,205,0.5)",
-							strokeColor: "rgba(151,187,205,1)",
-							pointColor: "rgba(151,187,205,1)",
-							pointStrokeColor: "#fff",
-							data: agentsData
-						}
+							{
+								fillColor: "rgba(151,187,205,0.5)",
+								strokeColor: "rgba(151,187,205,1)",
+								pointColor: "rgba(151,187,205,1)",
+								pointStrokeColor: "#fff",
+								data: agentsData
+							}
 						]
 					}
 
@@ -204,13 +204,13 @@
 					var data = {
 						labels: locationsLabels,
 						datasets: [
-						{
-							fillColor: "rgba(151,187,205,0.5)",
-							strokeColor: "rgba(151,187,205,1)",
-							pointColor: "rgba(151,187,205,1)",
-							pointStrokeColor: "#fff",
-							data: locationsData
-						}
+							{
+								fillColor: "rgba(151,187,205,0.5)",
+								strokeColor: "rgba(151,187,205,1)",
+								pointColor: "rgba(151,187,205,1)",
+								pointStrokeColor: "#fff",
+								data: locationsData
+							}
 						]
 					}
 
@@ -229,13 +229,13 @@
 					var data = {
 						labels: platformsLabels,
 						datasets: [
-						{
-							fillColor: "rgba(151,187,205,0.5)",
-							strokeColor: "rgba(151,187,205,1)",
-							pointColor: "rgba(151,187,205,1)",
-							pointStrokeColor: "#fff",
-							data: platformsData
-						}
+							{
+								fillColor: "rgba(151,187,205,0.5)",
+								strokeColor: "rgba(151,187,205,1)",
+								pointColor: "rgba(151,187,205,1)",
+								pointStrokeColor: "#fff",
+								data: platformsData
+							}
 						]
 					}
 
@@ -257,151 +257,142 @@
 				DrawLocationsGraph();
 				DrawPlatformsGraph();
 			})
-}
-var currentWidth = $(window).width();
-$(document).ready(function () {
-	currentWidth = $(window).width();
-	DrawAllCharts();
-});		
-$(window).resize(function () {
-	if (currentWidth != $(window).width()) {
-		location.reload();
-	}
-});
-</script>
-<div class="row" hidden>
-	<input type="text" id="clicks" name="clicks" value="{{clicks}}" hidden>
-	<input type="text" id="referers" name="referers" value="{{referers}}" hidden>
-	<input type="text" id="agents" name="agents" value="{{agents}}" hidden>
-	<input type="text" id="locations" name="locations" value="{{locations}}" hidden>
-	<input type="text" id="platforms" name="platforms" value="{{platforms}}" hidden>
+		}
+		var currentWidth = $(window).width();
+		$(document).ready(function () {
+			currentWidth = $(window).width();
+			DrawAllCharts();
+		});
+		$(window).resize(function () {
+			if (currentWidth != $(window).width()) {
+				location.reload();
+			}
+		});
+	</script>
+	<div class="row" hidden>
+		<input type="text" id="clicks" name="clicks" value="{{clicks}}" hidden>
+		<input type="text" id="referers" name="referers" value="{{referers}}" hidden>
+		<input type="text" id="agents" name="agents" value="{{agents}}" hidden>
+		<input type="text" id="locations" name="locations" value="{{locations}}" hidden>
+		<input type="text" id="platforms" name="platforms" value="{{platforms}}" hidden>
 
-	<input type="text" id="clicksLabels" name="clicksLabels" value="{{clicksLabels}}" hidden>
-	<input type="text" id="referersLabels" name="referersLabels" value="{{referersLabels}}" hidden>
-	<input type="text" id="agentsLabels" name="agentsLabels" value="{{agentsLabels}}" hidden>
-	<input type="text" id="locationsLabels" name="locationsLabels" value="{{locationsLabels}}" hidden>
-	<input type="text" id="platformsLabels" name="platformsLabels" value="{{platformsLabels}}" hidden>
-</div>
-<div class="row">
-	{{#unless noTitle}}
-	<div class="jumbotron text-center" style="margin-bottom:0;">
-		<div class="row">
-			<h1>{{mainH1}}</h1>
-		</div>
-		{{#if mainH2}}
-		<div class="row">
-			<h2>{{mainH2}}</h2>
-		</div>
-		{{/if}}
+		<input type="text" id="clicksLabels" name="clicksLabels" value="{{clicksLabels}}" hidden>
+		<input type="text" id="referersLabels" name="referersLabels" value="{{referersLabels}}" hidden>
+		<input type="text" id="agentsLabels" name="agentsLabels" value="{{agentsLabels}}" hidden>
+		<input type="text" id="locationsLabels" name="locationsLabels" value="{{locationsLabels}}" hidden>
+		<input type="text" id="platformsLabels" name="platformsLabels" value="{{platformsLabels}}" hidden>
 	</div>
-	{{/unless}}
-	<div class="container">
-		{{#if showNavButtons}}
-		<div class="row">
-			<div class="col-lg-12">
-				<div class="col-lg-4" style="margin-top: 20px">
-					{{#if link1}}
-					<a href="{{link1}}" role="button" class="btn btn-lg btn-default btn-block">{{btn1}}</a> {{else}}
-					<a href="#" role="button" class="btn btn-lg btn-default btn-block">{{btn1}}</a> {{/if}}
-				</div>
-				<div class="col-lg-4" style="margin-top: 20px">
-					{{#if link2}}
-					<a href="{{link2}}" role="button" class="btn btn-lg btn-info btn-block">{{btn2}}</a> {{else}}
-					<a href="#" role="button" class="btn btn-lg btn-info btn-block">{{btn2}}</a> {{/if}}
-				</div>
-				<div class="col-lg-4" style="margin-top: 20px">
-					{{#if link3}}
-					<a href="{{link3}}" role="button" class="btn btn-lg btn-danger btn-block">{{btn3}}</a> {{else}}
-					<a href="#" role="button" class="btn btn-lg btn-danger btn-block">{{btn3}}</a> {{/if}}
-				</div>
+	<div class="row">
+		{{#unless noTitle}}
+		<div class="jumbotron text-center" style="margin-bottom:0;">
+			<div class="row">
+				<h1>{{mainH1}}</h1>
 			</div>
+			{{#if mainH2}}
+			<div class="row">
+				<h2>{{mainH2}}</h2>
+			</div>
+			{{/if}}
 		</div>
-		{{/if}} {{#if login}}
-		<div class="row">
-			<div class="col-lg-12">
-				<form class="form" method="post">
-					<div class="row">
-						<div class="col-lg-12 form-group">
-							<label for="longURL" class="sr-only">Original URL</label>
-							<input type="url" id="longURL" name="longURL" class="form-control" placeholder="Enter URL..." required="" autofocus="" maxlength="256">
-						</div>
+		{{/unless}}
+		<div class="container">
+			{{#if showNavButtons}}
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="col-lg-4" style="margin-top: 20px">
+						{{#if link1}}
+						<a href="{{link1}}" role="button" class="btn btn-lg btn-default btn-block">{{btn1}}</a> {{else}}
+						<a href="#" role="button" class="btn btn-lg btn-default btn-block">{{btn1}}</a> {{/if}}
 					</div>
-					<div class="row">
-						<button class="btn btn-lg btn-primary btn-block" type="submit">Shorten URL</button>
+					<div class="col-lg-4" style="margin-top: 20px">
+						{{#if link2}}
+						<a href="{{link2}}" role="button" class="btn btn-lg btn-info btn-block">{{btn2}}</a> {{else}}
+						<a href="#" role="button" class="btn btn-lg btn-info btn-block">{{btn2}}</a> {{/if}}
 					</div>
-				</form>
-				<div class="row">
-					<div class="col-lg-12">
-						<h1>URLs List</h1>
+					<div class="col-lg-4" style="margin-top: 20px">
+						{{#if link3}}
+						<a href="{{link3}}" role="button" class="btn btn-lg btn-danger btn-block">{{btn3}}</a> {{else}}
+						<a href="#" role="button" class="btn btn-lg btn-danger btn-block">{{btn3}}</a> {{/if}}
 					</div>
 				</div>
 			</div>
-		</div>
-		{{/if}}
-		<div class="row">
-			<div class="col-lg-12">
-				<div class="col-lg-12" style="text-align: justify">
-					{{{body}}}
-					<div class="row">
-						<div class="col-lg-12">
-							<div class="container center-block">
-								<h2>Screenshot</h2>
-								<img src="{{image}}" class="screenshot" alt="Screenshot">
+			{{/if}} {{#if login}}
+			<div class="row">
+				<div class="col-lg-12">
+					<form class="form" method="post">
+						<div class="row">
+							<div class="col-lg-12 form-group">
+								<label for="longURL" class="sr-only">Original URL</label>
+								<input type="url" id="longURL" name="longURL" class="form-control" placeholder="Enter URL..." required="" autofocus="" maxlength="256">
 							</div>
 						</div>
-					</div>
+						<div class="row">
+							<button class="btn btn-lg btn-primary btn-block" type="submit">Shorten URL</button>
+						</div>
+					</form>
 					<div class="row">
 						<div class="col-lg-12">
-							<div class="container center-block">
-								<h2>Clicks - Line Chart</h2>
-								<canvas id="clicksChart" width="310" height="310" class="well"></canvas>
-							</div>
+							<h1>URLs List</h1>
 						</div>
 					</div>
-					<div class="row">
-						<div class="col-lg-12">
-							<div class="container center-block">
-								<h2>Referers - Line Chart</h2>
-								<canvas id="referersChart" width="310" height="310" class="well"></canvas>
+				</div>
+			</div>
+			{{/if}}
+			<br>
+			<div class="row">
+				<div class="panel">
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-lg-12">
+								<div class="col-lg-12" style="text-align: justify">
+									{{{body}}}
+									<div class="row">
+										<div class="col-lg-12">
+											<h2>Screenshot</h2>
+											<img src="{{image}}" class="screenshot" alt="Screenshot">
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-lg-6">
+											<h2>Clicks - Line Chart</h2>
+											<canvas id="clicksChart" width="310" height="310" class="well"></canvas>
+										</div>
+										<div class="col-lg-6">
+											<h2>Referers - Line Chart</h2>
+											<canvas id="referersChart" width="310" height="310" class="well"></canvas>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-lg-6">
+											<h2>Agents - Line Chart</h2>
+											<canvas id="agentsChart" width="310" height="310" class="well"></canvas>
+										</div>
+										<div class="col-lg-6">
+											<h2>Locations - Line Chart</h2>
+											<canvas id="locationsChart" width="310" height="310" class="well"></canvas>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-lg-6">
+											<h2>Platforms - Line Chart</h2>
+											<canvas id="platformsChart" width="310" height="310" class="well"></canvas>
+										</div>
+									</div>
+									<div class="row" style="margin-top: 10px">
+										<div class="col-lg-12 form-group">
+											<a href="{{delete}}" role="button" class="btn btn-lg btn-danger btn-block">DELETE</a>
+										</div>
+									</div>
+								</div>
 							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-lg-12">
-							<div class="container">
-								<h2>Agents - Line Chart</h2>
-								<canvas id="agentsChart" width="310" height="310" class="well"></canvas>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-lg-12">
-							<div class="container">
-								<h2>Locations - Line Chart</h2>
-								<canvas id="locationsChart" width="310" height="310" class="well"></canvas>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-lg-12">
-							<div class="container">
-								<h2>Platforms - Line Chart</h2>
-								<canvas id="platformsChart" width="310" height="310" class="well"></canvas>
-							</div>
-						</div>
-					</div>
-					<div class="row" style="margin-top: 10px">
-						<div class="col-lg-12 form-group">
-							<a href="{{delete}}" role="button" class="btn btn-lg btn-danger btn-block">DELETE</a>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-</div>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.js"></script>
-<hr>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.js"></script>
+	<hr>
 </body>
 
 </html>
