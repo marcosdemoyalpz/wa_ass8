@@ -113,11 +113,6 @@ namespace URL_Shortener_App.Controllers
                     string longURL = "";
 
                     int clicksCount = 0;
-                    int locationsCount = 0;
-                    int platformsCount = 0;
-
-                    bool locationFound = false;
-                    bool platformFound = false;
 
                     // ### Connect to the database
                     m_dbConnection = new SqliteConnection(_app.connectionString);
@@ -182,6 +177,7 @@ namespace URL_Shortener_App.Controllers
             return false;
         }
 
+        #region Update/Create
         bool UpdateReferers(HttpRequestEventArgs e, AppInfo _app, string username)
         {
             int referersCount = 0;
@@ -244,7 +240,6 @@ namespace URL_Shortener_App.Controllers
             }
             return false;
         }
-
         bool UpdateAgents(HttpRequestEventArgs e, AppInfo _app, string username)
         {
             int agentsCount = 0;
@@ -313,7 +308,6 @@ namespace URL_Shortener_App.Controllers
             }
             return false;
         }
-
         bool UpdateLocations(HttpRequestEventArgs e, AppInfo _app, string username)
         {
             int locationsCount = 0;
@@ -383,7 +377,6 @@ namespace URL_Shortener_App.Controllers
             }
             return false;
         }
-
         bool UpdatePlatforms(HttpRequestEventArgs e, AppInfo _app, string username)
         {
             int platformsCount = 0;
@@ -548,6 +541,169 @@ namespace URL_Shortener_App.Controllers
             }
             return false;
         }
+        #endregion
+
+        #region Delete
+        bool DeleteShort(HttpRequestEventArgs e)
+        {
+            try
+            {
+                if (DbLogin(e, true))
+                {
+                    _app = loadConfig.InitApp(resource + _appName, "/config.json");
+                    HttpCookie cookie = e.Request.Cookies.Get(cookieName1);
+                    JArray jArray = new JArray();
+                    string decoded;
+                    if (cookie != null && cookie.Value != "")
+                    {
+                        decoded = DecodeToken(cookie.Value);
+                        jArray = GetJArray(decoded);
+                    }
+
+                    string username = jArray[0].SelectToken("username").ToString();
+                    bool found = false;
+
+                    // ### Connect to the database
+                    m_dbConnection = new SqliteConnection(_app.connectionString);
+                    m_dbConnection.Open();
+
+                    // ### select the data from urls to load Click Info
+                    string sql = "SELECT * FROM urls";
+                    IDbCommand command = m_dbConnection.CreateCommand(); command.CommandText = sql;
+                    IDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        if (reader["username"].ToString().ToLower() == username.ToLower())
+                        {
+                            var shortUrl = reader["shortURL"].ToString();
+
+                            if (e.Request.Params["go"] == shortUrl)
+                            {
+                                found = true;
+                            }
+                        }
+                    }
+                    reader.Close();
+
+                    if (found == true)
+                    {
+                        #region Referers
+                        DeleteReferers(e, _app, username);
+                        #endregion
+
+                        #region Agents
+                        DeleteAgents(e, _app, username);
+                        #endregion
+
+                        #region Platforms
+                        DeletePlatforms(e, _app, username);
+                        #endregion
+
+                        #region Locations
+                        DeleteLocations(e, _app, username);
+                        #endregion
+
+                        // ### Update clicks on table
+                        sql = "DELETE FROM urls"
+                            + " WHERE shortURL = '" + e.Request.Params["go"] + "'";
+                        command.CommandText = sql;
+                        command.ExecuteNonQuery();
+                        e.Response.Redirect(GetAppURL(e, "Home") + "Index");
+                        return true;
+                    }
+                    return false;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+            return false;
+        }
+        bool DeleteReferers(HttpRequestEventArgs e, AppInfo _app, string username)
+        {
+            // ### Connect to the database
+            m_dbConnection = new SqliteConnection(_app.connectionString);
+            m_dbConnection.Open();
+            try
+            {
+                // ### Delete row
+                string sql = "DELETE FROM referers"
+                    + " WHERE shortURL = '" + e.Request.Params["go"] + "' AND "
+                    + "username = '" + username + "'";
+                IDbCommand command = m_dbConnection.CreateCommand();
+                command.CommandText = sql;
+                command.ExecuteNonQuery();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        bool DeleteAgents(HttpRequestEventArgs e, AppInfo _app, string username)
+        {
+            // ### Connect to the database
+            m_dbConnection = new SqliteConnection(_app.connectionString);
+            m_dbConnection.Open();
+            try
+            {
+                // ### Update clicks on table
+                string sql = "DELETE FROM agents"
+                    + " WHERE shortURL = '" + e.Request.Params["go"] + "' AND "
+                    + "username = '" + username + "'";
+                IDbCommand command = m_dbConnection.CreateCommand();
+                command.CommandText = sql;
+                command.ExecuteNonQuery();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        bool DeleteLocations(HttpRequestEventArgs e, AppInfo _app, string username)
+        {
+            // ### Connect to the database
+            m_dbConnection = new SqliteConnection(_app.connectionString);
+            m_dbConnection.Open();
+            try
+            {
+                string sql = "DELETE FROM locations"
+                    + " WHERE shortURL = '" + e.Request.Params["go"] + "' AND "
+                    + "username = '" + username + "'";
+                IDbCommand command = m_dbConnection.CreateCommand();
+                command.CommandText = sql;
+                command.ExecuteNonQuery();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        bool DeletePlatforms(HttpRequestEventArgs e, AppInfo _app, string username)
+        {
+            // ### Connect to the database
+            m_dbConnection = new SqliteConnection(_app.connectionString);
+            m_dbConnection.Open();
+
+            try
+            {
+                string sql = "DELETE FROM platforms"
+                    + " WHERE shortURL = '" + e.Request.Params["go"] + "' AND "
+                    + "username = '" + username + "'";
+                IDbCommand command = m_dbConnection.CreateCommand();
+                command.CommandText = sql;
+                command.ExecuteNonQuery();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        #endregion
 
         bool DbLogin(HttpRequestEventArgs e, bool fromCookie = false)
         {
@@ -1128,9 +1284,78 @@ namespace URL_Shortener_App.Controllers
                 Console.WriteLine("\tFile not found!");
             }
         }
-
+        [HttpGet]
+        public void Delete(HttpRequestEventArgs e)
+        {
+            if (DeleteShort(e)) { }
+            else
+            {
+                errorHandler.RenderErrorPage(500, e);
+            }
+        }
         [HttpGet]
         public void Details(HttpRequestEventArgs e)
+        {
+            string url = GetAppURL(e, "Home");
+            if (DbCheckURLDetails(e))
+            {
+                string views = resource + _appName + "/Views/";
+                HttpResponse res = e.Response;
+                string filePath = views + "detallesURL.hbs";
+                Console.WriteLine("\tStarting " + _appName + "!");
+                Console.WriteLine("\tLoading file on " + filePath + "!");
+
+                if (File.Exists(filePath) == true)
+                {
+                    var source = File.ReadAllText(filePath);
+                    var template = Handlebars.Compile(source);
+                    var data = new
+                    {
+                        showNavButtons = true,
+                        image = GetAppURL(e, "img") + e.Request.Params["go"] + ".png",
+                        delete = GetAppURL(e) + "Delete?go=" + e.Request.Params["go"],
+                        clicks = String.Join(",", GetClicks(e)),
+                        clicksLabels = e.Request.Params["go"],
+                        referers = String.Join(",", GetReferersCount(e)),
+                        referersLabels = String.Join(",", GetReferers(e)),
+                        agents = String.Join(",", GetAgentsCount(e)),
+                        agentsLabels = String.Join(",", GetAgents(e)),
+                        locations = String.Join(",", GetLocationsCount(e)),
+                        locationsLabels = String.Join(",", GetLocations(e)),
+                        platforms = String.Join(",", GetPlatformsCount(e)),
+                        platformsLabels = String.Join(",", GetPlatforms(e)),
+                        btn1 = "Home",
+                        btn2 = "About",
+                        btn3 = "Sign Out",
+                        link1 = url + "Index",
+                        link2 = url + "About",
+                        link3 = url + "Login",
+                        title = "Marcos URL Shortener",
+                        mainH1 = "Marcos's App",
+                        mainH2 = "URL Details",
+                        body = ""
+                    };
+                    var result = template(data);
+                    using (var writer = new StreamWriter(e.Response.OutputStream))
+                    {
+                        writer.Write(result);
+                    }
+                }
+                else
+                {
+                    errorHandler.RenderErrorPage(404, e);
+                    Console.WriteLine("\tFile not found!");
+                }
+            }
+            else
+            {
+                errorHandler.RenderErrorPage(404, e);
+                Console.WriteLine("\tFile not found!");
+            }
+        }
+
+        [HttpGet]
+        public void Anonymous(HttpRequestEventArgs e)
         {
             string url = GetAppURL(e, "Home");
             if (DbCheckURLDetails(e))

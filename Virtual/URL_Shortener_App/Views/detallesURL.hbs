@@ -29,7 +29,27 @@
 			margin-top: 20px;
 		}
 		
+		.screenshot {
+			position: relative;
+			width: 52vw;
+			height: auto;
+			overflow: hidden;
+			border: 1px solid black;
+			margin-top: 20px;
+		}
+		
 		.thumbnail img {
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			height: 100%;
+			width: auto;
+			-webkit-transform: translate(-50%, -50%);
+			-ms-transform: translate(-50%, -50%);
+			transform: translate(-50%, -50%);
+		}
+		
+		.screenshot img {
 			position: absolute;
 			left: 50%;
 			top: 50%;
@@ -67,7 +87,7 @@
 <body>
 	<script>
 		function DrawAllCharts() {
-			$.getScript('http://www.chartjs.org/assets/Chart.js', function () {				
+			$.getScript('http://www.chartjs.org/assets/Chart.js', function () {
 
 				var nums1 = document.getElementById("clicks").value;
 				var nums2 = document.getElementById("referers").value;
@@ -321,6 +341,14 @@
 						<div class="row">
 							<div class="col-lg-12">
 								<div class="container center-block">
+									<h2>Screenshot</h2>
+									<img src="{{image}}" class="screenshot" alt="Screenshot">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-lg-12">
+								<div class="container center-block">
 									<h2>Clicks - Line Chart</h2>
 									<canvas id="clicksChart" width="310" height="310" class="well"></canvas>
 								</div>
@@ -356,6 +384,11 @@
 									<h2>Platforms - Line Chart</h2>
 									<canvas id="platformsChart" width="310" height="310" class="well"></canvas>
 								</div>
+							</div>
+						</div>
+						<div class="row" style="margin-top: 10px">
+							<div class="col-lg-12 form-group">
+								<a href="{{delete}}" role="button" class="btn btn-lg btn-danger btn-block">DELETE</a>
 							</div>
 						</div>
 					</div>
