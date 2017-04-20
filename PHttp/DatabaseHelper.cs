@@ -48,26 +48,53 @@ namespace PHttp
 
                     if (app.database == "URL_Shortener_App_DB.sqlite")
                     {
-                        // ### Create users table
-                        sql = "CREATE TABLE urls (shortURL VARCHAR(128) PRIMARY KEY UNIQUE, longURL VARCHAR(128), username VARCHAR(128), dateCreated DATETIME, clicks INT, lastClicked DATETIME, FOREIGN KEY(username) REFERENCES users(username))";
+                        // ### Create urls table
+                        sql = "CREATE TABLE urls (shortURL VARCHAR(256) PRIMARY KEY UNIQUE, longURL VARCHAR(256), username VARCHAR(128), dateCreated DATETIME, clicks INT, lastClicked DATETIME,"
+                            + "FOREIGN KEY(username) REFERENCES users(username))";
+                        command.CommandText = sql;
+                        command.ExecuteNonQuery();
+
+                        // ### Create referers table
+                        sql = "CREATE TABLE referers (referer VARCHAR(256), username VARCHAR(128), shortURL VARCHAR(256), count INT,"
+                            + "FOREIGN KEY(username) REFERENCES users(username), FOREIGN KEY(shortURL) REFERENCES urls(shortURL))";
+                        command.CommandText = sql;
+                        command.ExecuteNonQuery();
+
+                        // ### Create agents table
+                        sql = "CREATE TABLE agents (agent VARCHAR(256), username VARCHAR(128), shortURL VARCHAR(256), count INT,"
+                            + "FOREIGN KEY(username) REFERENCES users(username), FOREIGN KEY(shortURL) REFERENCES urls(shortURL))";
+                        command.CommandText = sql;
+                        command.ExecuteNonQuery();
+
+                        // ### Create locations table
+                        sql = "CREATE TABLE locations (location VARCHAR(256), username VARCHAR(128), shortURL VARCHAR(256), count INT,"
+                            + "FOREIGN KEY(username) REFERENCES users(username), FOREIGN KEY(shortURL) REFERENCES urls(shortURL))";
+                        command.CommandText = sql;
+                        command.ExecuteNonQuery();
+
+                        // ### Create platforms table
+                        sql = "CREATE TABLE platforms (platform VARCHAR(256), username VARCHAR(128), shortURL VARCHAR(256), count INT,"
+                            + "FOREIGN KEY(username) REFERENCES users(username), FOREIGN KEY(shortURL) REFERENCES urls(shortURL))";
                         command.CommandText = sql;
                         command.ExecuteNonQuery();
 
                         // ### Add some data to the table
-                        sql = "insert into urls (shortURL, longURL, username, dateCreated, clicks, lastClicked) values ('hello', 'https://www.google.com', 'admin', DATETIME('NOW'), 5, DATETIME('NOW') )";
+                        sql = "insert into urls (shortURL, longURL, username, dateCreated, clicks, lastClicked) values ('hello', 'https://www.google.com', 'admin', DATETIME('NOW'), 0, DATETIME('NOW') )";
                         command.CommandText = sql;
                         command.ExecuteNonQuery();
 
                         // ### select the data
-                        sql = "select username, clicks, lastClicked from urls order by username desc";
+                        sql = "select * from urls order by username desc";
                         command.CommandText = sql;
                         IDataReader reader = command.ExecuteReader();
                         while (reader.Read())
                         {
+                            string shortURL = reader["shortURL"].ToString();
+                            string longURL = reader["longURL"].ToString();
                             string username = reader["username"].ToString();
                             int clicks = int.Parse(reader["clicks"].ToString());
                             string lastClicked = reader["lastClicked"].ToString();
-                            Console.WriteLine("\n\tUsername: " + username + "\n\tClicks: " + clicks + "\n\tLast Clicked: " + lastClicked + "\n");
+                            Console.WriteLine("\n\tUsername: " + username + "\n\tShort URL: " + shortURL + "\n\tLong URL: " + longURL + "\n\tClicks: " + clicks + "\n\tLast Clicked: " + lastClicked + "\n");
                         }
                         reader.Close();
 

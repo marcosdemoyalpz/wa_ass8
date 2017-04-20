@@ -44,9 +44,15 @@
 			width: 100%;
 			height: auto;
 		}
+		
+		canvas {
+			width: 100%;
+			height: auto;
+		}
 	</style>
 
 	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link href="/css/mainStyle.css" rel="stylesheet" type="text/css">
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput-typeahead.css" rel="stylesheet">
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css" rel="stylesheet">
@@ -60,19 +66,55 @@
 
 <body>
 	<script>
-		$(document).ready(function () {
-			$.getScript('http://www.chartjs.org/assets/Chart.js', function () {
-				var clicksData = document.getElementById("clicks").value;
+		function DrawAllCharts() {
+			$.getScript('http://www.chartjs.org/assets/Chart.js', function () {				
+
+				var nums1 = document.getElementById("clicks").value;
+				var nums2 = document.getElementById("referers").value;
+				var nums3 = document.getElementById("agents").value;
+				var nums4 = document.getElementById("locations").value;
+				var nums5 = document.getElementById("platforms").value;
+
+				var tempNum1 = nums1.split(',');
+				var tempNum2 = nums2.split(',');
+				var tempNum3 = nums3.split(',');
+				var tempNum4 = nums4.split(',');
+				var tempNum5 = nums5.split(',');
+
+				var clicksData = [];
+				var referersData = [];
+				var agentsData = [];
+				var locationsData = [];
+				var platformsData = [];
+
+				var clicksData = tempNum1;
+				var referersData = tempNum2;
+				var agentsData = tempNum3;
+				var locationsData = tempNum4;
+				var platformsData = tempNum5;
+
+				var temp1 = document.getElementById("clicksLabels").value;
+				var temp2 = document.getElementById("referersLabels").value;
+				var temp3 = document.getElementById("agentsLabels").value;
+				var temp4 = document.getElementById("locationsLabels").value;
+				var temp5 = document.getElementById("platformsLabels").value;
+
+				var clicksLabels = temp1.split(',');
+				var referersLabels = temp2.split(',');
+				var agentsLabels = temp3.split(',');
+				var locationsLabels = temp4.split(',');
+				var platformsLabels = temp5.split(',');
+
 				function DrawClicksGraph() {
 					var data = {
-						labels: ["Clicks"],
+						labels: clicksLabels,
 						datasets: [
 							{
 								fillColor: "rgba(151,187,205,0.5)",
 								strokeColor: "rgba(151,187,205,1)",
 								pointColor: "rgba(151,187,205,1)",
 								pointStrokeColor: "#fff",
-								data: [clicksData]
+								data: clicksData
 							}
 						]
 					}
@@ -88,12 +130,133 @@
 					/*********************/
 					new Chart(ctx).Bar(data, options);
 				}
+				function DrawReferersGraph() {
+					var data = {
+						labels: referersLabels,
+						datasets: [
+							{
+								fillColor: "rgba(151,187,205,0.5)",
+								strokeColor: "rgba(151,187,205,1)",
+								pointColor: "rgba(151,187,205,1)",
+								pointStrokeColor: "#fff",
+								data: referersData
+							}
+						]
+					}
+
+					var options = {
+						animation: true
+					};
+
+					//Get the context of the canvas element we want to select
+					var c = $('#referersChart');
+					var ct = c.get(0).getContext('2d');
+					var ctx = document.getElementById("referersChart").getContext("2d");
+					/*********************/
+					new Chart(ctx).Bar(data, options);
+				}
+				function DrawAgentsGraph() {
+					var data = {
+						labels: agentsLabels,
+						datasets: [
+							{
+								fillColor: "rgba(151,187,205,0.5)",
+								strokeColor: "rgba(151,187,205,1)",
+								pointColor: "rgba(151,187,205,1)",
+								pointStrokeColor: "#fff",
+								data: agentsData
+							}
+						]
+					}
+
+					var options = {
+						animation: true
+					};
+
+					//Get the context of the canvas element we want to select
+					var c = $('#agentsChart');
+					var ct = c.get(0).getContext('2d');
+					var ctx = document.getElementById("agentsChart").getContext("2d");
+					/*********************/
+					new Chart(ctx).Bar(data, options);
+				}
+				function DrawLocationsGraph() {
+					var data = {
+						labels: locationsLabels,
+						datasets: [
+							{
+								fillColor: "rgba(151,187,205,0.5)",
+								strokeColor: "rgba(151,187,205,1)",
+								pointColor: "rgba(151,187,205,1)",
+								pointStrokeColor: "#fff",
+								data: locationsData
+							}
+						]
+					}
+
+					var options = {
+						animation: true
+					};
+
+					//Get the context of the canvas element we want to select
+					var c = $('#locationsChart');
+					var ct = c.get(0).getContext('2d');
+					var ctx = document.getElementById("locationsChart").getContext("2d");
+					/*********************/
+					new Chart(ctx).Bar(data, options);
+				}
+				function DrawPlatformsGraph() {
+					var data = {
+						labels: platformsLabels,
+						datasets: [
+							{
+								fillColor: "rgba(151,187,205,0.5)",
+								strokeColor: "rgba(151,187,205,1)",
+								pointColor: "rgba(151,187,205,1)",
+								pointStrokeColor: "#fff",
+								data: platformsData
+							}
+						]
+					}
+
+					var options = {
+						animation: true
+					};
+
+					//Get the context of the canvas element we want to select
+					var c = $('#platformsChart');
+					var ct = c.get(0).getContext('2d');
+					var ctx = document.getElementById("platformsChart").getContext("2d");
+					/*********************/
+					new Chart(ctx).Bar(data, options);
+				}
+
 				DrawClicksGraph();
+				DrawReferersGraph();
+				DrawAgentsGraph();
+				DrawLocationsGraph();
+				DrawPlatformsGraph();
 			})
+		}
+		$(document).ready(function () {
+			DrawAllCharts();
+		});
+		$(window).resize(function () {
+			location.reload();
 		});
 	</script>
 	<div class="row" hidden>
-		<input type="text" id="clicks" name="clicks" maxlength="256" value="{{clicks}}" hidden>
+		<input type="text" id="clicks" name="clicks" value="{{clicks}}" hidden>
+		<input type="text" id="referers" name="referers" value="{{referers}}" hidden>
+		<input type="text" id="agents" name="agents" value="{{agents}}" hidden>
+		<input type="text" id="locations" name="locations" value="{{locations}}" hidden>
+		<input type="text" id="platforms" name="platforms" value="{{platforms}}" hidden>
+
+		<input type="text" id="clicksLabels" name="clicksLabels" value="{{clicksLabels}}" hidden>
+		<input type="text" id="referersLabels" name="referersLabels" value="{{referersLabels}}" hidden>
+		<input type="text" id="agentsLabels" name="agentsLabels" value="{{agentsLabels}}" hidden>
+		<input type="text" id="locationsLabels" name="locationsLabels" value="{{locationsLabels}}" hidden>
+		<input type="text" id="platformsLabels" name="platformsLabels" value="{{platformsLabels}}" hidden>
 	</div>
 	<div class="row">
 		{{#unless noTitle}}
@@ -155,9 +318,45 @@
 				<div class="col-lg-12">
 					<div class="col-lg-12" style="text-align: justify">
 						{{{body}}}
-						<div class="container">
-							<h2>Clicks - Line Chart</h2>
-							<canvas id="clicksChart" width="400" height="200" class="well"></canvas>
+						<div class="row">
+							<div class="col-lg-12">
+								<div class="container center-block">
+									<h2>Clicks - Line Chart</h2>
+									<canvas id="clicksChart" width="310" height="310" class="well"></canvas>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-lg-12">
+								<div class="container center-block">
+									<h2>Referers - Line Chart</h2>
+									<canvas id="referersChart" width="310" height="310" class="well"></canvas>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-lg-12">
+								<div class="container">
+									<h2>Agents - Line Chart</h2>
+									<canvas id="agentsChart" width="310" height="310" class="well"></canvas>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-lg-12">
+								<div class="container">
+									<h2>Locations - Line Chart</h2>
+									<canvas id="locationsChart" width="310" height="310" class="well"></canvas>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-lg-12">
+								<div class="container">
+									<h2>Platforms - Line Chart</h2>
+									<canvas id="platformsChart" width="310" height="310" class="well"></canvas>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
