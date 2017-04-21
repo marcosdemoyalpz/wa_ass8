@@ -187,7 +187,6 @@ namespace URL_Shortener_App.Controllers
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         string CreateTable(HttpRequestEventArgs e)
         {
-            string url = GetAppURL(e, "Short") + "Path";
             string table = "";
             try
             {
@@ -235,9 +234,9 @@ namespace URL_Shortener_App.Controllers
                         if (reader["username"].ToString().ToLower() == username.ToLower())
                         {
                             string img = "<img src=\"";
-                            var shortUrl = url + "?go=" + reader["shortURL"].ToString();
+                            var shortUrl = GetAppURL(e, "Short") + "Path" + "?go=" + reader["shortURL"].ToString();
                             var longURL = reader["longURL"].ToString();
-                            var link1 = "<a href=\"" + shortUrl + "\">" + shortUrl.Replace(url + "?", "") + "</a>";
+                            var link1 = "<a href=\"" + shortUrl + "\">" + reader["shortURL"].ToString() + "</a>";
                             var link2 = "<a href=\"" + longURL + "\">" + longURL + "</a>";
                             var dateCreatedRaw = reader["dateCreated"].ToString();
                             var clicks = reader["clicks"].ToString();

@@ -200,6 +200,7 @@ namespace URL_Shortener_App.Controllers
 
                     string username = jArray[0].SelectToken("username").ToString();
                     string longURL = "";
+                    string shortURL = "";
 
                     int clicksCount = 0;
 
@@ -214,14 +215,21 @@ namespace URL_Shortener_App.Controllers
                     IDataReader reader = command.ExecuteReader();
                     while (reader.Read())
                     {
+                        Console.WriteLine("\n"
+                        + "\n\t username = " + reader["username"].ToString()
+                        + "\n\t shortURL = " + reader["shortURL"].ToString()
+                        + "\n\t longURL = " + reader["longURL"].ToString()
+                        + "\n");
                         if (reader["username"].ToString().ToLower() == username.ToLower())
                         {
-                            var shortUrl = reader["shortURL"].ToString();
+                            shortURL = reader["shortURL"].ToString();
 
-                            if (e.Request.Params["go"] == shortUrl)
+                            if (e.Request.Params["go"] == shortURL)
                             {
                                 longURL = reader["longURL"].ToString();
+                                shortURL = reader["shortURL"].ToString();
                                 clicksCount = (int.Parse(reader["clicks"].ToString()) + 1);
+                                break;
                             }
                         }
                     }
@@ -244,18 +252,21 @@ namespace URL_Shortener_App.Controllers
                     UpdateLocations(e, _app, username);
                     #endregion
 
+                    Console.WriteLine("\n\t Redirecting " + shortURL + " ...");
                     if (longURL != "")
                     {
                         // ### Update clicks on table
                         sql = "UPDATE urls SET "
                             + "clicks = " + clicksCount
                             + ", lastClicked = DATETIME('NOW') "
-                            + "WHERE shortURL = '" + e.Request.Params["go"] + "'";
+                            + "WHERE shortURL = '" + shortURL + "'";
                         command.CommandText = sql;
                         command.ExecuteNonQuery();
                         e.Response.Redirect(longURL);
+                        Console.WriteLine("\n\t Redirected to " + longURL + "\n");
                         return true;
                     }
+                    Console.WriteLine("\n\t Failed to redirect " + shortURL + "\n");
                     return false;
                 }
                 else
