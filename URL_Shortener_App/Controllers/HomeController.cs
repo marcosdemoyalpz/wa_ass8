@@ -573,15 +573,6 @@ namespace URL_Shortener_App.Controllers
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        /// <summary>   Renders the message. </summary>
-        ///
-        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
-        ///
-        /// <param name="e">        HTTP request event information. </param>
-        /// <param name="message">  The message. </param>
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
         /// <summary>   Renders a message. </summary>
         /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
         /// <param name="e">        HTTP request event information. </param>

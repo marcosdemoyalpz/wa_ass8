@@ -249,7 +249,7 @@ namespace URL_Shortener_App.Controllers
                         // ### Update clicks on table
                         sql = "UPDATE urls SET "
                             + "clicks = " + clicksCount
-                            + ", lastClicked = DATETIME('NOW')"
+                            + ", lastClicked = DATETIME('NOW') "
                             + "WHERE shortURL = '" + e.Request.Params["go"] + "'";
                         command.CommandText = sql;
                         command.ExecuteNonQuery();
@@ -429,11 +429,8 @@ namespace URL_Shortener_App.Controllers
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         /// <summary>   Gets longURL. </summary>
-        ///
         /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
-        ///
         /// <param name="e">    HTTP request event information. </param>
-        ///
         /// <returns>   The long URL. </returns>
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         string GetLongURL(HttpRequestEventArgs e)
@@ -1725,7 +1722,7 @@ namespace URL_Shortener_App.Controllers
                         link2 = url + "About",
                         link3 = url + "Login",
                         title = "Marcos URL Shortener",
-                        mainH1 = "Marcos's App",
+                        mainH1 = "Marcos' App",
                         mainH2 = "URL Details",
                         body = ""
                     };
@@ -1784,7 +1781,7 @@ namespace URL_Shortener_App.Controllers
                         link2 = url + "About",
                         link3 = url + "Login",
                         title = "Marcos URL Shortener",
-                        mainH1 = "Marcos's App",
+                        mainH1 = "Marcos' App",
                         mainH2 = "Home",
                         body = File.ReadAllText(views + "/partials/captcha.hbs") + table
                     };
