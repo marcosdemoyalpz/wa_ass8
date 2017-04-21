@@ -276,7 +276,7 @@ namespace URL_Shortener_App.Controllers
                     }
                     catch
                     {
-                        Console.WriteLine("\n\t ip2location error!");
+                        Console.WriteLine("\n\t Location error!");
                     }
                     #endregion
 
@@ -720,6 +720,7 @@ namespace URL_Shortener_App.Controllers
             string shortURL = "";
             try
             {
+                Console.WriteLine("\n\t Location Provider Response:");
                 GeoLocation geo = new GeoLocation(e);
                 if (geo.countryn != null)
                 {
@@ -728,6 +729,7 @@ namespace URL_Shortener_App.Controllers
             }
             catch (Exception ex)
             {
+                Console.WriteLine("\n\t ip2location error!");
                 Console.WriteLine(ex);
                 location = "Unknown";
             }
@@ -807,43 +809,42 @@ namespace URL_Shortener_App.Controllers
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         bool UpdatePlatforms(HttpRequestEventArgs e, AppInfo _app, string username)
         {
-            int platformsCount = 0;
-            bool platformFound = false;
+            int agentsCount = 0;
+            bool agentFound = false;
 
             // ### Connect to the database
             m_dbConnection = new SqliteConnection(_app.connectionString);
             m_dbConnection.Open();
 
-            string platform = "Others";
+            string agent = "";
             string shortURL = "";
-
             UserAgentHelper agentHelper = new UserAgentHelper(e);
-            if (agentHelper.os_name != null)
+            if (agentHelper.agent_name != null)
             {
-                platform = agentHelper.os_name;
+                agent = agentHelper.os_name;
             }
             string readUser = "";
-            // ### select the data from platforms to load Platform Info
+            // ### select the data from agents to load Agents Info
             string sql = "SELECT * FROM platforms";
             IDbCommand command = m_dbConnection.CreateCommand(); command.CommandText = sql;
             IDataReader reader = command.ExecuteReader();
             while (reader.Read())
             {
                 Console.WriteLine("\n"
-                         + "\n\t username = " + reader["username"].ToString()
-                         + "\n\t shortURL = " + reader["shortURL"].ToString()
-                         + "\n\t platform = " + reader["platform"].ToString()
-                         + "\n");
+                        + "\n\t username = " + reader["username"].ToString()
+                        + "\n\t shortURL = " + reader["shortURL"].ToString()
+                        + "\n\t platform = " + reader["platform"].ToString()
+                        + "\n");
                 readUser = reader["username"].ToString();
                 if (readUser.ToLower() == username.ToLower())
                 {
                     shortURL = reader["shortURL"].ToString();
                     if (shortURL == e.Request.Params["go"])
                     {
-                        if (platform == reader["platform"].ToString())
+                        if (agent == reader["platform"].ToString())
                         {
-                            platformFound = true;
-                            platformsCount = (int.Parse(reader["count"].ToString()) + 1);
+                            agentFound = true;
+                            agentsCount = (int.Parse(reader["count"].ToString()) + 1);
                             Console.WriteLine("\n\t Platform Found!");
                             break;
                         }
@@ -851,13 +852,13 @@ namespace URL_Shortener_App.Controllers
                 }
             }
             reader.Close();
-            if (platformFound && shortURL != "")
+            if (agentFound == true && shortURL != "")
             {
                 // ### Update clicks on table
                 sql = "UPDATE platforms SET "
-                    + "count = " + platformsCount
+                    + "count = " + agentsCount
                     + " WHERE shortURL = '" + shortURL + "' AND "
-                    + "agent = '" + platform + "' AND "
+                    + "platform = '" + agent + "' AND "
                     + "username = '" + username + "'";
                 command.CommandText = sql;
                 command.ExecuteNonQuery();
@@ -865,14 +866,14 @@ namespace URL_Shortener_App.Controllers
             }
             else
             {
-                if (platform != "" && platform != null)
+                if (agent != "" && agent != null)
                 {
                     var shortUrl = e.Request.Params["go"];
                     // ### Add some data to the table
                     sql = "insert into platforms "
                         + "(platform, username, shortURL, count)"
                         + " values "
-                        + "('" + platform + "',"
+                        + "('" + agent + "',"
                         + "'" + username + "',"
                         + "'" + shortUrl + "',"
                         + " 1 )";
@@ -881,7 +882,7 @@ namespace URL_Shortener_App.Controllers
                     return true;
                 }
             }
-            Console.WriteLine("\n\t Failed to insert platform!");
+            Console.WriteLine("\n\t Failed to insert agent!");
             return false;
         }
         #endregion

@@ -78,8 +78,7 @@ namespace PHttp
             string content = reader.ReadToEnd();
             dynamic item = serializer.Deserialize<object>(content);
 
-            Console.WriteLine("\n\t Location Provider Response:");
-            Console.WriteLine("\t " + content);
+            Console.WriteLine("\n\t " + content);
             Console.WriteLine();
             foreach (var elem in item)
             {
