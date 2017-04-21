@@ -11,6 +11,8 @@ using JWT.Serializers;
 using Newtonsoft.Json.Linq;
 using NReco.PhantomJS;
 using System.Data;
+using OpenQA.Selenium.PhantomJS;
+using OpenQA.Selenium;
 
 namespace URL_Shortener_App.Controllers
 {
@@ -219,7 +221,7 @@ namespace URL_Shortener_App.Controllers
                     var trOpen = "<tr style=\"vertical-align: middle;\" align=\"center\">";
                     var trClose = "</tr>";
                     var tdOpen = "<td style=\"vertical-align: middle;\" align=\"center\">";
-                    var tdClose = "</td>";
+                    var tdClose = "</td>";                   
 
                     // ### Connect to the database
                     m_dbConnection = new SqliteConnection(_app.connectionString);
@@ -232,7 +234,7 @@ namespace URL_Shortener_App.Controllers
                     while (reader.Read())
                     {
                         if (reader["username"].ToString().ToLower() == username.ToLower())
-                        {
+                        {                          
                             string img = "<img src=\"";
                             var shortUrl = GetAppURL(e, "Short") + "Path" + "?go=" + reader["shortURL"].ToString();
                             var longURL = reader["longURL"].ToString();
@@ -246,7 +248,21 @@ namespace URL_Shortener_App.Controllers
                                 + "\" class=\"btn btn-lg btn-info btn-block\" role=\"button\">Analytics</a>";
 
                             //string imgURL = GetAppURL(e, "img") + reader["shortURL"].ToString() + ".png";
+
                             string imgURL = "http://api.screenshotmachine.com/?key=35f0a9&url=" + longURL;
+                            var driver = new PhantomJSDriver();
+                            try
+                            {
+                                driver.Url = _longURL;
+                                var screenshot = ((ITakesScreenshot)driver).GetScreenshot();
+                                imgURL = screenshot.AsBase64EncodedString;
+                                img = img + "data:image/jpeg;base64,";
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine(ex.Message);
+                            }
+                            
                             img = img + imgURL + "\" class=\"portrait\"" + " alt=\"URL Image\" + "
                                 + "style=\"max-width:100px; max-height:100%; display:inline-block; overflow: hidden;\">";
 

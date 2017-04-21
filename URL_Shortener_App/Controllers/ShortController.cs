@@ -11,6 +11,8 @@ using JWT.Serializers;
 using Newtonsoft.Json.Linq;
 using NReco.PhantomJS;
 using System.Data;
+using OpenQA.Selenium.PhantomJS;
+using OpenQA.Selenium;
 
 namespace URL_Shortener_App.Controllers
 {
@@ -1159,6 +1161,19 @@ namespace URL_Shortener_App.Controllers
                     var link2 = "<a href=\"" + longURL + "\">" + longURL + "</a>";
 
                     string imgURL = "http://api.screenshotmachine.com/?key=35f0a9&url=" + longURL;
+                    var driver = new PhantomJSDriver();
+                    try
+                    {
+                        driver.Url = longURL;
+                        var screenshot = ((ITakesScreenshot)driver).GetScreenshot();
+                        imgURL = screenshot.AsBase64EncodedString;
+                        img = img + "data:image/jpeg;base64,";
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+
                     img = img + imgURL + "\" class=\"portrait\"" + " alt=\"URL Image\" + "
                         + "style=\"max-width:100px; max-height:100%; display:inline-block; overflow: hidden;\">";
 
@@ -1782,6 +1797,18 @@ namespace URL_Shortener_App.Controllers
                 {
                     //string imgURL = GetAppURL(e, "img") + e.Request.Params["go"] + ".png";
                     string imgURL = "http://api.screenshotmachine.com/?key=35f0a9&dimension=640x480&url=" + GetLongURL(e);
+                    var driver = new PhantomJSDriver();
+                    try
+                    {
+                        driver.Url = GetLongURL(e);
+                        var screenshot = ((ITakesScreenshot)driver).GetScreenshot();
+                        imgURL = "data:image/jpeg;base64," + screenshot.AsBase64EncodedString;
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+
                     var source = File.ReadAllText(filePath);
                     var template = Handlebars.Compile(source);
                     var data = new
