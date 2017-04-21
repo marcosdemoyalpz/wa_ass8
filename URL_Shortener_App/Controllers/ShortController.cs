@@ -726,8 +726,9 @@ namespace URL_Shortener_App.Controllers
                     location = geo.countryn;
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                Console.WriteLine(ex);
                 location = "Unknown";
             }
             string readUser = "";
