@@ -19,7 +19,7 @@ namespace ConsoleApp
         ///
         /// <returns>   Exit-code for the process - 0 for success, else an error code. </returns>
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        private static int Main()
+        private static void Main()
         {
             Console.WriteLine("\n\tServer is starting...");
             try
@@ -44,7 +44,7 @@ namespace ConsoleApp
                     {
                         throw new Exception(ex.ToString());
                     }
-                    Console.ReadKey();
+                    for (;;) { };
 
                     // When the HttpServer is disposed, all opened connections
                     // are automatically closed.
@@ -54,7 +54,6 @@ namespace ConsoleApp
             {
                 throw new Exception(ex.Message);
             }
-            return 0;
         }
     }
 }
