@@ -651,7 +651,7 @@ namespace URL_Shortener_App.Controllers
                         link2 = url + "About",
                         link3 = url + "Login",
                         title = "Marcos URL Shortener",
-                        mainH1 = "Marcos's App",
+                        mainH1 = "Marcos' App",
                         mainH2 = "Home",
                         body = table
                     };
@@ -669,7 +669,7 @@ namespace URL_Shortener_App.Controllers
                         link2 = url + "About",
                         link3 = url + "Login",
                         title = "Marcos URL Shortener",
-                        mainH1 = "Marcos's App",
+                        mainH1 = "Marcos' App",
                         mainH2 = "Home",
                         body = File.ReadAllText(views + "/partials/captcha.hbs")
                     };
@@ -758,7 +758,7 @@ namespace URL_Shortener_App.Controllers
                     link2 = url + "About",
                     link3 = url + "Login",
                     title = "Marcos URL Shortener",
-                    mainH1 = "Marcos's App",
+                    mainH1 = "Marcos' App",
                     mainH2 = "About",
                     body = File.ReadAllText(views + "/partials/about.hbs")
                 };
@@ -816,7 +816,7 @@ namespace URL_Shortener_App.Controllers
                             link2 = url + "About",
                             link3 = url + "Register",
                             title = "Marcos URL Shortener",
-                            mainH1 = "Marcos's App",
+                            mainH1 = "Marcos' App",
                             mainH2 = "Login",
                             body = File.ReadAllText(views + "/partials/login.hbs")
                         };
@@ -879,7 +879,7 @@ namespace URL_Shortener_App.Controllers
                             link2 = url + "About",
                             link3 = url + "Login",
                             title = "Marcos URL Shortener",
-                            mainH1 = "Marcos's App",
+                            mainH1 = "Marcos' App",
                             mainH2 = "Register",
                             body = File.ReadAllText(views + "/partials/register.hbs")
                         };
