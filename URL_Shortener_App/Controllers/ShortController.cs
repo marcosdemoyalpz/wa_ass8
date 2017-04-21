@@ -512,6 +512,7 @@ namespace URL_Shortener_App.Controllers
             bool refererFound = false;
 
             string referer = "";
+            string shortURL = "";
             if (e.Request.ServerVariables["http_referer"] != null)
             {
                 referer = e.Request.ServerVariables["http_referer"];
@@ -523,26 +524,33 @@ namespace URL_Shortener_App.Controllers
             IDataReader reader = command.ExecuteReader();
             while (reader.Read())
             {
+                Console.WriteLine("\n"
+                       + "\n\t username = " + reader["username"].ToString()
+                       + "\n\t shortURL = " + reader["shortURL"].ToString()
+                       + "\n\t referer = " + reader["referer"].ToString()
+                       + "\n");
                 if (reader["username"].ToString().ToLower() == username.ToLower())
                 {
-                    var shortUrl = reader["shortURL"].ToString();
-                    if (e.Request.Params["go"] == shortUrl)
+                    shortURL = reader["shortURL"].ToString();
+                    if (e.Request.Params["go"] == shortURL)
                     {
                         if (referer == reader["referer"].ToString())
                         {
                             refererFound = true;
                             referersCount = (int.Parse(reader["count"].ToString()) + 1);
+                            Console.WriteLine("\n\t Referer Found!");
+                            break;
                         }
                     }
                 }
             }
             reader.Close();
-            if (refererFound)
+            if (refererFound == true && shortURL != "")
             {
                 // ### Update clicks on table
                 sql = "UPDATE referers SET "
                     + "count = " + referersCount
-                    + " WHERE shortURL = '" + e.Request.Params["go"] + "' AND "
+                    + " WHERE shortURL = '" + shortURL + "' AND "
                     + "referer = '" + referer + "' AND "
                     + "username = '" + username + "'";
                 command.CommandText = sql;
@@ -566,6 +574,7 @@ namespace URL_Shortener_App.Controllers
                     return true;
                 }
             }
+            Console.WriteLine("\n\t Failed to insert referer!");
             return false;
         }
 
@@ -590,6 +599,7 @@ namespace URL_Shortener_App.Controllers
             m_dbConnection.Open();
 
             string agent = "";
+            string shortURL = "";
             UserAgentHelper agentHelper = new UserAgentHelper(e);
             if (agentHelper.agent_name != null)
             {
@@ -602,27 +612,34 @@ namespace URL_Shortener_App.Controllers
             IDataReader reader = command.ExecuteReader();
             while (reader.Read())
             {
+                Console.WriteLine("\n"
+                        + "\n\t username = " + reader["username"].ToString()
+                        + "\n\t shortURL = " + reader["shortURL"].ToString()
+                        + "\n\t agent = " + reader["agent"].ToString()
+                        + "\n");
                 readUser = reader["username"].ToString();
                 if (readUser.ToLower() == username.ToLower())
                 {
-                    var shortUrl = reader["shortURL"].ToString();
-                    if (shortUrl == e.Request.Params["go"])
+                    shortURL = reader["shortURL"].ToString();
+                    if (shortURL == e.Request.Params["go"])
                     {
                         if (agent == reader["agent"].ToString())
                         {
                             agentFound = true;
                             agentsCount = (int.Parse(reader["count"].ToString()) + 1);
+                            Console.WriteLine("\n\t Agent Found!");
+                            break;
                         }
                     }
                 }
             }
             reader.Close();
-            if (agentFound == true)
+            if (agentFound == true && shortURL != "")
             {
                 // ### Update clicks on table
                 sql = "UPDATE agents SET "
                     + "count = " + agentsCount
-                    + " WHERE shortURL = '" + e.Request.Params["go"] + "' AND "
+                    + " WHERE shortURL = '" + shortURL + "' AND "
                     + "agent = '" + agent + "' AND "
                     + "username = '" + username + "'";
                 command.CommandText = sql;
@@ -647,6 +664,7 @@ namespace URL_Shortener_App.Controllers
                     return true;
                 }
             }
+            Console.WriteLine("\n\t Failed to insert agent!");
             return false;
         }
 
@@ -671,6 +689,7 @@ namespace URL_Shortener_App.Controllers
             m_dbConnection.Open();
 
             string location = "";
+            string shortURL = "";
             GeoLocation geo = new GeoLocation(e);
             if (geo.countryn != null)
             {
@@ -683,27 +702,34 @@ namespace URL_Shortener_App.Controllers
             IDataReader reader = command.ExecuteReader();
             while (reader.Read())
             {
+                Console.WriteLine("\n"
+                        + "\n\t username = " + reader["username"].ToString()
+                        + "\n\t shortURL = " + reader["shortURL"].ToString()
+                        + "\n\t location = " + reader["location"].ToString()
+                        + "\n");
                 readUser = reader["username"].ToString();
                 if (readUser.ToLower() == username.ToLower())
                 {
-                    var shortUrl = reader["shortURL"].ToString();
-                    if (shortUrl == e.Request.Params["go"])
+                    shortURL = reader["shortURL"].ToString();
+                    if (shortURL == e.Request.Params["go"])
                     {
                         if (location == reader["location"].ToString())
                         {
                             locationFound = true;
                             locationsCount = (int.Parse(reader["count"].ToString()) + 1);
+                            Console.WriteLine("\n\t Location Found!");
+                            break;
                         }
                     }
                 }
             }
             reader.Close();
-            if (locationFound)
+            if (locationFound == true && shortURL != "")
             {
                 // ### Update clicks on table
                 sql = "UPDATE locations SET "
                     + "count = " + locationsCount
-                    + " WHERE shortURL = '" + e.Request.Params["go"] + "' AND "
+                    + " WHERE shortURL = '" + shortURL + "' AND "
                     + "location = '" + location + "' AND "
                     + "username = '" + username + "'";
                 command.CommandText = sql;
@@ -728,6 +754,7 @@ namespace URL_Shortener_App.Controllers
                     return true;
                 }
             }
+            Console.WriteLine("\n\t Failed to insert location!");
             return false;
         }
 
@@ -752,6 +779,7 @@ namespace URL_Shortener_App.Controllers
             m_dbConnection.Open();
 
             string platform = "Others";
+            string shortURL = "";
 
             UserAgentHelper agentHelper = new UserAgentHelper(e);
             if (agentHelper.os_name != null)
@@ -765,27 +793,34 @@ namespace URL_Shortener_App.Controllers
             IDataReader reader = command.ExecuteReader();
             while (reader.Read())
             {
+                Console.WriteLine("\n"
+                         + "\n\t username = " + reader["username"].ToString()
+                         + "\n\t shortURL = " + reader["shortURL"].ToString()
+                         + "\n\t platform = " + reader["platform"].ToString()
+                         + "\n");
                 readUser = reader["username"].ToString();
                 if (readUser.ToLower() == username.ToLower())
                 {
-                    var shortUrl = reader["shortURL"].ToString();
-                    if (shortUrl == e.Request.Params["go"])
+                    shortURL = reader["shortURL"].ToString();
+                    if (shortURL == e.Request.Params["go"])
                     {
                         if (platform == reader["platform"].ToString())
                         {
                             platformFound = true;
                             platformsCount = (int.Parse(reader["count"].ToString()) + 1);
+                            Console.WriteLine("\n\t Platform Found!");
+                            break;
                         }
                     }
                 }
             }
             reader.Close();
-            if (platformFound)
+            if (platformFound && shortURL != "")
             {
                 // ### Update clicks on table
                 sql = "UPDATE platforms SET "
                     + "count = " + platformsCount
-                    + " WHERE shortURL = '" + e.Request.Params["go"] + "' AND "
+                    + " WHERE shortURL = '" + shortURL + "' AND "
                     + "agent = '" + platform + "' AND "
                     + "username = '" + username + "'";
                 command.CommandText = sql;
@@ -810,6 +845,7 @@ namespace URL_Shortener_App.Controllers
                     return true;
                 }
             }
+            Console.WriteLine("\n\t Failed to insert platform!");
             return false;
         }
         #endregion
