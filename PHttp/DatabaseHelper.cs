@@ -99,7 +99,7 @@ namespace PHttp
                         command.ExecuteNonQuery();
 
                         // ### Add some data to the table
-                        sql = "insert into urls (shortURL, longURL, username, dateCreated, clicks, lastClicked) values ('hello', 'https://www.google.com', 'admin', DATETIME('NOW'), 0, DATETIME('0') )";
+                        sql = "insert into urls (shortURL, longURL, username, dateCreated, clicks, lastClicked) values ('hello', 'https://www.google.com', 'admin', DATETIME('NOW'), 0, DATETIME('NOW') )";
                         command.CommandText = sql;
                         command.ExecuteNonQuery();
 

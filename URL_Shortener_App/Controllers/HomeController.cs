@@ -253,7 +253,11 @@ namespace URL_Shortener_App.Controllers
 
                             var dateCreated = DateTime.Parse(dateCreatedRaw).ToLocalTime();
                             var lastClicked = DateTime.Parse(lastClickedRaw).ToLocalTime();
-                            if (dateCreated.AddDays(30) < DateTime.Now)
+                            if(lastClicked == dateCreated)
+                            {
+                                lastClicked = DateTime.Parse("0000-01-01");
+                            }
+                            if (lastClicked.AddDays(30) < DateTime.Now)
                             {
                                 trOpen = "<tr class=\"warning\" style=\"vertical-align: middle;\" align=\"center\">";
                             }
@@ -526,7 +530,7 @@ namespace URL_Shortener_App.Controllers
                         + username + "',"
                         + "DATETIME('NOW'),"
                         + 0 + ","
-                        + "DATETIME('0')"
+                        + "DATETIME('NOW')"
                         + ")";
                     command.CommandText = sql;
                     command.ExecuteNonQuery();
