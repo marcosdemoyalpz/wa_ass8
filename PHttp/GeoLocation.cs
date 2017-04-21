@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -33,9 +34,45 @@ namespace PHttp
         /// ISP IP Address
         public string myIP { get; private set; }
 
+        /// <summary>
+        /// Default Constructor
+        /// </summary>
+        /// <param name="e"></param>
         public GeoLocation(HttpRequestEventArgs e)
         {
-            WebAPI(e);
+            city = "";
+            countryc = "";
+            countryn = "";
+            region = "";
+            lat = "";
+            longi = "";
+            timez = "";
+            zip = "";
+            GetLocation(e);
+        }
+
+        /// <summary>
+        /// Secondary Constructor
+        /// </summary>
+        /// <param name="e"></param>
+        public GeoLocation(HttpRequestEventArgs e, bool ip2location)
+        {
+            city = "";
+            countryc = "";
+            countryn = "";
+            region = "";
+            lat = "";
+            longi = "";
+            timez = "";
+            zip = "";
+            if (ip2location == true)
+            {
+                WebAPI(e);
+            }
+            else
+            {
+                countryn = GetLocation(e);
+            }
         }
         private void WebAPI(HttpRequestEventArgs e)
         {
@@ -93,6 +130,37 @@ namespace PHttp
             longi = item["longitude"];
             timez = item["time_zone"];
             zip = item["zip_code"];
+        }
+
+        private string GetLocation(HttpRequestEventArgs e)
+        {
+            #region Get Client IP
+            string VisitorsIPAddr = string.Empty;
+            if (e.Context.Request.ServerVariables["HTTP_X_FORWARDED_FOR"] != null)
+            {
+                VisitorsIPAddr = e.Context.Request.ServerVariables["HTTP_X_FORWARDED_FOR"].ToString();
+            }
+            else if (e.Context.Request.UserHostAddress.Length != 0)
+            {
+                VisitorsIPAddr = e.Context.Request.UserHostAddress;
+            }
+            myIP = VisitorsIPAddr;
+            #endregion
+
+            var request = WebRequest.Create("http://freegeoip.net/json/" + myIP);
+            request.Method = "GET";
+            var response = request.GetResponse();
+
+            using (var dataStream = response.GetResponseStream())
+            {
+                using (var reader = new System.IO.StreamReader(dataStream))
+                {
+                    var responseFromServer = reader.ReadToEnd();
+                    var result = JsonConvert.DeserializeObject<dynamic>(responseFromServer);
+
+                    return result.country_name;
+                }
+            }
         }
     }
 }
