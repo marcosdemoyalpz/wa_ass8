@@ -526,7 +526,7 @@ namespace URL_Shortener_App.Controllers
                         + username + "',"
                         + "DATETIME('NOW'),"
                         + 0 + ","
-                        + "DATETIME('0')"
+                        + "'0000-01-01 00:00:00'"
                         + ")";
                     command.CommandText = sql;
                     command.ExecuteNonQuery();
