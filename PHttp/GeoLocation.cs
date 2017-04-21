@@ -22,14 +22,8 @@ namespace PHttp
         public string countryn { get; private set; }
         /// Region Name
         public string region { get; private set; }
-        /// Latitude
-        public string lat { get; private set; }
-        /// Longitude
-        public string longi { get; private set; }
-        /// Time Zone
-        public string timez { get; private set; }
-        /// Zip Code
-        public string zip { get; private set; }
+        /// Latitude and Longitude
+        public string loc { get; private set; }
         /// ISP IP Address
         public string myIP { get; private set; }
 
@@ -79,14 +73,11 @@ namespace PHttp
             System.IO.StreamReader reader = new System.IO.StreamReader(HttpWResp.GetResponseStream());
             string content = reader.ReadToEnd();
             dynamic item = serializer.Deserialize<object>(content);
-            city = item["city_name"];
-            countryc = item["country_code"];
-            countryn = item["country_name"];
-            region = item["region_name"];
-            lat = item["latitude"];
-            longi = item["longitude"];
-            timez = item["time_zone"];
-            zip = item["zip_code"];
+            city = item["city"];
+            countryc = item["phone"];
+            countryn = item["country"];
+            region = item["region"];
+            loc = item["loc"];
         }
     }
 }
