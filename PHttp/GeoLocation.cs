@@ -65,10 +65,12 @@ namespace PHttp
             //myIP = a4;
             #endregion
             string strQuery;
-            string key = "demo";
+            string key = "f58d68e819b124";
+            //string key = "demo";
             HttpWebRequest HttpWReq;
             HttpWebResponse HttpWResp;
-            strQuery = "http://www.ip2location.com/demo?" + "ip=" + myIP + "&package=WS24&format=json";
+            //strQuery = "http://www.ip2location.com/demo?" + "ip=" + myIP + "&package=WS24&format=json";
+            strQuery = "https://ipinfo.io?" + "ip=" + myIP + "&token=" + key + "&package=WS24&format=json";
             JavaScriptSerializer serializer = new JavaScriptSerializer();
 
             HttpWReq = (HttpWebRequest)WebRequest.Create(strQuery);
