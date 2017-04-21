@@ -48,7 +48,7 @@ namespace PHttp
             longi = "";
             timez = "";
             zip = "";
-            GetLocation(e);
+            countryn = GetLocation(e);
         }
 
         /// <summary>
