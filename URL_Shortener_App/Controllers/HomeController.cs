@@ -253,7 +253,7 @@ namespace URL_Shortener_App.Controllers
                             var driver = new PhantomJSDriver();
                             try
                             {
-                                driver.Url = _longURL;
+                                driver.Url = longURL;
                                 var screenshot = ((ITakesScreenshot)driver).GetScreenshot();
                                 imgURL = screenshot.AsBase64EncodedString;
                                 img = img + "data:image/jpeg;base64,";
