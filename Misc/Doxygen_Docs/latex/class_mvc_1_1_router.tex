@@ -1,0 +1,145 @@
+\hypertarget{class_mvc_1_1_router}{}\section{Mvc.\+Router Class Reference}
+\label{class_mvc_1_1_router}\index{Mvc.\+Router@{Mvc.\+Router}}
+
+
+\hyperlink{class_mvc_1_1_router}{Router} Class.  
+
+
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{class_mvc_1_1_router_1_1_controllers}{Controllers}
+\begin{DoxyCompactList}\small\item\em A controllers class. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_mvc_1_1_router_a875ceb54c490e2d1d3f38d22552c1ccc}{Router} (string app\+Name)
+\begin{DoxyCompactList}\small\item\em Default Constructor. \end{DoxyCompactList}\item 
+void \hyperlink{class_mvc_1_1_router_a4fd8fe9a8853330f74267b4a56bcb4a4}{Call\+Action} (\hyperlink{class_p_http_1_1_http_request_event_args}{Http\+Request\+Event\+Args} e, string directory)
+\begin{DoxyCompactList}\small\item\em Call action. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \hyperlink{class_mvc_1_1_router_1_1_controllers}{Controllers} \hyperlink{class_mvc_1_1_router_aab057f45a02f85a3b6ceaff85a1edf6e}{load\+Controllers} (string path, string app\+Name)
+\begin{DoxyCompactList}\small\item\em Loads the controllers. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+string \hyperlink{class_mvc_1_1_router_aede73d60bab62819083e10f3815babf7}{App\+Name}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Gets or sets the name of the application. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\hyperlink{class_mvc_1_1_router}{Router} Class. 
+
+Marcos De Moya, 4/20/2017. 
+
+Definition at line 20 of file Router.\+cs.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_mvc_1_1_router_a875ceb54c490e2d1d3f38d22552c1ccc}\label{class_mvc_1_1_router_a875ceb54c490e2d1d3f38d22552c1ccc}} 
+\index{Mvc\+::\+Router@{Mvc\+::\+Router}!Router@{Router}}
+\index{Router@{Router}!Mvc\+::\+Router@{Mvc\+::\+Router}}
+\subsubsection{\texorpdfstring{Router()}{Router()}}
+{\footnotesize\ttfamily Mvc.\+Router.\+Router (\begin{DoxyParamCaption}\item[{string}]{app\+Name }\end{DoxyParamCaption})}
+
+
+
+Default Constructor. 
+
+Marcos De Moya, 4/20/2017. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em app\+Name} & Name of the application. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 55 of file Router.\+cs.
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_mvc_1_1_router_a4fd8fe9a8853330f74267b4a56bcb4a4}\label{class_mvc_1_1_router_a4fd8fe9a8853330f74267b4a56bcb4a4}} 
+\index{Mvc\+::\+Router@{Mvc\+::\+Router}!Call\+Action@{Call\+Action}}
+\index{Call\+Action@{Call\+Action}!Mvc\+::\+Router@{Mvc\+::\+Router}}
+\subsubsection{\texorpdfstring{Call\+Action()}{CallAction()}}
+{\footnotesize\ttfamily void Mvc.\+Router.\+Call\+Action (\begin{DoxyParamCaption}\item[{\hyperlink{class_p_http_1_1_http_request_event_args}{Http\+Request\+Event\+Args}}]{e,  }\item[{string}]{directory }\end{DoxyParamCaption})}
+
+
+
+Call action. 
+
+Marcos De Moya, 4/20/2017. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em e} & H\+T\+TP request event information. \\
+\hline
+{\em directory} & Pathname of the directory. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 330 of file Router.\+cs.
+
+\mbox{\Hypertarget{class_mvc_1_1_router_aab057f45a02f85a3b6ceaff85a1edf6e}\label{class_mvc_1_1_router_aab057f45a02f85a3b6ceaff85a1edf6e}} 
+\index{Mvc\+::\+Router@{Mvc\+::\+Router}!load\+Controllers@{load\+Controllers}}
+\index{load\+Controllers@{load\+Controllers}!Mvc\+::\+Router@{Mvc\+::\+Router}}
+\subsubsection{\texorpdfstring{load\+Controllers()}{loadControllers()}}
+{\footnotesize\ttfamily static \hyperlink{class_mvc_1_1_router_1_1_controllers}{Controllers} Mvc.\+Router.\+load\+Controllers (\begin{DoxyParamCaption}\item[{string}]{path,  }\item[{string}]{app\+Name }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Loads the controllers. 
+
+Marcos De Moya, 4/20/2017. 
+
+
+\begin{DoxyExceptions}{Exceptions}
+{\em File\+Not\+Found\+Exception} & Thrown when the requested file is not present. \\
+\hline
+\end{DoxyExceptions}
+
+
+
+\begin{DoxyParams}{Parameters}
+{\em path} & Full pathname of the file. \\
+\hline
+{\em app\+Name} & Name of the application. \\
+\hline
+\end{DoxyParams}
+
+
+\begin{DoxyReturn}{Returns}
+The controllers. 
+\end{DoxyReturn}
+
+
+Definition at line 274 of file Router.\+cs.
+
+
+
+\subsection{Property Documentation}
+\mbox{\Hypertarget{class_mvc_1_1_router_aede73d60bab62819083e10f3815babf7}\label{class_mvc_1_1_router_aede73d60bab62819083e10f3815babf7}} 
+\index{Mvc\+::\+Router@{Mvc\+::\+Router}!App\+Name@{App\+Name}}
+\index{App\+Name@{App\+Name}!Mvc\+::\+Router@{Mvc\+::\+Router}}
+\subsubsection{\texorpdfstring{App\+Name}{AppName}}
+{\footnotesize\ttfamily string Mvc.\+Router.\+App\+Name\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+Gets or sets the name of the application. 
+
+The name of the application. 
+
+Definition at line 37 of file Router.\+cs.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Marcos De Moya/\+Documents/\+Git\+Hub/wa\+\_\+ass8/\+Mvc/\hyperlink{_router_8cs}{Router.\+cs}\end{DoxyCompactItemize}

@@ -1,0 +1,135 @@
+\hypertarget{namespace_p_http}{}\section{P\+Http Namespace Reference}
+\label{namespace_p_http}\index{P\+Http@{P\+Http}}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{class_p_http_1_1_app_info}{App\+Info}
+\begin{DoxyCompactList}\small\item\em Information about the applications. \end{DoxyCompactList}\item 
+class \hyperlink{class_p_http_1_1_database_helper}{Database\+Helper}
+\begin{DoxyCompactList}\small\item\em A database helper. \end{DoxyCompactList}\item 
+class \hyperlink{class_p_http_1_1_error_handler}{Error\+Handler}
+\begin{DoxyCompactList}\small\item\em An error handler. \end{DoxyCompactList}\item 
+class \hyperlink{class_p_http_1_1_geo_location}{Geo\+Location}
+\begin{DoxyCompactList}\small\item\em Class used to obtain Geo Locations from Client IP. \end{DoxyCompactList}\item 
+class {\bfseries Http\+Client}
+\begin{DoxyCompactList}\small\item\em A H\+T\+TP client. \end{DoxyCompactList}\item 
+class \hyperlink{class_p_http_1_1_http_context}{Http\+Context}
+\item 
+class \hyperlink{class_p_http_1_1_http_cookie}{Http\+Cookie}
+\item 
+class \hyperlink{class_p_http_1_1_http_cookie_collection}{Http\+Cookie\+Collection}
+\item 
+class \hyperlink{class_p_http_1_1_http_exception_event_args}{Http\+Exception\+Event\+Args}
+\item 
+class \hyperlink{class_p_http_1_1_http_file_collection}{Http\+File\+Collection}
+\item 
+class {\bfseries Http\+Multi\+Part\+Item}
+\item 
+class {\bfseries Http\+Multi\+Part\+Request\+Parser}
+\item 
+class \hyperlink{class_p_http_1_1_http_output_stream}{Http\+Output\+Stream}
+\begin{DoxyCompactList}\small\item\em Wraps a stream for all operations except Close and Dispose, which merely flush the stream and prevent further operations from being carried out using this wrapper. \end{DoxyCompactList}\item 
+class \hyperlink{class_p_http_1_1_http_posted_file}{Http\+Posted\+File}
+\item 
+class {\bfseries Http\+Read\+Buffer}
+\item 
+class \hyperlink{class_p_http_1_1_http_request}{Http\+Request}
+\item 
+class \hyperlink{class_p_http_1_1_http_request_event_args}{Http\+Request\+Event\+Args}
+\item 
+class {\bfseries Http\+Request\+Parser}
+\item 
+class \hyperlink{class_p_http_1_1_http_response}{Http\+Response}
+\item 
+class \hyperlink{class_p_http_1_1_http_server}{Http\+Server}
+\item 
+class \hyperlink{class_p_http_1_1_http_server_utility}{Http\+Server\+Utility}
+\item 
+class \hyperlink{class_p_http_1_1_http_state_changed_event_args}{Http\+State\+Changed\+Event\+Args}
+\item 
+class {\bfseries Http\+Timeout\+Manager}
+\item 
+class {\bfseries Http\+Unknown\+Request\+Parser}
+\item 
+class {\bfseries Http\+Url\+Encoded\+Request\+Parser}
+\item 
+class {\bfseries Http\+Util}
+\item 
+interface \hyperlink{interface_p_http_1_1_i_p_http_application}{I\+P\+Http\+Application}
+\begin{DoxyCompactList}\small\item\em Interface for \hyperlink{interface_p_http_1_1_i_p_http_application}{I\+P\+Http\+Application}. \end{DoxyCompactList}\item 
+class \hyperlink{class_p_http_1_1_load_apps}{Load\+Apps}
+\item 
+class \hyperlink{class_p_http_1_1_load_config}{Load\+Config}
+\begin{DoxyCompactList}\small\item\em Load configurations class. \end{DoxyCompactList}\item 
+class \hyperlink{class_p_http_1_1_mime_types}{Mime\+Types}
+\begin{DoxyCompactList}\small\item\em Mime types class. \end{DoxyCompactList}\item 
+class \hyperlink{class_p_http_1_1_p_http_exception}{P\+Http\+Exception}
+\item 
+class {\bfseries Protocol\+Exception}
+\item 
+class \hyperlink{class_p_http_1_1_startup}{Startup}
+\begin{DoxyCompactList}\small\item\em \hyperlink{class_p_http_1_1_startup}{Startup} Class. \end{DoxyCompactList}\item 
+class \hyperlink{class_p_http_1_1_user_agent_helper}{User\+Agent\+Helper}
+\begin{DoxyCompactList}\small\item\em Parse User Agents Class. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{namespace_p_http_a8a92bffd93830785b58d0be3a2f5fdd4}{Http\+Server\+State} \{ \hyperlink{namespace_p_http_a8a92bffd93830785b58d0be3a2f5fdd4ac23e2b09ebe6bf4cb5e2a9abe85c0be2}{Http\+Server\+State.\+Stopped}, 
+\hyperlink{namespace_p_http_a8a92bffd93830785b58d0be3a2f5fdd4ac2efe4bbd13e6cb0db293e72884273c0}{Http\+Server\+State.\+Starting}, 
+\hyperlink{namespace_p_http_a8a92bffd93830785b58d0be3a2f5fdd4a8428552d86c0d262a542a528af490afa}{Http\+Server\+State.\+Started}, 
+\hyperlink{namespace_p_http_a8a92bffd93830785b58d0be3a2f5fdd4a7b7ecb39b9e110c2a31409a1672bad23}{Http\+Server\+State.\+Stopping}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+delegate void \hyperlink{namespace_p_http_a3004f4a8bbd5aaf98c00d1771384224f}{Http\+Exception\+Event\+Handler} (object sender, \hyperlink{class_p_http_1_1_http_exception_event_args}{Http\+Exception\+Event\+Args} e)
+\item 
+delegate void \hyperlink{namespace_p_http_a746b16e27637dd7ea95bb9256e7a93ff}{Http\+Request\+Event\+Handler} (object sender, \hyperlink{class_p_http_1_1_http_request_event_args}{Http\+Request\+Event\+Args} e)
+\end{DoxyCompactItemize}
+
+
+\subsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{namespace_p_http_a8a92bffd93830785b58d0be3a2f5fdd4}\label{namespace_p_http_a8a92bffd93830785b58d0be3a2f5fdd4}} 
+\index{P\+Http@{P\+Http}!Http\+Server\+State@{Http\+Server\+State}}
+\index{Http\+Server\+State@{Http\+Server\+State}!P\+Http@{P\+Http}}
+\subsubsection{\texorpdfstring{Http\+Server\+State}{HttpServerState}}
+{\footnotesize\ttfamily enum \hyperlink{namespace_p_http_a8a92bffd93830785b58d0be3a2f5fdd4}{P\+Http.\+Http\+Server\+State}\hspace{0.3cm}{\ttfamily [strong]}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Stopped@{Stopped}!P\+Http@{P\+Http}}\index{P\+Http@{P\+Http}!Stopped@{Stopped}}}\mbox{\Hypertarget{namespace_p_http_a8a92bffd93830785b58d0be3a2f5fdd4ac23e2b09ebe6bf4cb5e2a9abe85c0be2}\label{namespace_p_http_a8a92bffd93830785b58d0be3a2f5fdd4ac23e2b09ebe6bf4cb5e2a9abe85c0be2}} 
+Stopped&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Starting@{Starting}!P\+Http@{P\+Http}}\index{P\+Http@{P\+Http}!Starting@{Starting}}}\mbox{\Hypertarget{namespace_p_http_a8a92bffd93830785b58d0be3a2f5fdd4ac2efe4bbd13e6cb0db293e72884273c0}\label{namespace_p_http_a8a92bffd93830785b58d0be3a2f5fdd4ac2efe4bbd13e6cb0db293e72884273c0}} 
+Starting&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Started@{Started}!P\+Http@{P\+Http}}\index{P\+Http@{P\+Http}!Started@{Started}}}\mbox{\Hypertarget{namespace_p_http_a8a92bffd93830785b58d0be3a2f5fdd4a8428552d86c0d262a542a528af490afa}\label{namespace_p_http_a8a92bffd93830785b58d0be3a2f5fdd4a8428552d86c0d262a542a528af490afa}} 
+Started&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{Stopping@{Stopping}!P\+Http@{P\+Http}}\index{P\+Http@{P\+Http}!Stopping@{Stopping}}}\mbox{\Hypertarget{namespace_p_http_a8a92bffd93830785b58d0be3a2f5fdd4a7b7ecb39b9e110c2a31409a1672bad23}\label{namespace_p_http_a8a92bffd93830785b58d0be3a2f5fdd4a7b7ecb39b9e110c2a31409a1672bad23}} 
+Stopping&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+Definition at line 3 of file Http\+Server\+State.\+cs.
+
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{namespace_p_http_a3004f4a8bbd5aaf98c00d1771384224f}\label{namespace_p_http_a3004f4a8bbd5aaf98c00d1771384224f}} 
+\index{P\+Http@{P\+Http}!Http\+Exception\+Event\+Handler@{Http\+Exception\+Event\+Handler}}
+\index{Http\+Exception\+Event\+Handler@{Http\+Exception\+Event\+Handler}!P\+Http@{P\+Http}}
+\subsubsection{\texorpdfstring{Http\+Exception\+Event\+Handler()}{HttpExceptionEventHandler()}}
+{\footnotesize\ttfamily delegate void P\+Http.\+Http\+Exception\+Event\+Handler (\begin{DoxyParamCaption}\item[{object}]{sender,  }\item[{\hyperlink{class_p_http_1_1_http_exception_event_args}{Http\+Exception\+Event\+Args}}]{e }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{namespace_p_http_a746b16e27637dd7ea95bb9256e7a93ff}\label{namespace_p_http_a746b16e27637dd7ea95bb9256e7a93ff}} 
+\index{P\+Http@{P\+Http}!Http\+Request\+Event\+Handler@{Http\+Request\+Event\+Handler}}
+\index{Http\+Request\+Event\+Handler@{Http\+Request\+Event\+Handler}!P\+Http@{P\+Http}}
+\subsubsection{\texorpdfstring{Http\+Request\+Event\+Handler()}{HttpRequestEventHandler()}}
+{\footnotesize\ttfamily delegate void P\+Http.\+Http\+Request\+Event\+Handler (\begin{DoxyParamCaption}\item[{object}]{sender,  }\item[{\hyperlink{class_p_http_1_1_http_request_event_args}{Http\+Request\+Event\+Args}}]{e }\end{DoxyParamCaption})}
+

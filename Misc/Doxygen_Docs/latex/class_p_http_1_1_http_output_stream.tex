@@ -1,0 +1,472 @@
+\hypertarget{class_p_http_1_1_http_output_stream}{}\section{P\+Http.\+Http\+Output\+Stream Class Reference}
+\label{class_p_http_1_1_http_output_stream}\index{P\+Http.\+Http\+Output\+Stream@{P\+Http.\+Http\+Output\+Stream}}
+
+
+Wraps a stream for all operations except Close and Dispose, which merely flush the stream and prevent further operations from being carried out using this wrapper.  
+
+
+Inheritance diagram for P\+Http.\+Http\+Output\+Stream\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_p_http_1_1_http_output_stream}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_p_http_1_1_http_output_stream_af724a23a088e6cb05f4fe5fbe324c839}{Http\+Output\+Stream} (Memory\+Stream stream)
+\begin{DoxyCompactList}\small\item\em Creates a new instance of the class, wrapping the specified stream. \end{DoxyCompactList}\item 
+override I\+Async\+Result \hyperlink{class_p_http_1_1_http_output_stream_ae852390e54a77bff27b05b15e0edff8f}{Begin\+Read} (byte\mbox{[}$\,$\mbox{]} buffer, int offset, int count, Async\+Callback callback, object state)
+\begin{DoxyCompactList}\small\item\em Begins an asynchronous read operation. \end{DoxyCompactList}\item 
+override I\+Async\+Result \hyperlink{class_p_http_1_1_http_output_stream_adab5a2e6adb8b211668d994338d938b9}{Begin\+Write} (byte\mbox{[}$\,$\mbox{]} buffer, int offset, int count, Async\+Callback callback, object state)
+\begin{DoxyCompactList}\small\item\em Begins an asynchronous write operation. \end{DoxyCompactList}\item 
+override void \hyperlink{class_p_http_1_1_http_output_stream_a29789471faa70dd1f01e97894a506b87}{Close} ()
+\begin{DoxyCompactList}\small\item\em This method is not proxied to the underlying stream; instead, the wrapper is marked as unusable for other (non-\/close/\+Dispose) operations. The underlying stream is flushed if the wrapper wasn\textquotesingle{}t closed before this call. \end{DoxyCompactList}\item 
+override Obj\+Ref \hyperlink{class_p_http_1_1_http_output_stream_affae8b4276a22a7a3cdd0ac6364c9abb}{Create\+Obj\+Ref} (Type requested\+Type)
+\begin{DoxyCompactList}\small\item\em Throws a Not\+Supported\+Exception. \end{DoxyCompactList}\item 
+override int \hyperlink{class_p_http_1_1_http_output_stream_a313ebbb0a9983abe53c62a9e92f7fc5e}{End\+Read} (I\+Async\+Result async\+Result)
+\begin{DoxyCompactList}\small\item\em Waits for the pending asynchronous read to complete. \end{DoxyCompactList}\item 
+override void \hyperlink{class_p_http_1_1_http_output_stream_a1d31db11e5cf74a49016f88321961a59}{End\+Write} (I\+Async\+Result async\+Result)
+\begin{DoxyCompactList}\small\item\em Ends an asynchronous write operation. \end{DoxyCompactList}\item 
+override void \hyperlink{class_p_http_1_1_http_output_stream_ac3b05f512ec2d4b33740fed1f4a17a30}{Flush} ()
+\begin{DoxyCompactList}\small\item\em Flushes the underlying stream. \end{DoxyCompactList}\item 
+override object \hyperlink{class_p_http_1_1_http_output_stream_a4a420caafc304a3b28686f4b8e31a149}{Initialize\+Lifetime\+Service} ()
+\begin{DoxyCompactList}\small\item\em Throws a Not\+Supported\+Exception. \end{DoxyCompactList}\item 
+override int \hyperlink{class_p_http_1_1_http_output_stream_a7e144ab792ca62257b338bfebc74de51}{Read} (byte\mbox{[}$\,$\mbox{]} buffer, int offset, int count)
+\begin{DoxyCompactList}\small\item\em Reads a sequence of bytes from the underlying stream and advances the position within the stream by the number of bytes read. \end{DoxyCompactList}\item 
+override int \hyperlink{class_p_http_1_1_http_output_stream_a2983fe0c04f7276553396d7c8bc86928}{Read\+Byte} ()
+\begin{DoxyCompactList}\small\item\em Reads a byte from the stream and advances the position within the stream by one byte, or returns -\/1 if at the end of the stream. \end{DoxyCompactList}\item 
+override long \hyperlink{class_p_http_1_1_http_output_stream_ae15f3bb25db9f145175e0b870263feb5}{Seek} (long offset, Seek\+Origin origin)
+\begin{DoxyCompactList}\small\item\em Sets the position within the current stream. \end{DoxyCompactList}\item 
+override void \hyperlink{class_p_http_1_1_http_output_stream_adc9a34660dcab180636813dfd7bba7b2}{Set\+Length} (long value)
+\begin{DoxyCompactList}\small\item\em Sets the length of the underlying stream. \end{DoxyCompactList}\item 
+override void \hyperlink{class_p_http_1_1_http_output_stream_a9ecf846d90af729ce31130fdd58ce57b}{Write} (byte\mbox{[}$\,$\mbox{]} buffer, int offset, int count)
+\begin{DoxyCompactList}\small\item\em Writes a sequence of bytes to the underlying stream and advances the current position within the stream by the number of bytes written. \end{DoxyCompactList}\item 
+override void \hyperlink{class_p_http_1_1_http_output_stream_abc3e17eed0f5721726d260a0417c6f42}{Write\+Byte} (byte value)
+\begin{DoxyCompactList}\small\item\em Writes a byte to the current position in the stream and advances the position within the stream by one byte. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+override bool \hyperlink{class_p_http_1_1_http_output_stream_a4aa9c138e2d4228f179b5e615016b90e}{Can\+Read}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Indicates whether or not the underlying stream can be read from. \end{DoxyCompactList}\item 
+override bool \hyperlink{class_p_http_1_1_http_output_stream_ad098665c35a75ffae7b6a1bd60f5f922}{Can\+Seek}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Indicates whether or not the underlying stream supports seeking. \end{DoxyCompactList}\item 
+override bool \hyperlink{class_p_http_1_1_http_output_stream_a0ce0f653423645a055daea15d6f726a7}{Can\+Write}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Indicates whether or not the underlying stream can be written to. \end{DoxyCompactList}\item 
+override long \hyperlink{class_p_http_1_1_http_output_stream_abbc51e3cac2c8e5db155fd82d9c08a7c}{Length}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Returns the length of the underlying stream. \end{DoxyCompactList}\item 
+override long \hyperlink{class_p_http_1_1_http_output_stream_a1903fe514b1ed10c401645cef861d9c2}{Position}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\begin{DoxyCompactList}\small\item\em Gets or sets the current position in the underlying stream. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Wraps a stream for all operations except Close and Dispose, which merely flush the stream and prevent further operations from being carried out using this wrapper. 
+
+
+
+Definition at line 14 of file Http\+Output\+Stream.\+cs.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_p_http_1_1_http_output_stream_af724a23a088e6cb05f4fe5fbe324c839}\label{class_p_http_1_1_http_output_stream_af724a23a088e6cb05f4fe5fbe324c839}} 
+\index{P\+Http\+::\+Http\+Output\+Stream@{P\+Http\+::\+Http\+Output\+Stream}!Http\+Output\+Stream@{Http\+Output\+Stream}}
+\index{Http\+Output\+Stream@{Http\+Output\+Stream}!P\+Http\+::\+Http\+Output\+Stream@{P\+Http\+::\+Http\+Output\+Stream}}
+\subsubsection{\texorpdfstring{Http\+Output\+Stream()}{HttpOutputStream()}}
+{\footnotesize\ttfamily P\+Http.\+Http\+Output\+Stream.\+Http\+Output\+Stream (\begin{DoxyParamCaption}\item[{Memory\+Stream}]{stream }\end{DoxyParamCaption})}
+
+
+
+Creates a new instance of the class, wrapping the specified stream. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em stream} & The stream to wrap. Must not be null.\\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Argument\+Null\+Exception} & stream is null\\
+\hline
+\end{DoxyExceptions}
+
+
+Definition at line 22 of file Http\+Output\+Stream.\+cs.
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_p_http_1_1_http_output_stream_ae852390e54a77bff27b05b15e0edff8f}\label{class_p_http_1_1_http_output_stream_ae852390e54a77bff27b05b15e0edff8f}} 
+\index{P\+Http\+::\+Http\+Output\+Stream@{P\+Http\+::\+Http\+Output\+Stream}!Begin\+Read@{Begin\+Read}}
+\index{Begin\+Read@{Begin\+Read}!P\+Http\+::\+Http\+Output\+Stream@{P\+Http\+::\+Http\+Output\+Stream}}
+\subsubsection{\texorpdfstring{Begin\+Read()}{BeginRead()}}
+{\footnotesize\ttfamily override I\+Async\+Result P\+Http.\+Http\+Output\+Stream.\+Begin\+Read (\begin{DoxyParamCaption}\item[{byte \mbox{[}$\,$\mbox{]}}]{buffer,  }\item[{int}]{offset,  }\item[{int}]{count,  }\item[{Async\+Callback}]{callback,  }\item[{object}]{state }\end{DoxyParamCaption})}
+
+
+
+Begins an asynchronous read operation. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em buffer} & The buffer to read the data into. \\
+\hline
+{\em offset} & The byte offset in buffer at which to begin writing data read from the stream. \\
+\hline
+{\em count} & The maximum number of bytes to read. \\
+\hline
+{\em callback} & An optional asynchronous callback, to be called when the read is complete. \\
+\hline
+{\em state} & A user-\/provided object that distinguishes this particular asynchronous read request from other requests. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+An I\+Async\+Result that represents the asynchronous read, which could still be pending. 
+\end{DoxyReturn}
+
+
+Definition at line 78 of file Http\+Output\+Stream.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_output_stream_adab5a2e6adb8b211668d994338d938b9}\label{class_p_http_1_1_http_output_stream_adab5a2e6adb8b211668d994338d938b9}} 
+\index{P\+Http\+::\+Http\+Output\+Stream@{P\+Http\+::\+Http\+Output\+Stream}!Begin\+Write@{Begin\+Write}}
+\index{Begin\+Write@{Begin\+Write}!P\+Http\+::\+Http\+Output\+Stream@{P\+Http\+::\+Http\+Output\+Stream}}
+\subsubsection{\texorpdfstring{Begin\+Write()}{BeginWrite()}}
+{\footnotesize\ttfamily override I\+Async\+Result P\+Http.\+Http\+Output\+Stream.\+Begin\+Write (\begin{DoxyParamCaption}\item[{byte \mbox{[}$\,$\mbox{]}}]{buffer,  }\item[{int}]{offset,  }\item[{int}]{count,  }\item[{Async\+Callback}]{callback,  }\item[{object}]{state }\end{DoxyParamCaption})}
+
+
+
+Begins an asynchronous write operation. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em buffer} & The buffer to write data from.\\
+\hline
+{\em offset} & The byte offset in buffer from which to begin writing.\\
+\hline
+{\em count} & The maximum number of bytes to write.\\
+\hline
+{\em callback} & An optional asynchronous callback, to be called when the write is complete. \\
+\hline
+{\em state} & A user-\/provided object that distinguishes this particular asynchronous write request from other requests. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+An I\+Async\+Result that represents the asynchronous write, which could still be pending. 
+\end{DoxyReturn}
+
+
+Definition at line 102 of file Http\+Output\+Stream.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_output_stream_a29789471faa70dd1f01e97894a506b87}\label{class_p_http_1_1_http_output_stream_a29789471faa70dd1f01e97894a506b87}} 
+\index{P\+Http\+::\+Http\+Output\+Stream@{P\+Http\+::\+Http\+Output\+Stream}!Close@{Close}}
+\index{Close@{Close}!P\+Http\+::\+Http\+Output\+Stream@{P\+Http\+::\+Http\+Output\+Stream}}
+\subsubsection{\texorpdfstring{Close()}{Close()}}
+{\footnotesize\ttfamily override void P\+Http.\+Http\+Output\+Stream.\+Close (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+This method is not proxied to the underlying stream; instead, the wrapper is marked as unusable for other (non-\/close/\+Dispose) operations. The underlying stream is flushed if the wrapper wasn\textquotesingle{}t closed before this call. 
+
+
+
+Definition at line 138 of file Http\+Output\+Stream.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_output_stream_affae8b4276a22a7a3cdd0ac6364c9abb}\label{class_p_http_1_1_http_output_stream_affae8b4276a22a7a3cdd0ac6364c9abb}} 
+\index{P\+Http\+::\+Http\+Output\+Stream@{P\+Http\+::\+Http\+Output\+Stream}!Create\+Obj\+Ref@{Create\+Obj\+Ref}}
+\index{Create\+Obj\+Ref@{Create\+Obj\+Ref}!P\+Http\+::\+Http\+Output\+Stream@{P\+Http\+::\+Http\+Output\+Stream}}
+\subsubsection{\texorpdfstring{Create\+Obj\+Ref()}{CreateObjRef()}}
+{\footnotesize\ttfamily override Obj\+Ref P\+Http.\+Http\+Output\+Stream.\+Create\+Obj\+Ref (\begin{DoxyParamCaption}\item[{Type}]{requested\+Type }\end{DoxyParamCaption})}
+
+
+
+Throws a Not\+Supported\+Exception. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em requested\+Type} & The Type of the object that the new Obj\+Ref will reference.\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+n/a
+\end{DoxyReturn}
+
+
+Definition at line 152 of file Http\+Output\+Stream.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_output_stream_a313ebbb0a9983abe53c62a9e92f7fc5e}\label{class_p_http_1_1_http_output_stream_a313ebbb0a9983abe53c62a9e92f7fc5e}} 
+\index{P\+Http\+::\+Http\+Output\+Stream@{P\+Http\+::\+Http\+Output\+Stream}!End\+Read@{End\+Read}}
+\index{End\+Read@{End\+Read}!P\+Http\+::\+Http\+Output\+Stream@{P\+Http\+::\+Http\+Output\+Stream}}
+\subsubsection{\texorpdfstring{End\+Read()}{EndRead()}}
+{\footnotesize\ttfamily override int P\+Http.\+Http\+Output\+Stream.\+End\+Read (\begin{DoxyParamCaption}\item[{I\+Async\+Result}]{async\+Result }\end{DoxyParamCaption})}
+
+
+
+Waits for the pending asynchronous read to complete. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em async\+Result} & The reference to the pending asynchronous request to finish. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The number of bytes read from the stream, between zero (0) and the number of bytes you requested. Streams only return zero (0) at the end of the stream, otherwise, they should block until at least one byte is available. 
+\end{DoxyReturn}
+
+
+Definition at line 169 of file Http\+Output\+Stream.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_output_stream_a1d31db11e5cf74a49016f88321961a59}\label{class_p_http_1_1_http_output_stream_a1d31db11e5cf74a49016f88321961a59}} 
+\index{P\+Http\+::\+Http\+Output\+Stream@{P\+Http\+::\+Http\+Output\+Stream}!End\+Write@{End\+Write}}
+\index{End\+Write@{End\+Write}!P\+Http\+::\+Http\+Output\+Stream@{P\+Http\+::\+Http\+Output\+Stream}}
+\subsubsection{\texorpdfstring{End\+Write()}{EndWrite()}}
+{\footnotesize\ttfamily override void P\+Http.\+Http\+Output\+Stream.\+End\+Write (\begin{DoxyParamCaption}\item[{I\+Async\+Result}]{async\+Result }\end{DoxyParamCaption})}
+
+
+
+Ends an asynchronous write operation. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em async\+Result} & A reference to the outstanding asynchronous I/O request.\\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 179 of file Http\+Output\+Stream.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_output_stream_ac3b05f512ec2d4b33740fed1f4a17a30}\label{class_p_http_1_1_http_output_stream_ac3b05f512ec2d4b33740fed1f4a17a30}} 
+\index{P\+Http\+::\+Http\+Output\+Stream@{P\+Http\+::\+Http\+Output\+Stream}!Flush@{Flush}}
+\index{Flush@{Flush}!P\+Http\+::\+Http\+Output\+Stream@{P\+Http\+::\+Http\+Output\+Stream}}
+\subsubsection{\texorpdfstring{Flush()}{Flush()}}
+{\footnotesize\ttfamily override void P\+Http.\+Http\+Output\+Stream.\+Flush (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Flushes the underlying stream. 
+
+
+
+Definition at line 188 of file Http\+Output\+Stream.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_output_stream_a4a420caafc304a3b28686f4b8e31a149}\label{class_p_http_1_1_http_output_stream_a4a420caafc304a3b28686f4b8e31a149}} 
+\index{P\+Http\+::\+Http\+Output\+Stream@{P\+Http\+::\+Http\+Output\+Stream}!Initialize\+Lifetime\+Service@{Initialize\+Lifetime\+Service}}
+\index{Initialize\+Lifetime\+Service@{Initialize\+Lifetime\+Service}!P\+Http\+::\+Http\+Output\+Stream@{P\+Http\+::\+Http\+Output\+Stream}}
+\subsubsection{\texorpdfstring{Initialize\+Lifetime\+Service()}{InitializeLifetimeService()}}
+{\footnotesize\ttfamily override object P\+Http.\+Http\+Output\+Stream.\+Initialize\+Lifetime\+Service (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Throws a Not\+Supported\+Exception. 
+
+\begin{DoxyReturn}{Returns}
+n/a
+\end{DoxyReturn}
+
+
+Definition at line 198 of file Http\+Output\+Stream.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_output_stream_a7e144ab792ca62257b338bfebc74de51}\label{class_p_http_1_1_http_output_stream_a7e144ab792ca62257b338bfebc74de51}} 
+\index{P\+Http\+::\+Http\+Output\+Stream@{P\+Http\+::\+Http\+Output\+Stream}!Read@{Read}}
+\index{Read@{Read}!P\+Http\+::\+Http\+Output\+Stream@{P\+Http\+::\+Http\+Output\+Stream}}
+\subsubsection{\texorpdfstring{Read()}{Read()}}
+{\footnotesize\ttfamily override int P\+Http.\+Http\+Output\+Stream.\+Read (\begin{DoxyParamCaption}\item[{byte \mbox{[}$\,$\mbox{]}}]{buffer,  }\item[{int}]{offset,  }\item[{int}]{count }\end{DoxyParamCaption})}
+
+
+
+Reads a sequence of bytes from the underlying stream and advances the position within the stream by the number of bytes read. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em buffer} & An array of bytes. When this method returns, the buffer contains the specified byte array with the values between offset and (offset + count-\/ 1) replaced by the bytes read from the underlying source. \\
+\hline
+{\em offset} & The zero-\/based byte offset in buffer at which to begin storing the data read from the underlying stream. \\
+\hline
+{\em count} & The maximum number of bytes to be read from the underlying stream. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The total number of bytes read into the buffer. This can be less than the number of bytes requested if that many bytes are not currently available, or zero (0) if the end of the stream has been reached. 
+\end{DoxyReturn}
+
+
+Definition at line 254 of file Http\+Output\+Stream.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_output_stream_a2983fe0c04f7276553396d7c8bc86928}\label{class_p_http_1_1_http_output_stream_a2983fe0c04f7276553396d7c8bc86928}} 
+\index{P\+Http\+::\+Http\+Output\+Stream@{P\+Http\+::\+Http\+Output\+Stream}!Read\+Byte@{Read\+Byte}}
+\index{Read\+Byte@{Read\+Byte}!P\+Http\+::\+Http\+Output\+Stream@{P\+Http\+::\+Http\+Output\+Stream}}
+\subsubsection{\texorpdfstring{Read\+Byte()}{ReadByte()}}
+{\footnotesize\ttfamily override int P\+Http.\+Http\+Output\+Stream.\+Read\+Byte (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Reads a byte from the stream and advances the position within the stream by one byte, or returns -\/1 if at the end of the stream. 
+
+\begin{DoxyReturn}{Returns}
+The unsigned byte cast to an Int32, or -\/1 if at the end of the stream.
+\end{DoxyReturn}
+
+
+Definition at line 265 of file Http\+Output\+Stream.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_output_stream_ae15f3bb25db9f145175e0b870263feb5}\label{class_p_http_1_1_http_output_stream_ae15f3bb25db9f145175e0b870263feb5}} 
+\index{P\+Http\+::\+Http\+Output\+Stream@{P\+Http\+::\+Http\+Output\+Stream}!Seek@{Seek}}
+\index{Seek@{Seek}!P\+Http\+::\+Http\+Output\+Stream@{P\+Http\+::\+Http\+Output\+Stream}}
+\subsubsection{\texorpdfstring{Seek()}{Seek()}}
+{\footnotesize\ttfamily override long P\+Http.\+Http\+Output\+Stream.\+Seek (\begin{DoxyParamCaption}\item[{long}]{offset,  }\item[{Seek\+Origin}]{origin }\end{DoxyParamCaption})}
+
+
+
+Sets the position within the current stream. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em offset} & A byte offset relative to the origin parameter.\\
+\hline
+{\em origin} & A value of type Seek\+Origin indicating the reference point used to obtain the new position. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The new position within the underlying stream.
+\end{DoxyReturn}
+
+
+Definition at line 280 of file Http\+Output\+Stream.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_output_stream_adc9a34660dcab180636813dfd7bba7b2}\label{class_p_http_1_1_http_output_stream_adc9a34660dcab180636813dfd7bba7b2}} 
+\index{P\+Http\+::\+Http\+Output\+Stream@{P\+Http\+::\+Http\+Output\+Stream}!Set\+Length@{Set\+Length}}
+\index{Set\+Length@{Set\+Length}!P\+Http\+::\+Http\+Output\+Stream@{P\+Http\+::\+Http\+Output\+Stream}}
+\subsubsection{\texorpdfstring{Set\+Length()}{SetLength()}}
+{\footnotesize\ttfamily override void P\+Http.\+Http\+Output\+Stream.\+Set\+Length (\begin{DoxyParamCaption}\item[{long}]{value }\end{DoxyParamCaption})}
+
+
+
+Sets the length of the underlying stream. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & The desired length of the underlying stream in bytes.\\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 290 of file Http\+Output\+Stream.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_output_stream_a9ecf846d90af729ce31130fdd58ce57b}\label{class_p_http_1_1_http_output_stream_a9ecf846d90af729ce31130fdd58ce57b}} 
+\index{P\+Http\+::\+Http\+Output\+Stream@{P\+Http\+::\+Http\+Output\+Stream}!Write@{Write}}
+\index{Write@{Write}!P\+Http\+::\+Http\+Output\+Stream@{P\+Http\+::\+Http\+Output\+Stream}}
+\subsubsection{\texorpdfstring{Write()}{Write()}}
+{\footnotesize\ttfamily override void P\+Http.\+Http\+Output\+Stream.\+Write (\begin{DoxyParamCaption}\item[{byte \mbox{[}$\,$\mbox{]}}]{buffer,  }\item[{int}]{offset,  }\item[{int}]{count }\end{DoxyParamCaption})}
+
+
+
+Writes a sequence of bytes to the underlying stream and advances the current position within the stream by the number of bytes written. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em buffer} & An array of bytes. This method copies count bytes from buffer to the underlying stream. \\
+\hline
+{\em offset} & The zero-\/based byte offset in buffer at which to begin copying bytes to the underlying stream. \\
+\hline
+{\em count} & The number of bytes to be written to the underlying stream.\\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 309 of file Http\+Output\+Stream.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_output_stream_abc3e17eed0f5721726d260a0417c6f42}\label{class_p_http_1_1_http_output_stream_abc3e17eed0f5721726d260a0417c6f42}} 
+\index{P\+Http\+::\+Http\+Output\+Stream@{P\+Http\+::\+Http\+Output\+Stream}!Write\+Byte@{Write\+Byte}}
+\index{Write\+Byte@{Write\+Byte}!P\+Http\+::\+Http\+Output\+Stream@{P\+Http\+::\+Http\+Output\+Stream}}
+\subsubsection{\texorpdfstring{Write\+Byte()}{WriteByte()}}
+{\footnotesize\ttfamily override void P\+Http.\+Http\+Output\+Stream.\+Write\+Byte (\begin{DoxyParamCaption}\item[{byte}]{value }\end{DoxyParamCaption})}
+
+
+
+Writes a byte to the current position in the stream and advances the position within the stream by one byte. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & The byte to write to the stream. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 320 of file Http\+Output\+Stream.\+cs.
+
+
+
+\subsection{Property Documentation}
+\mbox{\Hypertarget{class_p_http_1_1_http_output_stream_a4aa9c138e2d4228f179b5e615016b90e}\label{class_p_http_1_1_http_output_stream_a4aa9c138e2d4228f179b5e615016b90e}} 
+\index{P\+Http\+::\+Http\+Output\+Stream@{P\+Http\+::\+Http\+Output\+Stream}!Can\+Read@{Can\+Read}}
+\index{Can\+Read@{Can\+Read}!P\+Http\+::\+Http\+Output\+Stream@{P\+Http\+::\+Http\+Output\+Stream}}
+\subsubsection{\texorpdfstring{Can\+Read}{CanRead}}
+{\footnotesize\ttfamily override bool P\+Http.\+Http\+Output\+Stream.\+Can\+Read\hspace{0.3cm}{\ttfamily [get]}}
+
+
+
+Indicates whether or not the underlying stream can be read from. 
+
+
+
+Definition at line 113 of file Http\+Output\+Stream.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_output_stream_ad098665c35a75ffae7b6a1bd60f5f922}\label{class_p_http_1_1_http_output_stream_ad098665c35a75ffae7b6a1bd60f5f922}} 
+\index{P\+Http\+::\+Http\+Output\+Stream@{P\+Http\+::\+Http\+Output\+Stream}!Can\+Seek@{Can\+Seek}}
+\index{Can\+Seek@{Can\+Seek}!P\+Http\+::\+Http\+Output\+Stream@{P\+Http\+::\+Http\+Output\+Stream}}
+\subsubsection{\texorpdfstring{Can\+Seek}{CanSeek}}
+{\footnotesize\ttfamily override bool P\+Http.\+Http\+Output\+Stream.\+Can\+Seek\hspace{0.3cm}{\ttfamily [get]}}
+
+
+
+Indicates whether or not the underlying stream supports seeking. 
+
+
+
+Definition at line 121 of file Http\+Output\+Stream.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_output_stream_a0ce0f653423645a055daea15d6f726a7}\label{class_p_http_1_1_http_output_stream_a0ce0f653423645a055daea15d6f726a7}} 
+\index{P\+Http\+::\+Http\+Output\+Stream@{P\+Http\+::\+Http\+Output\+Stream}!Can\+Write@{Can\+Write}}
+\index{Can\+Write@{Can\+Write}!P\+Http\+::\+Http\+Output\+Stream@{P\+Http\+::\+Http\+Output\+Stream}}
+\subsubsection{\texorpdfstring{Can\+Write}{CanWrite}}
+{\footnotesize\ttfamily override bool P\+Http.\+Http\+Output\+Stream.\+Can\+Write\hspace{0.3cm}{\ttfamily [get]}}
+
+
+
+Indicates whether or not the underlying stream can be written to. 
+
+
+
+Definition at line 129 of file Http\+Output\+Stream.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_output_stream_abbc51e3cac2c8e5db155fd82d9c08a7c}\label{class_p_http_1_1_http_output_stream_abbc51e3cac2c8e5db155fd82d9c08a7c}} 
+\index{P\+Http\+::\+Http\+Output\+Stream@{P\+Http\+::\+Http\+Output\+Stream}!Length@{Length}}
+\index{Length@{Length}!P\+Http\+::\+Http\+Output\+Stream@{P\+Http\+::\+Http\+Output\+Stream}}
+\subsubsection{\texorpdfstring{Length}{Length}}
+{\footnotesize\ttfamily override long P\+Http.\+Http\+Output\+Stream.\+Length\hspace{0.3cm}{\ttfamily [get]}}
+
+
+
+Returns the length of the underlying stream. 
+
+
+
+Definition at line 207 of file Http\+Output\+Stream.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_output_stream_a1903fe514b1ed10c401645cef861d9c2}\label{class_p_http_1_1_http_output_stream_a1903fe514b1ed10c401645cef861d9c2}} 
+\index{P\+Http\+::\+Http\+Output\+Stream@{P\+Http\+::\+Http\+Output\+Stream}!Position@{Position}}
+\index{Position@{Position}!P\+Http\+::\+Http\+Output\+Stream@{P\+Http\+::\+Http\+Output\+Stream}}
+\subsubsection{\texorpdfstring{Position}{Position}}
+{\footnotesize\ttfamily override long P\+Http.\+Http\+Output\+Stream.\+Position\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+Gets or sets the current position in the underlying stream. 
+
+
+
+Definition at line 219 of file Http\+Output\+Stream.\+cs.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Marcos De Moya/\+Documents/\+Git\+Hub/wa\+\_\+ass8/\+P\+Http/\hyperlink{_http_output_stream_8cs}{Http\+Output\+Stream.\+cs}\end{DoxyCompactItemize}

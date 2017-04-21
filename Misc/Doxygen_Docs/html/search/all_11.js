@@ -1,0 +1,25 @@
+var searchData=
+[
+  ['secure',['Secure',['../class_p_http_1_1_http_cookie.html#a6e1d24fd4dfc9139748a0539c35530b6',1,'PHttp::HttpCookie']]],
+  ['seek',['Seek',['../class_p_http_1_1_http_output_stream.html#ae15f3bb25db9f145175e0b870263feb5',1,'PHttp::HttpOutputStream']]],
+  ['server',['Server',['../class_p_http_1_1_http_context.html#a9296bc89f3b2af71642609f2d516a0fc',1,'PHttp.HttpContext.Server()'],['../class_p_http_1_1_http_request_event_args.html#a88b017f2e0e1078586498f4ce1ad8a0e',1,'PHttp.HttpRequestEventArgs.Server()']]],
+  ['serverbanner',['ServerBanner',['../class_p_http_1_1_http_server.html#a61a7c56daa7d7cd1c8da7bf7a3ff97fc',1,'PHttp::HttpServer']]],
+  ['servervariables',['ServerVariables',['../class_p_http_1_1_http_request.html#aeb783c64b73304cd0652bceccce4f977',1,'PHttp::HttpRequest']]],
+  ['set',['Set',['../class_p_http_1_1_http_cookie_collection.html#aa990ff46f7aee457f987760b7b549f14',1,'PHttp::HttpCookieCollection']]],
+  ['setlength',['SetLength',['../class_p_http_1_1_http_output_stream.html#adc9a34660dcab180636813dfd7bba7b2',1,'PHttp::HttpOutputStream']]],
+  ['shortcontroller_2ecs',['ShortController.cs',['../_short_controller_8cs.html',1,'']]],
+  ['shutdowntimeout',['ShutdownTimeout',['../class_p_http_1_1_http_server.html#ab9a572c54747bf0d95e58c98759ff8f1',1,'PHttp::HttpServer']]],
+  ['start',['Start',['../interface_p_http_1_1_i_p_http_application.html#a81b018098725b8cc313ce5477309ebb6',1,'PHttp.IPHttpApplication.Start()'],['../class_p_http_1_1_http_server.html#a28027a98dcfe8619150d883a5912b8e1',1,'PHttp.HttpServer.Start()']]],
+  ['started',['Started',['../namespace_p_http.html#a8a92bffd93830785b58d0be3a2f5fdd4a8428552d86c0d262a542a528af490afa',1,'PHttp']]],
+  ['starting',['Starting',['../namespace_p_http.html#a8a92bffd93830785b58d0be3a2f5fdd4ac2efe4bbd13e6cb0db293e72884273c0',1,'PHttp']]],
+  ['startup',['Startup',['../class_p_http_1_1_startup.html',1,'PHttp.Startup'],['../class_p_http_1_1_startup.html#a63b26e5469bbe84e46ae0c564a1ffa21',1,'PHttp.Startup.Startup()']]],
+  ['startup_2ecs',['Startup.cs',['../_startup_8cs.html',1,'']]],
+  ['state',['State',['../class_p_http_1_1_http_server.html#a5e98a8056d4f0d14b86083859aecc0a0',1,'PHttp::HttpServer']]],
+  ['statechanged',['StateChanged',['../class_p_http_1_1_http_server.html#a2a33f616b3d6fc6df79ec3c23f562a4b',1,'PHttp::HttpServer']]],
+  ['status',['Status',['../class_p_http_1_1_http_response.html#ac468b6359e6c52f5972683756a2efaaf',1,'PHttp::HttpResponse']]],
+  ['statuscode',['StatusCode',['../class_p_http_1_1_http_response.html#a866c2c9fe87e0f38de6b00dabce1c7a6',1,'PHttp::HttpResponse']]],
+  ['statusdescription',['StatusDescription',['../class_p_http_1_1_http_response.html#aea3f13ebc451a00fe6a0f5e0d8247739',1,'PHttp::HttpResponse']]],
+  ['stop',['Stop',['../class_p_http_1_1_http_server.html#a993be74aeea7a301e2c0bbd05882545b',1,'PHttp::HttpServer']]],
+  ['stopped',['Stopped',['../namespace_p_http.html#a8a92bffd93830785b58d0be3a2f5fdd4ac23e2b09ebe6bf4cb5e2a9abe85c0be2',1,'PHttp']]],
+  ['stopping',['Stopping',['../namespace_p_http.html#a8a92bffd93830785b58d0be3a2f5fdd4a7b7ecb39b9e110c2a31409a1672bad23',1,'PHttp']]]
+];

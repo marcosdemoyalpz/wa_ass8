@@ -1,0 +1,338 @@
+\hypertarget{class_p_http_1_1_http_server}{}\section{P\+Http.\+Http\+Server Class Reference}
+\label{class_p_http_1_1_http_server}\index{P\+Http.\+Http\+Server@{P\+Http.\+Http\+Server}}
+Inheritance diagram for P\+Http.\+Http\+Server\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_p_http_1_1_http_server}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_p_http_1_1_http_server_a6eda60a2a05fb5850dec16bbc620fb99}{Http\+Server} ()
+\item 
+\hyperlink{class_p_http_1_1_http_server_a50be37686732622c81f34cbe5a7a73e7}{Http\+Server} (int port)
+\item 
+\hyperlink{class_p_http_1_1_http_server_aa310a000ee6a0c85249627f9fa0f72c0}{Http\+Server} (string ip\+Address, int port)
+\item 
+\hyperlink{class_p_http_1_1_http_server_aca038ec73b59bc2ce28ea65072b78288}{Http\+Server} (I\+P\+Address ip\+Address, int port)
+\item 
+void \hyperlink{class_p_http_1_1_http_server_a28027a98dcfe8619150d883a5912b8e1}{Start} ()
+\item 
+void \hyperlink{class_p_http_1_1_http_server_a993be74aeea7a301e2c0bbd05882545b}{Stop} ()
+\item 
+void \hyperlink{class_p_http_1_1_http_server_aa5af6df141aacfb6b8a511a03885eea6}{Dispose} ()
+\item 
+bool \hyperlink{class_p_http_1_1_http_server_afeccf17ab6228908fd30ef6528ec43c2}{Process\+Request} (\hyperlink{class_p_http_1_1_http_request_event_args}{Http\+Request\+Event\+Args} e, \hyperlink{class_p_http_1_1_load_apps}{Load\+Apps} methods)
+\begin{DoxyCompactList}\small\item\em Process the request. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \hyperlink{class_p_http_1_1_http_server_ad1ecd530bcb727c89b9fca95697f8164}{On\+Request\+Received} (\hyperlink{class_p_http_1_1_http_request_event_args}{Http\+Request\+Event\+Args} e)
+\item 
+virtual void \hyperlink{class_p_http_1_1_http_server_af02e111fabc1f125e635f7e68d86a331}{On\+Unhandled\+Exception} (\hyperlink{class_p_http_1_1_http_exception_event_args}{Http\+Exception\+Event\+Args} e)
+\item 
+virtual void \hyperlink{class_p_http_1_1_http_server_a6e6dc47371f1de693f841d86bd4fc13f}{On\+State\+Changed} (\hyperlink{class_p_http_1_1_http_state_changed_event_args}{Http\+State\+Changed\+Event\+Args} e)
+\end{DoxyCompactItemize}
+\subsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{namespace_p_http_a8a92bffd93830785b58d0be3a2f5fdd4}{Http\+Server\+State} \hyperlink{class_p_http_1_1_http_server_a5e98a8056d4f0d14b86083859aecc0a0}{State}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\item 
+int \hyperlink{class_p_http_1_1_http_server_a8d71e30f8d73e46a2a0d3bb5fb6b5457}{Port}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\item 
+I\+P\+End\+Point \hyperlink{class_p_http_1_1_http_server_a9c58a69090a5c6e881f4dbafdd4f3dd9}{End\+Point}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+int \hyperlink{class_p_http_1_1_http_server_a12d10718594d56e153550c307300e8e0}{Read\+Buffer\+Size}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+int \hyperlink{class_p_http_1_1_http_server_a296fd3deb66496f7645399c84cd56c39}{Write\+Buffer\+Size}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+string \hyperlink{class_p_http_1_1_http_server_a61a7c56daa7d7cd1c8da7bf7a3ff97fc}{Server\+Banner}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+Time\+Span \hyperlink{class_p_http_1_1_http_server_a85559205c80abb794ccde2427a7a4e17}{Read\+Timeout}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+Time\+Span \hyperlink{class_p_http_1_1_http_server_ad359baaa114c854fc79c5aa5db3c91c4}{Write\+Timeout}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+Time\+Span \hyperlink{class_p_http_1_1_http_server_ab9a572c54747bf0d95e58c98759ff8f1}{Shutdown\+Timeout}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\end{DoxyCompactItemize}
+\subsection*{Events}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{namespace_p_http_a746b16e27637dd7ea95bb9256e7a93ff}{Http\+Request\+Event\+Handler} \hyperlink{class_p_http_1_1_http_server_ad29016597c3dd5c2aa944afce3c7dd13}{Request\+Received}
+\item 
+\hyperlink{namespace_p_http_a3004f4a8bbd5aaf98c00d1771384224f}{Http\+Exception\+Event\+Handler} \hyperlink{class_p_http_1_1_http_server_a08a7e838dc1d9c70ffa94ffce48a4533}{Unhandled\+Exception}
+\item 
+Event\+Handler \hyperlink{class_p_http_1_1_http_server_a2a33f616b3d6fc6df79ec3c23f562a4b}{State\+Changed}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+Definition at line 24 of file Http\+Server.\+cs.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_p_http_1_1_http_server_a6eda60a2a05fb5850dec16bbc620fb99}\label{class_p_http_1_1_http_server_a6eda60a2a05fb5850dec16bbc620fb99}} 
+\index{P\+Http\+::\+Http\+Server@{P\+Http\+::\+Http\+Server}!Http\+Server@{Http\+Server}}
+\index{Http\+Server@{Http\+Server}!P\+Http\+::\+Http\+Server@{P\+Http\+::\+Http\+Server}}
+\subsubsection{\texorpdfstring{Http\+Server()}{HttpServer()}\hspace{0.1cm}{\footnotesize\ttfamily [1/4]}}
+{\footnotesize\ttfamily P\+Http.\+Http\+Server.\+Http\+Server (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 97 of file Http\+Server.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_server_a50be37686732622c81f34cbe5a7a73e7}\label{class_p_http_1_1_http_server_a50be37686732622c81f34cbe5a7a73e7}} 
+\index{P\+Http\+::\+Http\+Server@{P\+Http\+::\+Http\+Server}!Http\+Server@{Http\+Server}}
+\index{Http\+Server@{Http\+Server}!P\+Http\+::\+Http\+Server@{P\+Http\+::\+Http\+Server}}
+\subsubsection{\texorpdfstring{Http\+Server()}{HttpServer()}\hspace{0.1cm}{\footnotesize\ttfamily [2/4]}}
+{\footnotesize\ttfamily P\+Http.\+Http\+Server.\+Http\+Server (\begin{DoxyParamCaption}\item[{int}]{port }\end{DoxyParamCaption})}
+
+
+
+Definition at line 101 of file Http\+Server.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_server_aa310a000ee6a0c85249627f9fa0f72c0}\label{class_p_http_1_1_http_server_aa310a000ee6a0c85249627f9fa0f72c0}} 
+\index{P\+Http\+::\+Http\+Server@{P\+Http\+::\+Http\+Server}!Http\+Server@{Http\+Server}}
+\index{Http\+Server@{Http\+Server}!P\+Http\+::\+Http\+Server@{P\+Http\+::\+Http\+Server}}
+\subsubsection{\texorpdfstring{Http\+Server()}{HttpServer()}\hspace{0.1cm}{\footnotesize\ttfamily [3/4]}}
+{\footnotesize\ttfamily P\+Http.\+Http\+Server.\+Http\+Server (\begin{DoxyParamCaption}\item[{string}]{ip\+Address,  }\item[{int}]{port }\end{DoxyParamCaption})}
+
+
+
+Definition at line 105 of file Http\+Server.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_server_aca038ec73b59bc2ce28ea65072b78288}\label{class_p_http_1_1_http_server_aca038ec73b59bc2ce28ea65072b78288}} 
+\index{P\+Http\+::\+Http\+Server@{P\+Http\+::\+Http\+Server}!Http\+Server@{Http\+Server}}
+\index{Http\+Server@{Http\+Server}!P\+Http\+::\+Http\+Server@{P\+Http\+::\+Http\+Server}}
+\subsubsection{\texorpdfstring{Http\+Server()}{HttpServer()}\hspace{0.1cm}{\footnotesize\ttfamily [4/4]}}
+{\footnotesize\ttfamily P\+Http.\+Http\+Server.\+Http\+Server (\begin{DoxyParamCaption}\item[{I\+P\+Address}]{ip\+Address,  }\item[{int}]{port }\end{DoxyParamCaption})}
+
+
+
+Definition at line 108 of file Http\+Server.\+cs.
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_p_http_1_1_http_server_aa5af6df141aacfb6b8a511a03885eea6}\label{class_p_http_1_1_http_server_aa5af6df141aacfb6b8a511a03885eea6}} 
+\index{P\+Http\+::\+Http\+Server@{P\+Http\+::\+Http\+Server}!Dispose@{Dispose}}
+\index{Dispose@{Dispose}!P\+Http\+::\+Http\+Server@{P\+Http\+::\+Http\+Server}}
+\subsubsection{\texorpdfstring{Dispose()}{Dispose()}}
+{\footnotesize\ttfamily void P\+Http.\+Http\+Server.\+Dispose (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 332 of file Http\+Server.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_server_ad1ecd530bcb727c89b9fca95697f8164}\label{class_p_http_1_1_http_server_ad1ecd530bcb727c89b9fca95697f8164}} 
+\index{P\+Http\+::\+Http\+Server@{P\+Http\+::\+Http\+Server}!On\+Request\+Received@{On\+Request\+Received}}
+\index{On\+Request\+Received@{On\+Request\+Received}!P\+Http\+::\+Http\+Server@{P\+Http\+::\+Http\+Server}}
+\subsubsection{\texorpdfstring{On\+Request\+Received()}{OnRequestReceived()}}
+{\footnotesize\ttfamily virtual void P\+Http.\+Http\+Server.\+On\+Request\+Received (\begin{DoxyParamCaption}\item[{\hyperlink{class_p_http_1_1_http_request_event_args}{Http\+Request\+Event\+Args}}]{e }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Definition at line 49 of file Http\+Server.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_server_a6e6dc47371f1de693f841d86bd4fc13f}\label{class_p_http_1_1_http_server_a6e6dc47371f1de693f841d86bd4fc13f}} 
+\index{P\+Http\+::\+Http\+Server@{P\+Http\+::\+Http\+Server}!On\+State\+Changed@{On\+State\+Changed}}
+\index{On\+State\+Changed@{On\+State\+Changed}!P\+Http\+::\+Http\+Server@{P\+Http\+::\+Http\+Server}}
+\subsubsection{\texorpdfstring{On\+State\+Changed()}{OnStateChanged()}}
+{\footnotesize\ttfamily virtual void P\+Http.\+Http\+Server.\+On\+State\+Changed (\begin{DoxyParamCaption}\item[{\hyperlink{class_p_http_1_1_http_state_changed_event_args}{Http\+State\+Changed\+Event\+Args}}]{e }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Definition at line 69 of file Http\+Server.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_server_af02e111fabc1f125e635f7e68d86a331}\label{class_p_http_1_1_http_server_af02e111fabc1f125e635f7e68d86a331}} 
+\index{P\+Http\+::\+Http\+Server@{P\+Http\+::\+Http\+Server}!On\+Unhandled\+Exception@{On\+Unhandled\+Exception}}
+\index{On\+Unhandled\+Exception@{On\+Unhandled\+Exception}!P\+Http\+::\+Http\+Server@{P\+Http\+::\+Http\+Server}}
+\subsubsection{\texorpdfstring{On\+Unhandled\+Exception()}{OnUnhandledException()}}
+{\footnotesize\ttfamily virtual void P\+Http.\+Http\+Server.\+On\+Unhandled\+Exception (\begin{DoxyParamCaption}\item[{\hyperlink{class_p_http_1_1_http_exception_event_args}{Http\+Exception\+Event\+Args}}]{e }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Definition at line 59 of file Http\+Server.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_server_afeccf17ab6228908fd30ef6528ec43c2}\label{class_p_http_1_1_http_server_afeccf17ab6228908fd30ef6528ec43c2}} 
+\index{P\+Http\+::\+Http\+Server@{P\+Http\+::\+Http\+Server}!Process\+Request@{Process\+Request}}
+\index{Process\+Request@{Process\+Request}!P\+Http\+::\+Http\+Server@{P\+Http\+::\+Http\+Server}}
+\subsubsection{\texorpdfstring{Process\+Request()}{ProcessRequest()}}
+{\footnotesize\ttfamily bool P\+Http.\+Http\+Server.\+Process\+Request (\begin{DoxyParamCaption}\item[{\hyperlink{class_p_http_1_1_http_request_event_args}{Http\+Request\+Event\+Args}}]{e,  }\item[{\hyperlink{class_p_http_1_1_load_apps}{Load\+Apps}}]{methods }\end{DoxyParamCaption})}
+
+
+
+Process the request. 
+
+Marcos De Moya, 4/20/2017. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em e} & H\+T\+TP request event information. \\
+\hline
+{\em methods} & The methods. \\
+\hline
+\end{DoxyParams}
+
+
+\begin{DoxyReturn}{Returns}
+True if it succeeds, false if it fails. 
+\end{DoxyReturn}
+
+
+Definition at line 385 of file Http\+Server.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_server_a28027a98dcfe8619150d883a5912b8e1}\label{class_p_http_1_1_http_server_a28027a98dcfe8619150d883a5912b8e1}} 
+\index{P\+Http\+::\+Http\+Server@{P\+Http\+::\+Http\+Server}!Start@{Start}}
+\index{Start@{Start}!P\+Http\+::\+Http\+Server@{P\+Http\+::\+Http\+Server}}
+\subsubsection{\texorpdfstring{Start()}{Start()}}
+{\footnotesize\ttfamily void P\+Http.\+Http\+Server.\+Start (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 121 of file Http\+Server.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_server_a993be74aeea7a301e2c0bbd05882545b}\label{class_p_http_1_1_http_server_a993be74aeea7a301e2c0bbd05882545b}} 
+\index{P\+Http\+::\+Http\+Server@{P\+Http\+::\+Http\+Server}!Stop@{Stop}}
+\index{Stop@{Stop}!P\+Http\+::\+Http\+Server@{P\+Http\+::\+Http\+Server}}
+\subsubsection{\texorpdfstring{Stop()}{Stop()}}
+{\footnotesize\ttfamily void P\+Http.\+Http\+Server.\+Stop (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 153 of file Http\+Server.\+cs.
+
+
+
+\subsection{Property Documentation}
+\mbox{\Hypertarget{class_p_http_1_1_http_server_a9c58a69090a5c6e881f4dbafdd4f3dd9}\label{class_p_http_1_1_http_server_a9c58a69090a5c6e881f4dbafdd4f3dd9}} 
+\index{P\+Http\+::\+Http\+Server@{P\+Http\+::\+Http\+Server}!End\+Point@{End\+Point}}
+\index{End\+Point@{End\+Point}!P\+Http\+::\+Http\+Server@{P\+Http\+::\+Http\+Server}}
+\subsubsection{\texorpdfstring{End\+Point}{EndPoint}}
+{\footnotesize\ttfamily I\+P\+End\+Point P\+Http.\+Http\+Server.\+End\+Point\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+Definition at line 78 of file Http\+Server.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_server_a8d71e30f8d73e46a2a0d3bb5fb6b5457}\label{class_p_http_1_1_http_server_a8d71e30f8d73e46a2a0d3bb5fb6b5457}} 
+\index{P\+Http\+::\+Http\+Server@{P\+Http\+::\+Http\+Server}!Port@{Port}}
+\index{Port@{Port}!P\+Http\+::\+Http\+Server@{P\+Http\+::\+Http\+Server}}
+\subsubsection{\texorpdfstring{Port}{Port}}
+{\footnotesize\ttfamily int P\+Http.\+Http\+Server.\+Port\hspace{0.3cm}{\ttfamily [get]}}
+
+
+
+Definition at line 76 of file Http\+Server.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_server_a12d10718594d56e153550c307300e8e0}\label{class_p_http_1_1_http_server_a12d10718594d56e153550c307300e8e0}} 
+\index{P\+Http\+::\+Http\+Server@{P\+Http\+::\+Http\+Server}!Read\+Buffer\+Size@{Read\+Buffer\+Size}}
+\index{Read\+Buffer\+Size@{Read\+Buffer\+Size}!P\+Http\+::\+Http\+Server@{P\+Http\+::\+Http\+Server}}
+\subsubsection{\texorpdfstring{Read\+Buffer\+Size}{ReadBufferSize}}
+{\footnotesize\ttfamily int P\+Http.\+Http\+Server.\+Read\+Buffer\+Size\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+Definition at line 80 of file Http\+Server.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_server_a85559205c80abb794ccde2427a7a4e17}\label{class_p_http_1_1_http_server_a85559205c80abb794ccde2427a7a4e17}} 
+\index{P\+Http\+::\+Http\+Server@{P\+Http\+::\+Http\+Server}!Read\+Timeout@{Read\+Timeout}}
+\index{Read\+Timeout@{Read\+Timeout}!P\+Http\+::\+Http\+Server@{P\+Http\+::\+Http\+Server}}
+\subsubsection{\texorpdfstring{Read\+Timeout}{ReadTimeout}}
+{\footnotesize\ttfamily Time\+Span P\+Http.\+Http\+Server.\+Read\+Timeout\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+Definition at line 86 of file Http\+Server.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_server_a61a7c56daa7d7cd1c8da7bf7a3ff97fc}\label{class_p_http_1_1_http_server_a61a7c56daa7d7cd1c8da7bf7a3ff97fc}} 
+\index{P\+Http\+::\+Http\+Server@{P\+Http\+::\+Http\+Server}!Server\+Banner@{Server\+Banner}}
+\index{Server\+Banner@{Server\+Banner}!P\+Http\+::\+Http\+Server@{P\+Http\+::\+Http\+Server}}
+\subsubsection{\texorpdfstring{Server\+Banner}{ServerBanner}}
+{\footnotesize\ttfamily string P\+Http.\+Http\+Server.\+Server\+Banner\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+Definition at line 84 of file Http\+Server.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_server_ab9a572c54747bf0d95e58c98759ff8f1}\label{class_p_http_1_1_http_server_ab9a572c54747bf0d95e58c98759ff8f1}} 
+\index{P\+Http\+::\+Http\+Server@{P\+Http\+::\+Http\+Server}!Shutdown\+Timeout@{Shutdown\+Timeout}}
+\index{Shutdown\+Timeout@{Shutdown\+Timeout}!P\+Http\+::\+Http\+Server@{P\+Http\+::\+Http\+Server}}
+\subsubsection{\texorpdfstring{Shutdown\+Timeout}{ShutdownTimeout}}
+{\footnotesize\ttfamily Time\+Span P\+Http.\+Http\+Server.\+Shutdown\+Timeout\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+Definition at line 90 of file Http\+Server.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_server_a5e98a8056d4f0d14b86083859aecc0a0}\label{class_p_http_1_1_http_server_a5e98a8056d4f0d14b86083859aecc0a0}} 
+\index{P\+Http\+::\+Http\+Server@{P\+Http\+::\+Http\+Server}!State@{State}}
+\index{State@{State}!P\+Http\+::\+Http\+Server@{P\+Http\+::\+Http\+Server}}
+\subsubsection{\texorpdfstring{State}{State}}
+{\footnotesize\ttfamily \hyperlink{namespace_p_http_a8a92bffd93830785b58d0be3a2f5fdd4}{Http\+Server\+State} P\+Http.\+Http\+Server.\+State\hspace{0.3cm}{\ttfamily [get]}}
+
+
+
+Definition at line 34 of file Http\+Server.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_server_a296fd3deb66496f7645399c84cd56c39}\label{class_p_http_1_1_http_server_a296fd3deb66496f7645399c84cd56c39}} 
+\index{P\+Http\+::\+Http\+Server@{P\+Http\+::\+Http\+Server}!Write\+Buffer\+Size@{Write\+Buffer\+Size}}
+\index{Write\+Buffer\+Size@{Write\+Buffer\+Size}!P\+Http\+::\+Http\+Server@{P\+Http\+::\+Http\+Server}}
+\subsubsection{\texorpdfstring{Write\+Buffer\+Size}{WriteBufferSize}}
+{\footnotesize\ttfamily int P\+Http.\+Http\+Server.\+Write\+Buffer\+Size\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+Definition at line 82 of file Http\+Server.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_server_ad359baaa114c854fc79c5aa5db3c91c4}\label{class_p_http_1_1_http_server_ad359baaa114c854fc79c5aa5db3c91c4}} 
+\index{P\+Http\+::\+Http\+Server@{P\+Http\+::\+Http\+Server}!Write\+Timeout@{Write\+Timeout}}
+\index{Write\+Timeout@{Write\+Timeout}!P\+Http\+::\+Http\+Server@{P\+Http\+::\+Http\+Server}}
+\subsubsection{\texorpdfstring{Write\+Timeout}{WriteTimeout}}
+{\footnotesize\ttfamily Time\+Span P\+Http.\+Http\+Server.\+Write\+Timeout\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+Definition at line 88 of file Http\+Server.\+cs.
+
+
+
+\subsection{Event Documentation}
+\mbox{\Hypertarget{class_p_http_1_1_http_server_ad29016597c3dd5c2aa944afce3c7dd13}\label{class_p_http_1_1_http_server_ad29016597c3dd5c2aa944afce3c7dd13}} 
+\index{P\+Http\+::\+Http\+Server@{P\+Http\+::\+Http\+Server}!Request\+Received@{Request\+Received}}
+\index{Request\+Received@{Request\+Received}!P\+Http\+::\+Http\+Server@{P\+Http\+::\+Http\+Server}}
+\subsubsection{\texorpdfstring{Request\+Received}{RequestReceived}}
+{\footnotesize\ttfamily \hyperlink{namespace_p_http_a746b16e27637dd7ea95bb9256e7a93ff}{Http\+Request\+Event\+Handler} P\+Http.\+Http\+Server.\+Request\+Received}
+
+
+
+Definition at line 47 of file Http\+Server.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_server_a2a33f616b3d6fc6df79ec3c23f562a4b}\label{class_p_http_1_1_http_server_a2a33f616b3d6fc6df79ec3c23f562a4b}} 
+\index{P\+Http\+::\+Http\+Server@{P\+Http\+::\+Http\+Server}!State\+Changed@{State\+Changed}}
+\index{State\+Changed@{State\+Changed}!P\+Http\+::\+Http\+Server@{P\+Http\+::\+Http\+Server}}
+\subsubsection{\texorpdfstring{State\+Changed}{StateChanged}}
+{\footnotesize\ttfamily Event\+Handler P\+Http.\+Http\+Server.\+State\+Changed}
+
+
+
+Definition at line 67 of file Http\+Server.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_server_a08a7e838dc1d9c70ffa94ffce48a4533}\label{class_p_http_1_1_http_server_a08a7e838dc1d9c70ffa94ffce48a4533}} 
+\index{P\+Http\+::\+Http\+Server@{P\+Http\+::\+Http\+Server}!Unhandled\+Exception@{Unhandled\+Exception}}
+\index{Unhandled\+Exception@{Unhandled\+Exception}!P\+Http\+::\+Http\+Server@{P\+Http\+::\+Http\+Server}}
+\subsubsection{\texorpdfstring{Unhandled\+Exception}{UnhandledException}}
+{\footnotesize\ttfamily \hyperlink{namespace_p_http_a3004f4a8bbd5aaf98c00d1771384224f}{Http\+Exception\+Event\+Handler} P\+Http.\+Http\+Server.\+Unhandled\+Exception}
+
+
+
+Definition at line 57 of file Http\+Server.\+cs.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Marcos De Moya/\+Documents/\+Git\+Hub/wa\+\_\+ass8/\+P\+Http/\hyperlink{_http_server_8cs}{Http\+Server.\+cs}\end{DoxyCompactItemize}

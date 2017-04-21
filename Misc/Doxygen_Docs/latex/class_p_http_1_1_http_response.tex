@@ -1,0 +1,218 @@
+\hypertarget{class_p_http_1_1_http_response}{}\section{P\+Http.\+Http\+Response Class Reference}
+\label{class_p_http_1_1_http_response}\index{P\+Http.\+Http\+Response@{P\+Http.\+Http\+Response}}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{class_p_http_1_1_http_response_a5b53f914c9325785bfec60d574b4c56a}{Redirect} (string location)
+\item 
+void \hyperlink{class_p_http_1_1_http_response_ab17d0a301980de9576fd51b0b131101f}{Redirect\+Permanent} (string location)
+\end{DoxyCompactItemize}
+\subsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+string \hyperlink{class_p_http_1_1_http_response_a03fac2b45dd30f39d3dc8a54b791ca8e}{Cache\+Control}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+string \hyperlink{class_p_http_1_1_http_response_abe34cf26dbacdf3b05889bab4ce450b9}{Char\+Set}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+string \hyperlink{class_p_http_1_1_http_response_a8c9dc1f065002a1a1a802b7f711c309b}{Content\+Type}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+\hyperlink{class_p_http_1_1_http_cookie_collection}{Http\+Cookie\+Collection} \hyperlink{class_p_http_1_1_http_response_a8dbfb0838084e2a340bb645458e80340}{Cookies}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\item 
+Date\+Time \hyperlink{class_p_http_1_1_http_response_a66d1928b9ddfb7fde134b49526f2f7df}{Expires\+Absolute}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+Encoding \hyperlink{class_p_http_1_1_http_response_aa482de609c9a20bfc9807a7d20693a77}{Headers\+Encoding}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+Name\+Value\+Collection \hyperlink{class_p_http_1_1_http_response_a0dd2eb88f26f3d2e076a89daf2d70b01}{Headers}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\item 
+bool \hyperlink{class_p_http_1_1_http_response_afc2755555012d91d8e1421cc1268af7c}{Is\+Client\+Connected}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\item 
+bool \hyperlink{class_p_http_1_1_http_response_a57384d805c05f6d7152cdddc96ba2de3}{Is\+Request\+Being\+Redirected}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\item 
+\hyperlink{class_p_http_1_1_http_output_stream}{Http\+Output\+Stream} \hyperlink{class_p_http_1_1_http_response_ab2d95593e6189ead61f2bba2d3e5fd19}{Output\+Stream}\hspace{0.3cm}{\ttfamily  \mbox{[}get\mbox{]}}
+\item 
+string \hyperlink{class_p_http_1_1_http_response_aa0eb4a96bfbbefdac522df852d6adc2f}{Redirect\+Location}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+int \hyperlink{class_p_http_1_1_http_response_a866c2c9fe87e0f38de6b00dabce1c7a6}{Status\+Code}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+string \hyperlink{class_p_http_1_1_http_response_aea3f13ebc451a00fe6a0f5e0d8247739}{Status\+Description}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\item 
+string \hyperlink{class_p_http_1_1_http_response_ac468b6359e6c52f5972683756a2efaaf}{Status}\hspace{0.3cm}{\ttfamily  \mbox{[}get, set\mbox{]}}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+Definition at line 9 of file Http\+Response.\+cs.
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_p_http_1_1_http_response_a5b53f914c9325785bfec60d574b4c56a}\label{class_p_http_1_1_http_response_a5b53f914c9325785bfec60d574b4c56a}} 
+\index{P\+Http\+::\+Http\+Response@{P\+Http\+::\+Http\+Response}!Redirect@{Redirect}}
+\index{Redirect@{Redirect}!P\+Http\+::\+Http\+Response@{P\+Http\+::\+Http\+Response}}
+\subsubsection{\texorpdfstring{Redirect()}{Redirect()}}
+{\footnotesize\ttfamily void P\+Http.\+Http\+Response.\+Redirect (\begin{DoxyParamCaption}\item[{string}]{location }\end{DoxyParamCaption})}
+
+
+
+Definition at line 92 of file Http\+Response.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_response_ab17d0a301980de9576fd51b0b131101f}\label{class_p_http_1_1_http_response_ab17d0a301980de9576fd51b0b131101f}} 
+\index{P\+Http\+::\+Http\+Response@{P\+Http\+::\+Http\+Response}!Redirect\+Permanent@{Redirect\+Permanent}}
+\index{Redirect\+Permanent@{Redirect\+Permanent}!P\+Http\+::\+Http\+Response@{P\+Http\+::\+Http\+Response}}
+\subsubsection{\texorpdfstring{Redirect\+Permanent()}{RedirectPermanent()}}
+{\footnotesize\ttfamily void P\+Http.\+Http\+Response.\+Redirect\+Permanent (\begin{DoxyParamCaption}\item[{string}]{location }\end{DoxyParamCaption})}
+
+
+
+Definition at line 97 of file Http\+Response.\+cs.
+
+
+
+\subsection{Property Documentation}
+\mbox{\Hypertarget{class_p_http_1_1_http_response_a03fac2b45dd30f39d3dc8a54b791ca8e}\label{class_p_http_1_1_http_response_a03fac2b45dd30f39d3dc8a54b791ca8e}} 
+\index{P\+Http\+::\+Http\+Response@{P\+Http\+::\+Http\+Response}!Cache\+Control@{Cache\+Control}}
+\index{Cache\+Control@{Cache\+Control}!P\+Http\+::\+Http\+Response@{P\+Http\+::\+Http\+Response}}
+\subsubsection{\texorpdfstring{Cache\+Control}{CacheControl}}
+{\footnotesize\ttfamily string P\+Http.\+Http\+Response.\+Cache\+Control\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+Definition at line 12 of file Http\+Response.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_response_abe34cf26dbacdf3b05889bab4ce450b9}\label{class_p_http_1_1_http_response_abe34cf26dbacdf3b05889bab4ce450b9}} 
+\index{P\+Http\+::\+Http\+Response@{P\+Http\+::\+Http\+Response}!Char\+Set@{Char\+Set}}
+\index{Char\+Set@{Char\+Set}!P\+Http\+::\+Http\+Response@{P\+Http\+::\+Http\+Response}}
+\subsubsection{\texorpdfstring{Char\+Set}{CharSet}}
+{\footnotesize\ttfamily string P\+Http.\+Http\+Response.\+Char\+Set\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+Definition at line 14 of file Http\+Response.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_response_a8c9dc1f065002a1a1a802b7f711c309b}\label{class_p_http_1_1_http_response_a8c9dc1f065002a1a1a802b7f711c309b}} 
+\index{P\+Http\+::\+Http\+Response@{P\+Http\+::\+Http\+Response}!Content\+Type@{Content\+Type}}
+\index{Content\+Type@{Content\+Type}!P\+Http\+::\+Http\+Response@{P\+Http\+::\+Http\+Response}}
+\subsubsection{\texorpdfstring{Content\+Type}{ContentType}}
+{\footnotesize\ttfamily string P\+Http.\+Http\+Response.\+Content\+Type\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+Definition at line 16 of file Http\+Response.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_response_a8dbfb0838084e2a340bb645458e80340}\label{class_p_http_1_1_http_response_a8dbfb0838084e2a340bb645458e80340}} 
+\index{P\+Http\+::\+Http\+Response@{P\+Http\+::\+Http\+Response}!Cookies@{Cookies}}
+\index{Cookies@{Cookies}!P\+Http\+::\+Http\+Response@{P\+Http\+::\+Http\+Response}}
+\subsubsection{\texorpdfstring{Cookies}{Cookies}}
+{\footnotesize\ttfamily \hyperlink{class_p_http_1_1_http_cookie_collection}{Http\+Cookie\+Collection} P\+Http.\+Http\+Response.\+Cookies\hspace{0.3cm}{\ttfamily [get]}}
+
+
+
+Definition at line 18 of file Http\+Response.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_response_a66d1928b9ddfb7fde134b49526f2f7df}\label{class_p_http_1_1_http_response_a66d1928b9ddfb7fde134b49526f2f7df}} 
+\index{P\+Http\+::\+Http\+Response@{P\+Http\+::\+Http\+Response}!Expires\+Absolute@{Expires\+Absolute}}
+\index{Expires\+Absolute@{Expires\+Absolute}!P\+Http\+::\+Http\+Response@{P\+Http\+::\+Http\+Response}}
+\subsubsection{\texorpdfstring{Expires\+Absolute}{ExpiresAbsolute}}
+{\footnotesize\ttfamily Date\+Time P\+Http.\+Http\+Response.\+Expires\+Absolute\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+Definition at line 20 of file Http\+Response.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_response_a0dd2eb88f26f3d2e076a89daf2d70b01}\label{class_p_http_1_1_http_response_a0dd2eb88f26f3d2e076a89daf2d70b01}} 
+\index{P\+Http\+::\+Http\+Response@{P\+Http\+::\+Http\+Response}!Headers@{Headers}}
+\index{Headers@{Headers}!P\+Http\+::\+Http\+Response@{P\+Http\+::\+Http\+Response}}
+\subsubsection{\texorpdfstring{Headers}{Headers}}
+{\footnotesize\ttfamily Name\+Value\+Collection P\+Http.\+Http\+Response.\+Headers\hspace{0.3cm}{\ttfamily [get]}}
+
+
+
+Definition at line 24 of file Http\+Response.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_response_aa482de609c9a20bfc9807a7d20693a77}\label{class_p_http_1_1_http_response_aa482de609c9a20bfc9807a7d20693a77}} 
+\index{P\+Http\+::\+Http\+Response@{P\+Http\+::\+Http\+Response}!Headers\+Encoding@{Headers\+Encoding}}
+\index{Headers\+Encoding@{Headers\+Encoding}!P\+Http\+::\+Http\+Response@{P\+Http\+::\+Http\+Response}}
+\subsubsection{\texorpdfstring{Headers\+Encoding}{HeadersEncoding}}
+{\footnotesize\ttfamily Encoding P\+Http.\+Http\+Response.\+Headers\+Encoding\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+Definition at line 22 of file Http\+Response.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_response_afc2755555012d91d8e1421cc1268af7c}\label{class_p_http_1_1_http_response_afc2755555012d91d8e1421cc1268af7c}} 
+\index{P\+Http\+::\+Http\+Response@{P\+Http\+::\+Http\+Response}!Is\+Client\+Connected@{Is\+Client\+Connected}}
+\index{Is\+Client\+Connected@{Is\+Client\+Connected}!P\+Http\+::\+Http\+Response@{P\+Http\+::\+Http\+Response}}
+\subsubsection{\texorpdfstring{Is\+Client\+Connected}{IsClientConnected}}
+{\footnotesize\ttfamily bool P\+Http.\+Http\+Response.\+Is\+Client\+Connected\hspace{0.3cm}{\ttfamily [get]}}
+
+
+
+Definition at line 26 of file Http\+Response.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_response_a57384d805c05f6d7152cdddc96ba2de3}\label{class_p_http_1_1_http_response_a57384d805c05f6d7152cdddc96ba2de3}} 
+\index{P\+Http\+::\+Http\+Response@{P\+Http\+::\+Http\+Response}!Is\+Request\+Being\+Redirected@{Is\+Request\+Being\+Redirected}}
+\index{Is\+Request\+Being\+Redirected@{Is\+Request\+Being\+Redirected}!P\+Http\+::\+Http\+Response@{P\+Http\+::\+Http\+Response}}
+\subsubsection{\texorpdfstring{Is\+Request\+Being\+Redirected}{IsRequestBeingRedirected}}
+{\footnotesize\ttfamily bool P\+Http.\+Http\+Response.\+Is\+Request\+Being\+Redirected\hspace{0.3cm}{\ttfamily [get]}}
+
+
+
+Definition at line 29 of file Http\+Response.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_response_ab2d95593e6189ead61f2bba2d3e5fd19}\label{class_p_http_1_1_http_response_ab2d95593e6189ead61f2bba2d3e5fd19}} 
+\index{P\+Http\+::\+Http\+Response@{P\+Http\+::\+Http\+Response}!Output\+Stream@{Output\+Stream}}
+\index{Output\+Stream@{Output\+Stream}!P\+Http\+::\+Http\+Response@{P\+Http\+::\+Http\+Response}}
+\subsubsection{\texorpdfstring{Output\+Stream}{OutputStream}}
+{\footnotesize\ttfamily \hyperlink{class_p_http_1_1_http_output_stream}{Http\+Output\+Stream} P\+Http.\+Http\+Response.\+Output\+Stream\hspace{0.3cm}{\ttfamily [get]}}
+
+
+
+Definition at line 33 of file Http\+Response.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_response_aa0eb4a96bfbbefdac522df852d6adc2f}\label{class_p_http_1_1_http_response_aa0eb4a96bfbbefdac522df852d6adc2f}} 
+\index{P\+Http\+::\+Http\+Response@{P\+Http\+::\+Http\+Response}!Redirect\+Location@{Redirect\+Location}}
+\index{Redirect\+Location@{Redirect\+Location}!P\+Http\+::\+Http\+Response@{P\+Http\+::\+Http\+Response}}
+\subsubsection{\texorpdfstring{Redirect\+Location}{RedirectLocation}}
+{\footnotesize\ttfamily string P\+Http.\+Http\+Response.\+Redirect\+Location\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+Definition at line 35 of file Http\+Response.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_response_ac468b6359e6c52f5972683756a2efaaf}\label{class_p_http_1_1_http_response_ac468b6359e6c52f5972683756a2efaaf}} 
+\index{P\+Http\+::\+Http\+Response@{P\+Http\+::\+Http\+Response}!Status@{Status}}
+\index{Status@{Status}!P\+Http\+::\+Http\+Response@{P\+Http\+::\+Http\+Response}}
+\subsubsection{\texorpdfstring{Status}{Status}}
+{\footnotesize\ttfamily string P\+Http.\+Http\+Response.\+Status\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+Definition at line 42 of file Http\+Response.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_response_a866c2c9fe87e0f38de6b00dabce1c7a6}\label{class_p_http_1_1_http_response_a866c2c9fe87e0f38de6b00dabce1c7a6}} 
+\index{P\+Http\+::\+Http\+Response@{P\+Http\+::\+Http\+Response}!Status\+Code@{Status\+Code}}
+\index{Status\+Code@{Status\+Code}!P\+Http\+::\+Http\+Response@{P\+Http\+::\+Http\+Response}}
+\subsubsection{\texorpdfstring{Status\+Code}{StatusCode}}
+{\footnotesize\ttfamily int P\+Http.\+Http\+Response.\+Status\+Code\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+Definition at line 37 of file Http\+Response.\+cs.
+
+\mbox{\Hypertarget{class_p_http_1_1_http_response_aea3f13ebc451a00fe6a0f5e0d8247739}\label{class_p_http_1_1_http_response_aea3f13ebc451a00fe6a0f5e0d8247739}} 
+\index{P\+Http\+::\+Http\+Response@{P\+Http\+::\+Http\+Response}!Status\+Description@{Status\+Description}}
+\index{Status\+Description@{Status\+Description}!P\+Http\+::\+Http\+Response@{P\+Http\+::\+Http\+Response}}
+\subsubsection{\texorpdfstring{Status\+Description}{StatusDescription}}
+{\footnotesize\ttfamily string P\+Http.\+Http\+Response.\+Status\+Description\hspace{0.3cm}{\ttfamily [get]}, {\ttfamily [set]}}
+
+
+
+Definition at line 39 of file Http\+Response.\+cs.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+C\+:/\+Users/\+Marcos De Moya/\+Documents/\+Git\+Hub/wa\+\_\+ass8/\+P\+Http/\hyperlink{_http_response_8cs}{Http\+Response.\+cs}\end{DoxyCompactItemize}
