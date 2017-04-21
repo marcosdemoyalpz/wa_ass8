@@ -276,7 +276,7 @@ namespace URL_Shortener_App.Controllers
                     }
                     catch
                     {
-                        Console.WriteLine("\n\t Location not found!");
+                        Console.WriteLine("\n\t ip2location error!");
                     }
                     #endregion
 
@@ -718,10 +718,17 @@ namespace URL_Shortener_App.Controllers
 
             string location = "";
             string shortURL = "";
-            GeoLocation geo = new GeoLocation(e);
-            if (geo.countryn != null)
+            try
             {
-                location = geo.countryn;
+                GeoLocation geo = new GeoLocation(e);
+                if (geo.countryn != null)
+                {
+                    location = geo.countryn;
+                }
+            }
+            catch
+            {
+                location = "Unknown";
             }
             string readUser = "";
             // ### select the data from locations to load Locations Info
