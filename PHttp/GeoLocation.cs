@@ -77,6 +77,15 @@ namespace PHttp
             System.IO.StreamReader reader = new System.IO.StreamReader(HttpWResp.GetResponseStream());
             string content = reader.ReadToEnd();
             dynamic item = serializer.Deserialize<object>(content);
+
+            Console.WriteLine("\n\t Location Provider Response:");
+            Console.WriteLine("\t " + content);
+            Console.WriteLine();
+            foreach (var elem in item)
+            {
+                Console.WriteLine(elem);
+            }
+
             city = item["city_name"];
             countryc = item["country_code"];
             countryn = item["country_name"];
