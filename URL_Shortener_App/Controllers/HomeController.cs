@@ -239,9 +239,9 @@ namespace URL_Shortener_App.Controllers
                             var longURL = reader["longURL"].ToString();
                             var link1 = "<a href=\"" + shortUrl + "\">" + shortUrl.Replace(url + "?", "") + "</a>";
                             var link2 = "<a href=\"" + longURL + "\">" + longURL + "</a>";
-                            var dateCreated = reader["dateCreated"].ToString();
+                            var dateCreatedRaw = reader["dateCreated"].ToString();
                             var clicks = reader["clicks"].ToString();
-                            var lastClicked = reader["lastClicked"].ToString();
+                            var lastClickedRaw = reader["lastClicked"].ToString();
 
                             var button = "<a href=\"" + GetAppURL(e, "Short") + "Details" + "?go=" + reader["shortURL"].ToString()
                                 + "\" class=\"btn btn-lg btn-info btn-block\" role=\"button\">Analytics</a>";
@@ -251,8 +251,9 @@ namespace URL_Shortener_App.Controllers
                             img = img + imgURL + "\" class=\"portrait\"" + " alt=\"URL Image\" + "
                                 + "style=\"max-width:100px; max-height:100%; display:inline-block; overflow: hidden;\">";
 
-                            var dateTemp = DateTime.Parse(dateCreated).ToLocalTime();
-                            if (dateTemp.AddDays(30) < DateTime.Now)
+                            var dateCreated = DateTime.Parse(dateCreatedRaw).ToLocalTime();
+                            var lastClicked = DateTime.Parse(lastClickedRaw).ToLocalTime();
+                            if (dateCreated.AddDays(30) < DateTime.Now)
                             {
                                 trOpen = "<tr class=\"warning\" style=\"vertical-align: middle;\" align=\"center\">";
                             }
