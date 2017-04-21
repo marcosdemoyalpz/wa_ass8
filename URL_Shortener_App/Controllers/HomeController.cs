@@ -253,9 +253,9 @@ namespace URL_Shortener_App.Controllers
 
                             var dateCreated = DateTime.Parse(dateCreatedRaw).ToLocalTime();
                             var lastClicked = DateTime.Parse(lastClickedRaw).ToLocalTime();
-                            if(lastClicked == dateCreated)
+                            if (lastClicked == dateCreated)
                             {
-                                lastClicked = DateTime.Parse("0000-01-01");
+                                lastClicked = new DateTime(1, 1, 1);
                             }
                             if (lastClicked.AddDays(30) < DateTime.Now)
                             {
