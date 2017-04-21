@@ -6,14 +6,34 @@ using System.Data;
 
 namespace PHttp
 {
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// <summary>   A database helper. </summary>
+    /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
     public class DatabaseHelper
     {
+        #region Properties
+        /// <summary>   List of apps. </summary>
         private List<AppInfo> _apps;
+        #endregion
+
+        #region Constructor
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Constructor. </summary>
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        /// <param name="apps"> List of apps. </param>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         public DatabaseHelper(List<AppInfo> apps)
         {
             _apps = apps;
         }
+        #endregion
 
+        #region Public Methods
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Initializes the Databases. </summary>
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         public void Init()
         {
             foreach (var app in _apps)
@@ -103,5 +123,6 @@ namespace PHttp
                 }
             }
         }
+        #endregion
     }
 }

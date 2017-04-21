@@ -14,31 +14,102 @@ using System.Data;
 
 namespace URL_Shortener_App.Controllers
 {
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// <summary>   Home controller. </summary>
+    /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
     internal class HomeController : Mvc.ControllerBase
     {
-        string secret = ConfigurationManager.AppSettings["Secret"];
-        string resource = ConfigurationManager.AppSettings["Virtual"];
-        string layout = ConfigurationManager.AppSettings["Layout"];
-
+        #region Properties
+        /// <summary> The application. </summary>
         AppInfo _app;
 
+        /// <summary>   The database connection. </summary>
         IDbConnection m_dbConnection;
 
+        /// <summary>  Current shortURL. </summary>
+        string _shortURL;
+
+        /// <summary>   Current longURL. </summary>
+        string _longURL;
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Gets the application settings[" secret"]. </summary>
+        /// <value> The application settings[" secret"]. </value>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        string secret = ConfigurationManager.AppSettings["Secret"];
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Gets the application settings[" virtual"]. </summary>
+        /// <value> The application settings[" virtual"]. </value>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        string resource = ConfigurationManager.AppSettings["Virtual"];
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Gets the application settings[" layout"]. </summary>
+        /// <value> The application settings[" layout"]. </value>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        string layout = ConfigurationManager.AppSettings["Layout"];
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Loads the configuration. </summary>
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        /// <returns>   The configuration. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         LoadConfig loadConfig = new LoadConfig();
 
-        string _shortURL;
-        string _longURL;
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Gets the Login Timeout. </summary>
+        /// <value> The loginTimeout. </value>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         float loginTimeout = 1.25f;
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Gets the Cookie expiration. </summary>
+        /// <value> expiration </value>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         int expiration = 7200;
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Gets the "url shortener application jwt cookie name". </summary>
+        /// <value> The "url shortener application jwt". </value>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         string cookieName1 = "URL_Shortener_App_JWT";
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Gets the Anon Token Value. </summary>
+        /// <value> Anon Token Value. </value>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         string AnonToken = "";
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Gets the App name. </summary>
+        /// <value> _appName </value>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         private string _appName = "URL_Shortener_App";
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Gets the Controller Name". </summary>
+        /// <value> The " short". </value>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         private string _controllerName = "Home";
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Handler, called when the error. </summary>
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        /// <returns>   An errorHandler. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         ErrorHandler errorHandler = new ErrorHandler();
+        #endregion
 
         #region Private Methods
+        #region Misc. Methods
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Gets JArray. </summary>
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        /// <param name="jsonString">   The JSON string. </param>
+        /// <returns>   The JArray. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         JArray GetJArray(string jsonString)
         {
             if (jsonString[0] != '[')
@@ -56,6 +127,12 @@ namespace URL_Shortener_App.Controllers
             return JArray.Parse(jsonString);
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Decode token. </summary>
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        /// <param name="token">    The token. </param>
+        /// <returns>   A string. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         private string DecodeToken(string token)
         {
             string json = "";
@@ -81,9 +158,16 @@ namespace URL_Shortener_App.Controllers
             return json;
         }
 
-        string GetAppURL(HttpRequestEventArgs e, string controllerName = "")
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Gets application URL. </summary>
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        /// <param name="e">                HTTP request event information. </param>
+        /// <param name="controllerName">   (Optional) Sets the Controller Name". </param>
+        /// <returns>   The application URL. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        string GetAppURL(HttpRequestEventArgs e, string controllerName = null)
         {
-            if (controllerName == "")
+            if (controllerName == null || controllerName == "")
             {
                 controllerName = _controllerName;
             }
@@ -95,6 +179,12 @@ namespace URL_Shortener_App.Controllers
             return url;
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Creates URLs table. </summary>
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        /// <param name="e">    HTTP request event information. </param>
+        /// <returns>   The new table. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         string CreateTable(HttpRequestEventArgs e)
         {
             string url = GetAppURL(e, "Short") + "Path";
@@ -214,6 +304,13 @@ namespace URL_Shortener_App.Controllers
             return table;
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Database login. </summary>
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        /// <param name="e">            HTTP request event information. </param>
+        /// <param name="fromCookie">   (Optional) True to from cookie. </param>
+        /// <returns>   True if it succeeds, false if it fails. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         bool DbLogin(HttpRequestEventArgs e, bool fromCookie = false)
         {
             try
@@ -260,6 +357,12 @@ namespace URL_Shortener_App.Controllers
             }
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Database register new user. </summary>
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        /// <param name="e">    HTTP request event information. </param>
+        /// <returns>   True if it succeeds, false if it fails. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         bool DbRegister(HttpRequestEventArgs e)
         {
             try
@@ -309,6 +412,12 @@ namespace URL_Shortener_App.Controllers
             }
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Login process. </summary>
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        /// <param name="e">    HTTP request event information. </param>
+        /// <returns>   True if it succeeds, false if it fails. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         bool LoginProcess(HttpRequestEventArgs e)
         {
             string url = GetAppURL(e);
@@ -359,6 +468,12 @@ namespace URL_Shortener_App.Controllers
             }
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Creates short URL. </summary>
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        /// <param name="e">    HTTP request event information. </param>
+        /// <returns>   True if it succeeds, false if it fails. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         bool CreateShortURL(HttpRequestEventArgs e)
         {
             try
@@ -457,6 +572,21 @@ namespace URL_Shortener_App.Controllers
             }
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Renders the message. </summary>
+        ///
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        ///
+        /// <param name="e">        HTTP request event information. </param>
+        /// <param name="message">  The message. </param>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Renders a message. </summary>
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        /// <param name="e">        HTTP request event information. </param>
+        /// <param name="message">  The message. </param>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         void RenderMessage(HttpRequestEventArgs e, string message)
         {
             string views = resource + _appName + "/Views/";
@@ -486,7 +616,17 @@ namespace URL_Shortener_App.Controllers
             }
         }
         #endregion
+        #endregion
 
+        #region Controller Methods
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>
+        /// (An Action that handles HTTP GET requests) (An Action that handles HTTP POST requests)
+        /// Home Controller Index Method.
+        /// </summary>
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        /// <param name="e">    HTTP request event information. </param>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         [HttpGet, HttpPost]
         public void Index(HttpRequestEventArgs e)
         {
@@ -589,6 +729,14 @@ namespace URL_Shortener_App.Controllers
             }
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>
+        /// (An Action that handles HTTP GET requests) (Restricted to Authenticated Users)
+        /// Home Controller About Method.
+        /// </summary>
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        /// <param name="e">    HTTP request event information. </param>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         [Authorize, HttpGet]
         public void About(HttpRequestEventArgs e)
         {
@@ -631,6 +779,14 @@ namespace URL_Shortener_App.Controllers
             }
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>
+        /// (An Action that handles HTTP GET requests) (An Action that handles HTTP POST requests)
+        /// Home Controller Login Method.
+        /// </summary>
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        /// <param name="e">    HTTP request event information. </param>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         [HttpGet, HttpPost]
         public void Login(HttpRequestEventArgs e)
         {
@@ -687,6 +843,14 @@ namespace URL_Shortener_App.Controllers
             }
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>
+        /// (An Action that handles HTTP GET requests) (An Action that handles HTTP POST requests)
+        /// Home Controller Register New User Method.
+        /// </summary>
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        /// <param name="e">    HTTP request event information. </param>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         [HttpGet, HttpPost]
         public void Register(HttpRequestEventArgs e)
         {
@@ -765,5 +929,6 @@ namespace URL_Shortener_App.Controllers
                 }
             }
         }
+        #endregion
     }
 }

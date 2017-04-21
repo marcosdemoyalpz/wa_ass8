@@ -14,29 +14,97 @@ using System.Data;
 
 namespace URL_Shortener_App.Controllers
 {
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// <summary>   A controller for handling shortURLs. </summary>
+    /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
     internal class ShortController : Mvc.ControllerBase
     {
-        string secret = ConfigurationManager.AppSettings["Secret"];
-        string resource = ConfigurationManager.AppSettings["Virtual"];
-        string layout = ConfigurationManager.AppSettings["Layout"];
-
+        #region Properties
+        /// <summary> The application. </summary>
         AppInfo _app;
 
+        /// <summary>   The database connection. </summary>
         IDbConnection m_dbConnection;
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Gets the application settings[" secret"]. </summary>
+        /// <value> The application settings[" secret"]. </value>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        string secret = ConfigurationManager.AppSettings["Secret"];
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Gets the application settings[" virtual"]. </summary>
+        /// <value> The application settings[" virtual"]. </value>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        string resource = ConfigurationManager.AppSettings["Virtual"];
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Gets the application settings[" layout"]. </summary>
+        /// <value> The application settings[" layout"]. </value>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        string layout = ConfigurationManager.AppSettings["Layout"];
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Loads the configuration. </summary>
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        /// <returns>   The configuration. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         LoadConfig loadConfig = new LoadConfig();
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Gets the Login Timeout. </summary>
+        /// <value> The loginTimeout. </value>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         float loginTimeout = 1.25f;
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Gets the Cookie expiration. </summary>
+        /// <value> expiration </value>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         int expiration = 7200;
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Gets the "url shortener application jwt cookie name". </summary>
+        /// <value> The "url shortener application jwt cookie name". </value>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         string cookieName1 = "URL_Shortener_App_JWT";
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Gets the anon temp cookie name". </summary>
+        /// <value> The " anon temp". </value>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         string cookieName2 = "AnonTemp";
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Gets the App name. </summary>
+        /// <value> _appName </value>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         private string _appName = "URL_Shortener_App";
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Gets the Controller Name". </summary>
+        /// <value> The " short". </value>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         private string _controllerName = "Short";
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Handler, called when the error. </summary>
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        /// <returns>   An errorHandler. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         ErrorHandler errorHandler = new ErrorHandler();
+        #endregion
 
         #region Private Methods
+
+        #region Misc. Methods
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Gets JArray. </summary>
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        /// <param name="jsonString">   The JSON string. </param>
+        /// <returns>   The JArray. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         JArray GetJArray(string jsonString)
         {
             if (jsonString[0] != '[')
@@ -54,6 +122,12 @@ namespace URL_Shortener_App.Controllers
             return JArray.Parse(jsonString);
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Decode token. </summary>
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        /// <param name="token">    The token. </param>
+        /// <returns>   A string. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         private string DecodeToken(string token)
         {
             string json = "";
@@ -79,6 +153,13 @@ namespace URL_Shortener_App.Controllers
             return json;
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Gets application URL. </summary>
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        /// <param name="e">                HTTP request event information. </param>
+        /// <param name="controllerName">   (Optional) Sets the Controller Name". </param>
+        /// <returns>   The application URL. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         string GetAppURL(HttpRequestEventArgs e, string controllerName = null)
         {
             if (controllerName == null || controllerName == "")
@@ -93,6 +174,14 @@ namespace URL_Shortener_App.Controllers
             return url;
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Redirect short. </summary>
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        /// <exception cref="ArgumentNullException">    Thrown when one or more required arguments are
+        ///                                             null. </exception>
+        /// <param name="e">    HTTP request event information. </param>
+        /// <returns>   True if it succeeds, false if it fails. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         bool RedirectShort(HttpRequestEventArgs e)
         {
             try
@@ -195,6 +284,13 @@ namespace URL_Shortener_App.Controllers
             }
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Database login. </summary>
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        /// <param name="e">            HTTP request event information. </param>
+        /// <param name="fromCookie">   (Optional) True to from cookie. </param>
+        /// <returns>   True if it succeeds, false if it fails. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         bool DbLogin(HttpRequestEventArgs e, bool fromCookie = false)
         {
             try
@@ -240,6 +336,12 @@ namespace URL_Shortener_App.Controllers
             }
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Renders a message. </summary>
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        /// <param name="e">        HTTP request event information. </param>
+        /// <param name="message">  The message. </param>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         void RenderMessage(HttpRequestEventArgs e, string message)
         {
             string views = resource + _appName + "/Views/";
@@ -269,6 +371,12 @@ namespace URL_Shortener_App.Controllers
             }
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Database check URL details. </summary>
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        /// <param name="e">    HTTP request event information. </param>
+        /// <returns>   True if it succeeds, false if it fails. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         bool DbCheckURLDetails(HttpRequestEventArgs e)
         {
             try
@@ -319,7 +427,77 @@ namespace URL_Shortener_App.Controllers
             return false;
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Gets longURL. </summary>
+        ///
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        ///
+        /// <param name="e">    HTTP request event information. </param>
+        ///
+        /// <returns>   The long URL. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        string GetLongURL(HttpRequestEventArgs e)
+        {
+            try
+            {
+                string longURL = "";
+                if (DbLogin(e, true))
+                {
+                    _app = loadConfig.InitApp(resource + _appName, "/config.json");
+                    HttpCookie cookie = e.Request.Cookies.Get(cookieName1);
+                    JArray jArray = new JArray();
+                    string decoded;
+                    if (cookie != null && cookie.Value != "")
+                    {
+                        decoded = DecodeToken(cookie.Value);
+                        jArray = GetJArray(decoded);
+                    }
+
+                    string username = jArray[0].SelectToken("username").ToString();
+
+                    // ### Connect to the database
+                    m_dbConnection = new SqliteConnection(_app.connectionString);
+                    m_dbConnection.Open();
+
+                    // ### select the data from urls to load Click Info
+                    string sql = "SELECT * FROM urls";
+                    IDbCommand command = m_dbConnection.CreateCommand(); command.CommandText = sql;
+                    IDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        if (reader["username"].ToString().ToLower() == username.ToLower())
+                        {
+                            var shortUrl = reader["shortURL"].ToString();
+
+                            if (e.Request.Params["go"] == shortUrl)
+                            {
+                                longURL = reader["longURL"].ToString();
+                            }
+                        }
+                    }
+                }
+                return longURL;
+            }
+            catch
+            {
+                return "";
+            }
+        }
+        #endregion
+
         #region Update/Create
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Updates the referers. </summary>
+        ///
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        ///
+        /// <param name="e">        HTTP request event information. </param>
+        /// <param name="_app">     The application. </param>
+        /// <param name="username"> The username. </param>
+        ///
+        /// <returns>   True if it succeeds, false if it fails. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         bool UpdateReferers(HttpRequestEventArgs e, AppInfo _app, string username)
         {
             int referersCount = 0;
@@ -382,6 +560,18 @@ namespace URL_Shortener_App.Controllers
             }
             return false;
         }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Updates the agents. </summary>
+        ///
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        ///
+        /// <param name="e">        HTTP request event information. </param>
+        /// <param name="_app">     The application. </param>
+        /// <param name="username"> The username. </param>
+        ///
+        /// <returns>   True if it succeeds, false if it fails. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         bool UpdateAgents(HttpRequestEventArgs e, AppInfo _app, string username)
         {
             int agentsCount = 0;
@@ -451,6 +641,18 @@ namespace URL_Shortener_App.Controllers
             }
             return false;
         }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Updates the locations. </summary>
+        ///
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        ///
+        /// <param name="e">        HTTP request event information. </param>
+        /// <param name="_app">     The application. </param>
+        /// <param name="username"> The username. </param>
+        ///
+        /// <returns>   True if it succeeds, false if it fails. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         bool UpdateLocations(HttpRequestEventArgs e, AppInfo _app, string username)
         {
             int locationsCount = 0;
@@ -520,172 +722,18 @@ namespace URL_Shortener_App.Controllers
             }
             return false;
         }
-        #region UpdatePlatforms_OLD
-        //bool UpdatePlatforms(HttpRequestEventArgs e, AppInfo _app, string username)
-        //{
-        //    int platformsCount = 0;
-        //    bool platformFound = false;
 
-        //    // ### Connect to the database
-        //    m_dbConnection = new SqliteConnection(_app.connectionString);
-        //    m_dbConnection.Open();
-
-        //    string platform = "Others";
-        //    string userAgent = e.Request.UserAgent;
-
-        //    if (userAgent.Contains("Windows NT 10.0"))
-        //    {
-        //        //Windows 8.1
-        //        platform = "Windows NT 10.0";
-        //    }
-        //    else if (userAgent.Contains("Windows NT 6.3"))
-        //    {
-        //        //Windows 8.1
-        //        platform = "Windows NT 6.3";
-        //    }
-        //    else if (userAgent.Contains("Windows NT 6.2"))
-        //    {
-        //        //Windows 8
-        //        platform = "Windows NT 6.2";
-        //    }
-        //    else if (userAgent.Contains("Windows NT 6.1"))
-        //    {
-        //        //Windows 7
-        //        platform = "Windows NT 6.1";
-        //    }
-        //    else if (userAgent.Contains("Windows NT 6.0"))
-        //    {
-        //        //Windows Vista
-        //        platform = "Windows NT 6.0";
-        //    }
-        //    else if (userAgent.Contains("Windows NT 5.2"))
-        //    {
-        //        //Windows Server 2003; Windows XP x64 Edition
-        //        platform = "Windows NT 5.2";
-        //    }
-        //    else if (userAgent.Contains("Windows NT 5.1"))
-        //    {
-        //        //Windows XP
-        //        platform = "Windows NT 5.1";
-        //    }
-        //    else if (userAgent.Contains("Windows NT 5.01"))
-        //    {
-        //        //Windows 2000, Service Pack 1 (SP1)
-        //        platform = "Windows NT 5.01";
-        //    }
-        //    else if (userAgent.Contains("Windows NT 5.0"))
-        //    {
-        //        //Windows 2000
-        //        platform = "Windows NT 5.0";
-        //    }
-        //    else if (userAgent.Contains("Windows NT 4.0"))
-        //    {
-        //        //Microsoft Windows NT 4.0
-        //        platform = "Windows NT 4.0";
-        //    }
-        //    else if (userAgent.Contains("Win 9x 4.90"))
-        //    {
-        //        //Windows Millennium Edition (Windows Me)
-        //        platform = "Win 9x 4.90";
-        //    }
-        //    else if (userAgent.Contains("Windows 98"))
-        //    {
-        //        //Windows 98
-        //        platform = "Windows 98";
-        //    }
-        //    else if (userAgent.Contains("Windows 95"))
-        //    {
-        //        //Windows 95
-        //        platform = "Windows 95";
-        //    }
-        //    else if (userAgent.Contains("Windows CE"))
-        //    {
-        //        //Windows CE
-        //        platform = "Windows CE";
-        //    }
-        //    else if (userAgent.Contains("Android"))
-        //    {
-        //        platform = "Android";
-        //    }
-        //    else if (userAgent.Contains("iPad"))
-        //    {
-        //        platform = "iPad OS";
-        //    }
-        //    else if (userAgent.Contains("iPhone"))
-        //    {
-        //        platform = "iPhone OS";
-        //    }
-        //    else if (userAgent.Contains("Linux") && userAgent.Contains("KFAPWI"))
-        //    {
-        //        platform = "Kindle Fire";
-        //    }
-        //    else if (userAgent.Contains("RIM Tablet") || (userAgent.Contains("BB") && userAgent.Contains("Mobile")))
-        //    {
-        //        platform = "Black Berry";
-        //    }
-        //    else if (userAgent.Contains("Windows Phone"))
-        //    {
-        //        platform = "Windows Phone";
-        //    }
-        //    else if (userAgent.Contains("Mac OS"))
-        //    {
-        //        platform = "Mac OS";
-        //    }
-        //    string readUser = "";
-        //    // ### select the data from platforms to load Platform Info
-        //    string sql = "SELECT * FROM platforms";
-        //    IDbCommand command = m_dbConnection.CreateCommand(); command.CommandText = sql;
-        //    IDataReader reader = command.ExecuteReader();
-        //    while (reader.Read())
-        //    {
-        //        readUser = reader["username"].ToString();
-        //        if (readUser.ToLower() == username.ToLower())
-        //        {
-        //            var shortUrl = reader["shortURL"].ToString();
-        //            if (shortUrl == e.Request.Params["go"])
-        //            {
-        //                if (platform == reader["platform"].ToString())
-        //                {
-        //                    platformFound = true;
-        //                    platformsCount = (int.Parse(reader["count"].ToString()) + 1);
-        //                }
-        //            }
-        //        }
-        //    }
-        //    reader.Close();
-        //    if (platformFound)
-        //    {
-        //        // ### Update clicks on table
-        //        sql = "UPDATE platforms SET "
-        //            + "count = " + platformsCount
-        //            + " WHERE shortURL = '" + e.Request.Params["go"] + "' AND "
-        //            + "agent = '" + platform + "' AND "
-        //            + "username = '" + username + "'";
-        //        command.CommandText = sql;
-        //        command.ExecuteNonQuery();
-        //        return true;
-        //    }
-        //    else
-        //    {
-        //        if (platform != "" && platform != null)
-        //        {
-        //            var shortUrl = e.Request.Params["go"];
-        //            // ### Add some data to the table
-        //            sql = "insert into platforms "
-        //                + "(platform, username, shortURL, count)"
-        //                + " values "
-        //                + "('" + platform + "',"
-        //                + "'" + username + "',"
-        //                + "'" + shortUrl + "',"
-        //                + " 1 )";
-        //            command.CommandText = sql;
-        //            command.ExecuteNonQuery();
-        //            return true;
-        //        }
-        //    }
-        //    return false;
-        //}
-        #endregion
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Updates the platforms. </summary>
+        ///
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        ///
+        /// <param name="e">        HTTP request event information. </param>
+        /// <param name="_app">     The application. </param>
+        /// <param name="username"> The username. </param>
+        ///
+        /// <returns>   True if it succeeds, false if it fails. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         bool UpdatePlatforms(HttpRequestEventArgs e, AppInfo _app, string username)
         {
             int platformsCount = 0;
@@ -759,6 +807,15 @@ namespace URL_Shortener_App.Controllers
         #endregion
 
         #region Delete
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Deletes the shortURL described by e. </summary>
+        ///
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        ///
+        /// <param name="e">    HTTP request event information. </param>
+        ///
+        /// <returns>   True if it succeeds, false if it fails. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         bool DeleteShort(HttpRequestEventArgs e)
         {
             try
@@ -835,6 +892,18 @@ namespace URL_Shortener_App.Controllers
             }
             return false;
         }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Deletes the referers. </summary>
+        ///
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        ///
+        /// <param name="e">        HTTP request event information. </param>
+        /// <param name="_app">     The application. </param>
+        /// <param name="username"> The username. </param>
+        ///
+        /// <returns>   True if it succeeds, false if it fails. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         bool DeleteReferers(HttpRequestEventArgs e, AppInfo _app, string username)
         {
             // ### Connect to the database
@@ -856,6 +925,18 @@ namespace URL_Shortener_App.Controllers
                 return false;
             }
         }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Deletes the agents. </summary>
+        ///
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        ///
+        /// <param name="e">        HTTP request event information. </param>
+        /// <param name="_app">     The application. </param>
+        /// <param name="username"> The username. </param>
+        ///
+        /// <returns>   True if it succeeds, false if it fails. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         bool DeleteAgents(HttpRequestEventArgs e, AppInfo _app, string username)
         {
             // ### Connect to the database
@@ -877,6 +958,18 @@ namespace URL_Shortener_App.Controllers
                 return false;
             }
         }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Deletes the locations. </summary>
+        ///
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        ///
+        /// <param name="e">        HTTP request event information. </param>
+        /// <param name="_app">     The application. </param>
+        /// <param name="username"> The username. </param>
+        ///
+        /// <returns>   True if it succeeds, false if it fails. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         bool DeleteLocations(HttpRequestEventArgs e, AppInfo _app, string username)
         {
             // ### Connect to the database
@@ -897,6 +990,18 @@ namespace URL_Shortener_App.Controllers
                 return false;
             }
         }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Deletes the platforms. </summary>
+        ///
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        ///
+        /// <param name="e">        HTTP request event information. </param>
+        /// <param name="_app">     The application. </param>
+        /// <param name="username"> The username. </param>
+        ///
+        /// <returns>   True if it succeeds, false if it fails. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         bool DeletePlatforms(HttpRequestEventArgs e, AppInfo _app, string username)
         {
             // ### Connect to the database
@@ -921,449 +1026,18 @@ namespace URL_Shortener_App.Controllers
         #endregion        
 
         #region Charts
-        List<int> GetClicks(HttpRequestEventArgs e)
-        {
-            List<int> results = new List<int>();
-            try
-            {
-                if (DbLogin(e, true))
-                {
-                    _app = loadConfig.InitApp(resource + _appName, "/config.json");
-                    HttpCookie cookie = e.Request.Cookies.Get(cookieName1);
-                    JArray jArray = new JArray();
-                    string decoded;
-                    if (cookie != null && cookie.Value != "")
-                    {
-                        decoded = DecodeToken(cookie.Value);
-                        jArray = GetJArray(decoded);
-                    }
-
-                    string username = jArray[0].SelectToken("username").ToString();
-
-                    // ### Connect to the database
-                    m_dbConnection = new SqliteConnection(_app.connectionString);
-                    m_dbConnection.Open();
-
-                    // ### select the data
-                    string sql = "SELECT * FROM urls";
-                    IDbCommand command = m_dbConnection.CreateCommand(); command.CommandText = sql;
-                    IDataReader reader = command.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        if (reader["username"].ToString().ToLower() == username.ToLower())
-                        {
-                            var shortUrl = reader["shortURL"].ToString();
-                            var longURL = reader["longURL"].ToString();
-
-                            if (e.Request.Params["go"] == shortUrl)
-                            {
-                                results.Add(int.Parse(reader["clicks"].ToString()));
-                            }
-                        }
-                    }
-                    reader.Close();
-                }
-            }
-            catch
-            {
-                return new List<int>();
-            }
-            return results;
-        }
-
-        List<string> GetReferers(HttpRequestEventArgs e)
-        {
-            List<string> results = new List<string>();
-            try
-            {
-                if (DbLogin(e, true))
-                {
-                    _app = loadConfig.InitApp(resource + _appName, "/config.json");
-                    HttpCookie cookie = e.Request.Cookies.Get(cookieName1);
-                    JArray jArray = new JArray();
-                    string decoded;
-                    if (cookie != null && cookie.Value != "")
-                    {
-                        decoded = DecodeToken(cookie.Value);
-                        jArray = GetJArray(decoded);
-                    }
-
-                    string username = jArray[0].SelectToken("username").ToString();
-
-                    // ### Connect to the database
-                    m_dbConnection = new SqliteConnection(_app.connectionString);
-                    m_dbConnection.Open();
-
-                    // ### select the data
-                    string sql = "SELECT * FROM referers";
-                    IDbCommand command = m_dbConnection.CreateCommand(); command.CommandText = sql;
-                    IDataReader reader = command.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        if (reader["username"].ToString().ToLower() == username.ToLower())
-                        {
-                            var shortUrl = reader["shortURL"].ToString();
-                            if (e.Request.Params["go"] == shortUrl)
-                            {
-                                string referer = reader["referer"].ToString();
-                                results.Add(referer);
-                            }
-                        }
-                    }
-                    reader.Close();
-                }
-            }
-            catch
-            {
-                return new List<string>();
-            }
-            return results;
-        }
-        List<int> GetReferersCount(HttpRequestEventArgs e)
-        {
-            List<int> results = new List<int>();
-            try
-            {
-                if (DbLogin(e, true))
-                {
-                    _app = loadConfig.InitApp(resource + _appName, "/config.json");
-                    HttpCookie cookie = e.Request.Cookies.Get(cookieName1);
-                    JArray jArray = new JArray();
-                    string decoded;
-                    if (cookie != null && cookie.Value != "")
-                    {
-                        decoded = DecodeToken(cookie.Value);
-                        jArray = GetJArray(decoded);
-                    }
-
-                    string username = jArray[0].SelectToken("username").ToString();
-
-                    // ### Connect to the database
-                    m_dbConnection = new SqliteConnection(_app.connectionString);
-                    m_dbConnection.Open();
-
-                    // ### select the data
-                    string sql = "SELECT * FROM referers";
-                    IDbCommand command = m_dbConnection.CreateCommand(); command.CommandText = sql;
-                    IDataReader reader = command.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        if (reader["username"].ToString().ToLower() == username.ToLower())
-                        {
-                            var shortUrl = reader["shortURL"].ToString();
-
-                            if (e.Request.Params["go"] == shortUrl)
-                            {
-                                int count = int.Parse(reader["count"].ToString());
-                                results.Add(count);
-                            }
-                        }
-                    }
-                    reader.Close();
-                }
-            }
-            catch
-            {
-                return new List<int>();
-            }
-            return results;
-        }
-
-        List<string> GetAgents(HttpRequestEventArgs e)
-        {
-            List<string> results = new List<string>();
-            try
-            {
-                if (DbLogin(e, true))
-                {
-                    _app = loadConfig.InitApp(resource + _appName, "/config.json");
-                    HttpCookie cookie = e.Request.Cookies.Get(cookieName1);
-                    JArray jArray = new JArray();
-                    string decoded;
-                    if (cookie != null && cookie.Value != "")
-                    {
-                        decoded = DecodeToken(cookie.Value);
-                        jArray = GetJArray(decoded);
-                    }
-
-                    string username = jArray[0].SelectToken("username").ToString();
-
-                    // ### Connect to the database
-                    m_dbConnection = new SqliteConnection(_app.connectionString);
-                    m_dbConnection.Open();
-
-                    // ### select the data
-                    string sql = "SELECT * FROM agents";
-                    IDbCommand command = m_dbConnection.CreateCommand(); command.CommandText = sql;
-                    IDataReader reader = command.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        if (reader["username"].ToString().ToLower() == username.ToLower())
-                        {
-                            var shortUrl = reader["shortURL"].ToString();
-                            if (e.Request.Params["go"] == shortUrl)
-                            {
-                                string agent = reader["agent"].ToString();
-                                results.Add(agent);
-                            }
-                        }
-                    }
-                    reader.Close();
-                }
-            }
-            catch
-            {
-                return new List<string>();
-            }
-            return results;
-        }
-        List<int> GetAgentsCount(HttpRequestEventArgs e)
-        {
-            List<int> results = new List<int>();
-            try
-            {
-                if (DbLogin(e, true))
-                {
-                    _app = loadConfig.InitApp(resource + _appName, "/config.json");
-                    HttpCookie cookie = e.Request.Cookies.Get(cookieName1);
-                    JArray jArray = new JArray();
-                    string decoded;
-                    if (cookie != null && cookie.Value != "")
-                    {
-                        decoded = DecodeToken(cookie.Value);
-                        jArray = GetJArray(decoded);
-                    }
-
-                    string username = jArray[0].SelectToken("username").ToString();
-
-                    // ### Connect to the database
-                    m_dbConnection = new SqliteConnection(_app.connectionString);
-                    m_dbConnection.Open();
-
-                    // ### select the data
-                    string sql = "SELECT * FROM agents";
-                    IDbCommand command = m_dbConnection.CreateCommand(); command.CommandText = sql;
-                    IDataReader reader = command.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        if (reader["username"].ToString().ToLower() == username.ToLower())
-                        {
-                            var shortUrl = reader["shortURL"].ToString();
-
-                            if (e.Request.Params["go"] == shortUrl)
-                            {
-                                int count = int.Parse(reader["count"].ToString());
-                                results.Add(count);
-                            }
-                        }
-                    }
-                    reader.Close();
-                }
-            }
-            catch
-            {
-                return new List<int>();
-            }
-            return results;
-        }
-
-        List<string> GetLocations(HttpRequestEventArgs e)
-        {
-            List<string> results = new List<string>();
-            try
-            {
-                if (DbLogin(e, true))
-                {
-                    _app = loadConfig.InitApp(resource + _appName, "/config.json");
-                    HttpCookie cookie = e.Request.Cookies.Get(cookieName1);
-                    JArray jArray = new JArray();
-                    string decoded;
-                    if (cookie != null && cookie.Value != "")
-                    {
-                        decoded = DecodeToken(cookie.Value);
-                        jArray = GetJArray(decoded);
-                    }
-
-                    string username = jArray[0].SelectToken("username").ToString();
-
-                    // ### Connect to the database
-                    m_dbConnection = new SqliteConnection(_app.connectionString);
-                    m_dbConnection.Open();
-
-                    // ### select the data
-                    string sql = "SELECT * FROM locations";
-                    IDbCommand command = m_dbConnection.CreateCommand(); command.CommandText = sql;
-                    IDataReader reader = command.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        if (reader["username"].ToString().ToLower() == username.ToLower())
-                        {
-                            var shortUrl = reader["shortURL"].ToString();
-                            if (e.Request.Params["go"] == shortUrl)
-                            {
-                                string location = reader["location"].ToString();
-                                results.Add(location);
-                            }
-                        }
-                    }
-                    reader.Close();
-                }
-            }
-            catch
-            {
-                return new List<string>();
-            }
-            return results;
-        }
-        List<int> GetLocationsCount(HttpRequestEventArgs e)
-        {
-            List<int> results = new List<int>();
-            try
-            {
-                if (DbLogin(e, true))
-                {
-                    _app = loadConfig.InitApp(resource + _appName, "/config.json");
-                    HttpCookie cookie = e.Request.Cookies.Get(cookieName1);
-                    JArray jArray = new JArray();
-                    string decoded;
-                    if (cookie != null && cookie.Value != "")
-                    {
-                        decoded = DecodeToken(cookie.Value);
-                        jArray = GetJArray(decoded);
-                    }
-
-                    string username = jArray[0].SelectToken("username").ToString();
-
-                    // ### Connect to the database
-                    m_dbConnection = new SqliteConnection(_app.connectionString);
-                    m_dbConnection.Open();
-
-                    // ### select the data
-                    string sql = "SELECT * FROM locations";
-                    IDbCommand command = m_dbConnection.CreateCommand(); command.CommandText = sql;
-                    IDataReader reader = command.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        if (reader["username"].ToString().ToLower() == username.ToLower())
-                        {
-                            var shortUrl = reader["shortURL"].ToString();
-
-                            if (e.Request.Params["go"] == shortUrl)
-                            {
-                                int count = int.Parse(reader["count"].ToString());
-                                results.Add(count);
-                            }
-                        }
-                    }
-                    reader.Close();
-                }
-            }
-            catch
-            {
-                return new List<int>();
-            }
-            return results;
-        }
-
-        List<string> GetPlatforms(HttpRequestEventArgs e)
-        {
-            List<string> results = new List<string>();
-            try
-            {
-                if (DbLogin(e, true))
-                {
-                    _app = loadConfig.InitApp(resource + _appName, "/config.json");
-                    HttpCookie cookie = e.Request.Cookies.Get(cookieName1);
-                    JArray jArray = new JArray();
-                    string decoded;
-                    if (cookie != null && cookie.Value != "")
-                    {
-                        decoded = DecodeToken(cookie.Value);
-                        jArray = GetJArray(decoded);
-                    }
-
-                    string username = jArray[0].SelectToken("username").ToString();
-
-                    // ### Connect to the database
-                    m_dbConnection = new SqliteConnection(_app.connectionString);
-                    m_dbConnection.Open();
-
-                    // ### select the data
-                    string sql = "SELECT * FROM platforms";
-                    IDbCommand command = m_dbConnection.CreateCommand(); command.CommandText = sql;
-                    IDataReader reader = command.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        if (reader["username"].ToString().ToLower() == username.ToLower())
-                        {
-                            var shortUrl = reader["shortURL"].ToString();
-                            if (shortUrl == e.Request.Params["go"])
-                            {
-                                string platform = reader["platform"].ToString();
-                                results.Add(platform);
-                            }
-                        }
-                    }
-                    reader.Close();
-                }
-            }
-            catch
-            {
-                return new List<string>();
-            }
-            return results;
-        }
-        List<int> GetPlatformsCount(HttpRequestEventArgs e)
-        {
-            List<int> results = new List<int>();
-            try
-            {
-                if (DbLogin(e, true))
-                {
-                    _app = loadConfig.InitApp(resource + _appName, "/config.json");
-                    HttpCookie cookie = e.Request.Cookies.Get(cookieName1);
-                    JArray jArray = new JArray();
-                    string decoded;
-                    if (cookie != null && cookie.Value != "")
-                    {
-                        decoded = DecodeToken(cookie.Value);
-                        jArray = GetJArray(decoded);
-                    }
-
-                    string username = jArray[0].SelectToken("username").ToString();
-
-                    // ### Connect to the database
-                    m_dbConnection = new SqliteConnection(_app.connectionString);
-                    m_dbConnection.Open();
-
-                    // ### select the data
-                    string sql = "SELECT * FROM platforms";
-                    IDbCommand command = m_dbConnection.CreateCommand(); command.CommandText = sql;
-                    IDataReader reader = command.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        if (reader["username"].ToString().ToLower() == username.ToLower())
-                        {
-                            var shortUrl = reader["shortURL"].ToString();
-
-                            if (e.Request.Params["go"] == shortUrl)
-                            {
-                                int count = int.Parse(reader["count"].ToString());
-                                results.Add(count);
-                            }
-                        }
-                    }
-                    reader.Close();
-                }
-            }
-            catch
-            {
-                return new List<int>();
-            }
-            return results;
-        }
-        #endregion
-
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Creates anon table. </summary>
+        ///
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        ///
+        /// <exception cref="ArgumentNullException">    Thrown when one or more required arguments are
+        ///                                             null. </exception>
+        ///
+        /// <param name="e">    HTTP request event information. </param>
+        ///
+        /// <returns>   The new anon table. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         string CreateAnonTable(HttpRequestEventArgs e)
         {
             string url = GetAppURL(e, "Short") + "Path";
@@ -1437,11 +1111,20 @@ namespace URL_Shortener_App.Controllers
             return table;
         }
 
-        string GetLongURL(HttpRequestEventArgs e)
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Gets the clicks. </summary>
+        ///
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        ///
+        /// <param name="e">    HTTP request event information. </param>
+        ///
+        /// <returns>   The clicks. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        List<int> GetClicks(HttpRequestEventArgs e)
         {
+            List<int> results = new List<int>();
             try
             {
-                string longURL = "";
                 if (DbLogin(e, true))
                 {
                     _app = loadConfig.InitApp(resource + _appName, "/config.json");
@@ -1460,8 +1143,125 @@ namespace URL_Shortener_App.Controllers
                     m_dbConnection = new SqliteConnection(_app.connectionString);
                     m_dbConnection.Open();
 
-                    // ### select the data from urls to load Click Info
+                    // ### select the data
                     string sql = "SELECT * FROM urls";
+                    IDbCommand command = m_dbConnection.CreateCommand(); command.CommandText = sql;
+                    IDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        if (reader["username"].ToString().ToLower() == username.ToLower())
+                        {
+                            var shortUrl = reader["shortURL"].ToString();
+                            var longURL = reader["longURL"].ToString();
+
+                            if (e.Request.Params["go"] == shortUrl)
+                            {
+                                results.Add(int.Parse(reader["clicks"].ToString()));
+                            }
+                        }
+                    }
+                    reader.Close();
+                }
+            }
+            catch
+            {
+                return new List<int>();
+            }
+            return results;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Gets the referers. </summary>
+        ///
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        ///
+        /// <param name="e">    HTTP request event information. </param>
+        ///
+        /// <returns>   The referers. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        List<string> GetReferers(HttpRequestEventArgs e)
+        {
+            List<string> results = new List<string>();
+            try
+            {
+                if (DbLogin(e, true))
+                {
+                    _app = loadConfig.InitApp(resource + _appName, "/config.json");
+                    HttpCookie cookie = e.Request.Cookies.Get(cookieName1);
+                    JArray jArray = new JArray();
+                    string decoded;
+                    if (cookie != null && cookie.Value != "")
+                    {
+                        decoded = DecodeToken(cookie.Value);
+                        jArray = GetJArray(decoded);
+                    }
+
+                    string username = jArray[0].SelectToken("username").ToString();
+
+                    // ### Connect to the database
+                    m_dbConnection = new SqliteConnection(_app.connectionString);
+                    m_dbConnection.Open();
+
+                    // ### select the data
+                    string sql = "SELECT * FROM referers";
+                    IDbCommand command = m_dbConnection.CreateCommand(); command.CommandText = sql;
+                    IDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        if (reader["username"].ToString().ToLower() == username.ToLower())
+                        {
+                            var shortUrl = reader["shortURL"].ToString();
+                            if (e.Request.Params["go"] == shortUrl)
+                            {
+                                string referer = reader["referer"].ToString();
+                                results.Add(referer);
+                            }
+                        }
+                    }
+                    reader.Close();
+                }
+            }
+            catch
+            {
+                return new List<string>();
+            }
+            return results;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Gets referers count. </summary>
+        ///
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        ///
+        /// <param name="e">    HTTP request event information. </param>
+        ///
+        /// <returns>   The referers count. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        List<int> GetReferersCount(HttpRequestEventArgs e)
+        {
+            List<int> results = new List<int>();
+            try
+            {
+                if (DbLogin(e, true))
+                {
+                    _app = loadConfig.InitApp(resource + _appName, "/config.json");
+                    HttpCookie cookie = e.Request.Cookies.Get(cookieName1);
+                    JArray jArray = new JArray();
+                    string decoded;
+                    if (cookie != null && cookie.Value != "")
+                    {
+                        decoded = DecodeToken(cookie.Value);
+                        jArray = GetJArray(decoded);
+                    }
+
+                    string username = jArray[0].SelectToken("username").ToString();
+
+                    // ### Connect to the database
+                    m_dbConnection = new SqliteConnection(_app.connectionString);
+                    m_dbConnection.Open();
+
+                    // ### select the data
+                    string sql = "SELECT * FROM referers";
                     IDbCommand command = m_dbConnection.CreateCommand(); command.CommandText = sql;
                     IDataReader reader = command.ExecuteReader();
                     while (reader.Read())
@@ -1472,22 +1272,384 @@ namespace URL_Shortener_App.Controllers
 
                             if (e.Request.Params["go"] == shortUrl)
                             {
-                                longURL = reader["longURL"].ToString();
+                                int count = int.Parse(reader["count"].ToString());
+                                results.Add(count);
                             }
                         }
                     }
+                    reader.Close();
                 }
-                return longURL;
             }
             catch
             {
-                return "";
+                return new List<int>();
             }
+            return results;
         }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Gets the agents. </summary>
+        ///
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        ///
+        /// <param name="e">    HTTP request event information. </param>
+        ///
+        /// <returns>   The agents. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        List<string> GetAgents(HttpRequestEventArgs e)
+        {
+            List<string> results = new List<string>();
+            try
+            {
+                if (DbLogin(e, true))
+                {
+                    _app = loadConfig.InitApp(resource + _appName, "/config.json");
+                    HttpCookie cookie = e.Request.Cookies.Get(cookieName1);
+                    JArray jArray = new JArray();
+                    string decoded;
+                    if (cookie != null && cookie.Value != "")
+                    {
+                        decoded = DecodeToken(cookie.Value);
+                        jArray = GetJArray(decoded);
+                    }
+
+                    string username = jArray[0].SelectToken("username").ToString();
+
+                    // ### Connect to the database
+                    m_dbConnection = new SqliteConnection(_app.connectionString);
+                    m_dbConnection.Open();
+
+                    // ### select the data
+                    string sql = "SELECT * FROM agents";
+                    IDbCommand command = m_dbConnection.CreateCommand(); command.CommandText = sql;
+                    IDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        if (reader["username"].ToString().ToLower() == username.ToLower())
+                        {
+                            var shortUrl = reader["shortURL"].ToString();
+                            if (e.Request.Params["go"] == shortUrl)
+                            {
+                                string agent = reader["agent"].ToString();
+                                results.Add(agent);
+                            }
+                        }
+                    }
+                    reader.Close();
+                }
+            }
+            catch
+            {
+                return new List<string>();
+            }
+            return results;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Gets agents count. </summary>
+        ///
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        ///
+        /// <param name="e">    HTTP request event information. </param>
+        ///
+        /// <returns>   The agents count. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        List<int> GetAgentsCount(HttpRequestEventArgs e)
+        {
+            List<int> results = new List<int>();
+            try
+            {
+                if (DbLogin(e, true))
+                {
+                    _app = loadConfig.InitApp(resource + _appName, "/config.json");
+                    HttpCookie cookie = e.Request.Cookies.Get(cookieName1);
+                    JArray jArray = new JArray();
+                    string decoded;
+                    if (cookie != null && cookie.Value != "")
+                    {
+                        decoded = DecodeToken(cookie.Value);
+                        jArray = GetJArray(decoded);
+                    }
+
+                    string username = jArray[0].SelectToken("username").ToString();
+
+                    // ### Connect to the database
+                    m_dbConnection = new SqliteConnection(_app.connectionString);
+                    m_dbConnection.Open();
+
+                    // ### select the data
+                    string sql = "SELECT * FROM agents";
+                    IDbCommand command = m_dbConnection.CreateCommand(); command.CommandText = sql;
+                    IDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        if (reader["username"].ToString().ToLower() == username.ToLower())
+                        {
+                            var shortUrl = reader["shortURL"].ToString();
+
+                            if (e.Request.Params["go"] == shortUrl)
+                            {
+                                int count = int.Parse(reader["count"].ToString());
+                                results.Add(count);
+                            }
+                        }
+                    }
+                    reader.Close();
+                }
+            }
+            catch
+            {
+                return new List<int>();
+            }
+            return results;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Gets the locations. </summary>
+        ///
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        ///
+        /// <param name="e">    HTTP request event information. </param>
+        ///
+        /// <returns>   The locations. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        List<string> GetLocations(HttpRequestEventArgs e)
+        {
+            List<string> results = new List<string>();
+            try
+            {
+                if (DbLogin(e, true))
+                {
+                    _app = loadConfig.InitApp(resource + _appName, "/config.json");
+                    HttpCookie cookie = e.Request.Cookies.Get(cookieName1);
+                    JArray jArray = new JArray();
+                    string decoded;
+                    if (cookie != null && cookie.Value != "")
+                    {
+                        decoded = DecodeToken(cookie.Value);
+                        jArray = GetJArray(decoded);
+                    }
+
+                    string username = jArray[0].SelectToken("username").ToString();
+
+                    // ### Connect to the database
+                    m_dbConnection = new SqliteConnection(_app.connectionString);
+                    m_dbConnection.Open();
+
+                    // ### select the data
+                    string sql = "SELECT * FROM locations";
+                    IDbCommand command = m_dbConnection.CreateCommand(); command.CommandText = sql;
+                    IDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        if (reader["username"].ToString().ToLower() == username.ToLower())
+                        {
+                            var shortUrl = reader["shortURL"].ToString();
+                            if (e.Request.Params["go"] == shortUrl)
+                            {
+                                string location = reader["location"].ToString();
+                                results.Add(location);
+                            }
+                        }
+                    }
+                    reader.Close();
+                }
+            }
+            catch
+            {
+                return new List<string>();
+            }
+            return results;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Gets locations count. </summary>
+        ///
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        ///
+        /// <param name="e">    HTTP request event information. </param>
+        ///
+        /// <returns>   The locations count. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        List<int> GetLocationsCount(HttpRequestEventArgs e)
+        {
+            List<int> results = new List<int>();
+            try
+            {
+                if (DbLogin(e, true))
+                {
+                    _app = loadConfig.InitApp(resource + _appName, "/config.json");
+                    HttpCookie cookie = e.Request.Cookies.Get(cookieName1);
+                    JArray jArray = new JArray();
+                    string decoded;
+                    if (cookie != null && cookie.Value != "")
+                    {
+                        decoded = DecodeToken(cookie.Value);
+                        jArray = GetJArray(decoded);
+                    }
+
+                    string username = jArray[0].SelectToken("username").ToString();
+
+                    // ### Connect to the database
+                    m_dbConnection = new SqliteConnection(_app.connectionString);
+                    m_dbConnection.Open();
+
+                    // ### select the data
+                    string sql = "SELECT * FROM locations";
+                    IDbCommand command = m_dbConnection.CreateCommand(); command.CommandText = sql;
+                    IDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        if (reader["username"].ToString().ToLower() == username.ToLower())
+                        {
+                            var shortUrl = reader["shortURL"].ToString();
+
+                            if (e.Request.Params["go"] == shortUrl)
+                            {
+                                int count = int.Parse(reader["count"].ToString());
+                                results.Add(count);
+                            }
+                        }
+                    }
+                    reader.Close();
+                }
+            }
+            catch
+            {
+                return new List<int>();
+            }
+            return results;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Gets the platforms. </summary>
+        ///
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        ///
+        /// <param name="e">    HTTP request event information. </param>
+        ///
+        /// <returns>   The platforms. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        List<string> GetPlatforms(HttpRequestEventArgs e)
+        {
+            List<string> results = new List<string>();
+            try
+            {
+                if (DbLogin(e, true))
+                {
+                    _app = loadConfig.InitApp(resource + _appName, "/config.json");
+                    HttpCookie cookie = e.Request.Cookies.Get(cookieName1);
+                    JArray jArray = new JArray();
+                    string decoded;
+                    if (cookie != null && cookie.Value != "")
+                    {
+                        decoded = DecodeToken(cookie.Value);
+                        jArray = GetJArray(decoded);
+                    }
+
+                    string username = jArray[0].SelectToken("username").ToString();
+
+                    // ### Connect to the database
+                    m_dbConnection = new SqliteConnection(_app.connectionString);
+                    m_dbConnection.Open();
+
+                    // ### select the data
+                    string sql = "SELECT * FROM platforms";
+                    IDbCommand command = m_dbConnection.CreateCommand(); command.CommandText = sql;
+                    IDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        if (reader["username"].ToString().ToLower() == username.ToLower())
+                        {
+                            var shortUrl = reader["shortURL"].ToString();
+                            if (shortUrl == e.Request.Params["go"])
+                            {
+                                string platform = reader["platform"].ToString();
+                                results.Add(platform);
+                            }
+                        }
+                    }
+                    reader.Close();
+                }
+            }
+            catch
+            {
+                return new List<string>();
+            }
+            return results;
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Gets platforms count. </summary>
+        ///
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        ///
+        /// <param name="e">    HTTP request event information. </param>
+        ///
+        /// <returns>   The platforms count. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        List<int> GetPlatformsCount(HttpRequestEventArgs e)
+        {
+            List<int> results = new List<int>();
+            try
+            {
+                if (DbLogin(e, true))
+                {
+                    _app = loadConfig.InitApp(resource + _appName, "/config.json");
+                    HttpCookie cookie = e.Request.Cookies.Get(cookieName1);
+                    JArray jArray = new JArray();
+                    string decoded;
+                    if (cookie != null && cookie.Value != "")
+                    {
+                        decoded = DecodeToken(cookie.Value);
+                        jArray = GetJArray(decoded);
+                    }
+
+                    string username = jArray[0].SelectToken("username").ToString();
+
+                    // ### Connect to the database
+                    m_dbConnection = new SqliteConnection(_app.connectionString);
+                    m_dbConnection.Open();
+
+                    // ### select the data
+                    string sql = "SELECT * FROM platforms";
+                    IDbCommand command = m_dbConnection.CreateCommand(); command.CommandText = sql;
+                    IDataReader reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        if (reader["username"].ToString().ToLower() == username.ToLower())
+                        {
+                            var shortUrl = reader["shortURL"].ToString();
+
+                            if (e.Request.Params["go"] == shortUrl)
+                            {
+                                int count = int.Parse(reader["count"].ToString());
+                                results.Add(count);
+                            }
+                        }
+                    }
+                    reader.Close();
+                }
+            }
+            catch
+            {
+                return new List<int>();
+            }
+            return results;
+        }
+        #endregion        
 
         #endregion
 
         #region Controller Methods
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   (An Action that handles HTTP GET requests)
+        ///             Redirects to the longURL of the the given e. </summary>
+        ///
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        ///
+        /// <param name="e">    HTTP request event information. </param>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         [HttpGet]
         public void Path(HttpRequestEventArgs e)
         {
@@ -1498,6 +1660,14 @@ namespace URL_Shortener_App.Controllers
                 Console.WriteLine("\tFile not found!");
             }
         }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   (An Action that handles HTTP GET requests) deletes the given shortURL. </summary>
+        ///
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        ///
+        /// <param name="e">    The e to delete. </param>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         [HttpGet]
         public void Delete(HttpRequestEventArgs e)
         {
@@ -1507,6 +1677,14 @@ namespace URL_Shortener_App.Controllers
                 errorHandler.RenderErrorPage(500, e);
             }
         }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   (An Action that handles HTTP GET requests) details the given shortURL. </summary>
+        ///
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        ///
+        /// <param name="e">    HTTP request event information. </param>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         [HttpGet]
         public void Details(HttpRequestEventArgs e)
         {
@@ -1570,6 +1748,14 @@ namespace URL_Shortener_App.Controllers
             }
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   (An Action that handles HTTP GET requests)
+        ///             Created Anonymous shortURL page. </summary>
+        ///
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        ///
+        /// <param name="e">    HTTP request event information. </param>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         [HttpGet]
         public void Anonymous(HttpRequestEventArgs e)
         {

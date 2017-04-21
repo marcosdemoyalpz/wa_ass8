@@ -13,14 +13,58 @@ using System.Data;
 
 namespace Mvc
 {
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// <summary>   Router Class. </summary>
+    /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
     public class Router
     {
+        #region Properties
+        /// <summary>   The controller. </summary>
+        private ControllerBase _controller;
+
+        /// <summary>   The error handler. </summary>
+        ErrorHandler _errorHandler;
+
+        /// <summary>   Name of the application. </summary>
         private string _appName;
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Gets or sets the name of the application. </summary>
+        /// <value> The name of the application. </value>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         public string AppName
         {
             get { return _appName; }
             set { _appName = value; }
         }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Gets a value indicating whether the Authentication Failed. </summary>
+        /// <value> True if false, false if not. </value>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        bool _FailedAuth = false;
+        #endregion
+
+        #region Constructors
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Default Constructor. </summary>
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        /// <param name="appName">  Name of the application. </param>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        public Router(string appName)
+        {
+            _controller = new ControllerBase();
+            _errorHandler = new ErrorHandler();
+            _appName = appName;
+        }
+        #endregion
+
+        #region Public Classes
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   A controllers class. </summary>
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         public class Controllers
         {
             List<ControllerBase> _controllers = new List<ControllerBase>();
@@ -34,9 +78,15 @@ namespace Mvc
                 _controllers = controllers;
             }
         }
+        #endregion
 
-        bool _FailedAuth = false;
-
+        #region Private Methods
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Gets a JArray. </summary>
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        /// <param name="jsonString">   The JSON string. </param>
+        /// <returns>   The j array. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         JArray GetJArray(string jsonString)
         {
             if (jsonString[0] != '[')
@@ -54,6 +104,12 @@ namespace Mvc
             return JArray.Parse(jsonString);
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Database login. </summary>
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        /// <param name="e">    HTTP request event information. </param>
+        /// <returns>   True if it succeeds, false if it fails. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         bool DbLogin(HttpRequestEventArgs e)
         {
             try
@@ -101,6 +157,12 @@ namespace Mvc
             }
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Decode token. </summary>
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        /// <param name="token">    The token. </param>
+        /// <returns>   A string. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         private string DecodeToken(string token)
         {
             string json = "";
@@ -127,66 +189,14 @@ namespace Mvc
             return json;
         }
 
-        public static Controllers loadControllers(string path, string appName)
-        {
-            Console.WriteLine("\n\tLooking for apps in " + path + "\n");
-
-            if (string.IsNullOrEmpty(path)) { throw new FileNotFoundException(); } //sanity check
-
-            DirectoryInfo info = new DirectoryInfo(path);
-            if (!info.Exists) { throw new FileNotFoundException(); } //make sure directory exists
-
-            var impl = new List<ControllerBase>();
-
-            foreach (FileInfo file in info.GetFiles("*.dll")) //loop through all dll files in directory
-            {
-                if (file.Name == (appName + ".dll"))
-                {
-                    Console.WriteLine("\tdll = " + file);
-                    Assembly currentAssembly = null;
-                    try
-                    {
-                        var name = AssemblyName.GetAssemblyName(file.FullName);
-                        currentAssembly = Assembly.Load(name);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("\n\t" + ex);
-                        continue;
-                    }
-
-                    var types = currentAssembly.GetTypes();
-                    foreach (var type in types)
-                    {
-                        if (type != typeof(ControllerBase) && typeof(ControllerBase).IsAssignableFrom(type))
-                        {
-                            var temp = (ControllerBase)Activator.CreateInstance(type);
-                            if (!impl.Contains(temp))
-                            {
-                                impl.Add(temp);
-                            }
-                        }
-                    }
-                }
-            }
-            Console.WriteLine();
-            foreach (var el in impl)
-            {
-                Console.WriteLine("\tLoading " + el + "...\n");
-            }
-            return new Controllers(impl);
-        }
-
-        public Router(string appName)
-        {
-            _controller = new ControllerBase();
-            _errorHandler = new ErrorHandler();
-            _appName = appName;
-        }
-
-        private ControllerBase _controller;
-        ErrorHandler _errorHandler;
-
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Query if 'member' is HTTP attribute allowed. </summary>
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        /// <param name="member">       The member. </param>
+        /// <param name="requestType">  Type of the request. </param>
+        /// <param name="e">            HTTP request event information. </param>
+        /// <returns>   True if HTTP attribute allowed, false if not. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         private bool IsHttpAttributeAllowed(MemberInfo member, string requestType, HttpRequestEventArgs e)
         {
             bool allowed = false;
@@ -246,7 +256,77 @@ namespace Mvc
                 return allowed;
             }
         }
+        #endregion
 
+        #region Public Methods
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Loads the controllers. </summary>
+        ///
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        ///
+        /// <exception cref="FileNotFoundException">    Thrown when the requested file is not present. </exception>
+        ///
+        /// <param name="path">     Full pathname of the file. </param>
+        /// <param name="appName">  Name of the application. </param>
+        ///
+        /// <returns>   The controllers. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        public static Controllers loadControllers(string path, string appName)
+        {
+            Console.WriteLine("\n\tLooking for apps in " + path + "\n");
+
+            if (string.IsNullOrEmpty(path)) { throw new FileNotFoundException(); } //sanity check
+
+            DirectoryInfo info = new DirectoryInfo(path);
+            if (!info.Exists) { throw new FileNotFoundException(); } //make sure directory exists
+
+            var impl = new List<ControllerBase>();
+
+            foreach (FileInfo file in info.GetFiles("*.dll")) //loop through all dll files in directory
+            {
+                if (file.Name == (appName + ".dll"))
+                {
+                    Console.WriteLine("\tdll = " + file);
+                    Assembly currentAssembly = null;
+                    try
+                    {
+                        var name = AssemblyName.GetAssemblyName(file.FullName);
+                        currentAssembly = Assembly.Load(name);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("\n\t" + ex);
+                        continue;
+                    }
+
+                    var types = currentAssembly.GetTypes();
+                    foreach (var type in types)
+                    {
+                        if (type != typeof(ControllerBase) && typeof(ControllerBase).IsAssignableFrom(type))
+                        {
+                            var temp = (ControllerBase)Activator.CreateInstance(type);
+                            if (!impl.Contains(temp))
+                            {
+                                impl.Add(temp);
+                            }
+                        }
+                    }
+                }
+            }
+            Console.WriteLine();
+            foreach (var el in impl)
+            {
+                Console.WriteLine("\tLoading " + el + "...\n");
+            }
+            return new Controllers(impl);
+        }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Call action. </summary>
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        /// <param name="e">            HTTP request event information. </param>
+        /// <param name="directory">    Pathname of the directory. </param>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         public void CallAction(HttpRequestEventArgs e, string directory)
         {
             string path = e.Request.Url.PathAndQuery;
@@ -327,5 +407,6 @@ namespace Mvc
                 }
             }
         }
+        #endregion
     }
 }

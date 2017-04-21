@@ -122,7 +122,6 @@
     <Compile Include="Application\IPHttpApplication.cs" />
     <Compile Include="DatabaseHelper.cs" />
     <Compile Include="ErrorHandler.cs" />
-    <Compile Include="WebshotHelper.cs" />
     <Compile Include="UserAgentHelper.cs" />
     <Compile Include="GeoLocation.cs" />
     <Compile Include="HttpContext.cs" />

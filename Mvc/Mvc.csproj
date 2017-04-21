@@ -117,7 +117,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Application.cs" />
-    <Compile Include="ApplicationUser.cs" />
     <Compile Include="Attributes\AuthorizeAttribute.cs" />
     <Compile Include="Attributes\HttpDelete.cs" />
     <Compile Include="Attributes\HttpGet.cs" />

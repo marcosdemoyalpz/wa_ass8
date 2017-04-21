@@ -4,6 +4,10 @@ using System.Collections.Generic;
 
 namespace Mvc
 {
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// <summary>   Controller base class. </summary>
+    /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
     public class ControllerBase
     {
         HttpContext _context;
@@ -51,7 +55,7 @@ namespace Mvc
             Console.WriteLine("\tRoute = " + _route);
             Console.WriteLine("\tControllerName = " + _controllerName);
             Console.WriteLine("\tActionName = " + _actionName);
-            Console.WriteLine("\tUser = " + _username);
+            //Console.WriteLine("\tUser = " + _username);
         }
     }
 }

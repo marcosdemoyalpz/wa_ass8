@@ -371,6 +371,17 @@ namespace PHttp
             return e.Handled;
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Process the request. </summary>
+        ///
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        ///
+        /// <param name="e">        HTTP request event information. </param>
+        /// <param name="methods">  The methods. </param>
+        ///
+        /// <returns>   True if it succeeds, false if it fails. </returns>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+
         public bool ProcessRequest(HttpRequestEventArgs e, LoadApps methods)
         {
             Console.WriteLine("\tProcess request...");

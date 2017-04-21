@@ -9,6 +9,10 @@ using System.Web.Script.Serialization;
 
 namespace PHttp
 {
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// <summary>   Parse User Agents Class. </summary>
+    /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
     public class UserAgentHelper
     {
         public string agent_type { get; private set; }
@@ -20,6 +24,11 @@ namespace PHttp
         public string os_versionNumber { get; private set; }
         public string linux_distibution { get; private set; }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Constructor. </summary>
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        /// <param name="e">    HTTP request event information. </param>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         public UserAgentHelper(HttpRequestEventArgs e)
         {
             agent_type = "";
@@ -32,6 +41,12 @@ namespace PHttp
             linux_distibution = "";
             WebAPI(e);
         }
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>   Process UserAgent. </summary>
+        /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+        /// <param name="e">    HTTP request event information. </param>
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         private void WebAPI(HttpRequestEventArgs e)
         {
             string userAgent = e.Request.UserAgent;

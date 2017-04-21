@@ -11,6 +11,10 @@ using System.Text.RegularExpressions;
 
 namespace PHttp
 {
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// <summary>   A HTTP client. </summary>
+    /// <remarks>   Marcos De Moya, 4/20/2017. </remarks>
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
     internal class HttpClient : IDisposable
     {
         private static readonly Regex PrologRegex = new Regex("^([A-Z]+) ([^ ]+) (HTTP/[^ ]+)$", RegexOptions.Compiled);
