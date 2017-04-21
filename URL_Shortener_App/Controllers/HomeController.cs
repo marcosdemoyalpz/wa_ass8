@@ -236,7 +236,7 @@ namespace URL_Shortener_App.Controllers
                             string img = "<img src=\"";
                             var shortUrl = GetAppURL(e, "Short") + "Path" + "?go=" + reader["shortURL"].ToString();
                             var longURL = reader["longURL"].ToString();
-                            var link1 = "<a href=\"" + shortUrl + "\">" + reader["shortURL"].ToString() + "</a>";
+                            var link1 = "<a href=\"" + shortUrl + "\">" + "go=" + reader["shortURL"].ToString() + "</a>";
                             var link2 = "<a href=\"" + longURL + "\">" + longURL + "</a>";
                             var dateCreatedRaw = reader["dateCreated"].ToString();
                             var clicks = reader["clicks"].ToString();

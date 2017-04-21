@@ -237,19 +237,47 @@ namespace URL_Shortener_App.Controllers
                     #endregion
 
                     #region Referers
-                    UpdateReferers(e, _app, username);
+                    try
+                    {
+                        UpdateReferers(e, _app, username);
+                    }
+                    catch
+                    {
+                        Console.WriteLine("\n\t Referer not found!");
+                    }
                     #endregion
 
                     #region Agents
-                    UpdateAgents(e, _app, username);
+                    try
+                    {
+                        UpdateAgents(e, _app, username);
+                    }
+                    catch
+                    {
+                        Console.WriteLine("\n\t Agent not found!");
+                    }
                     #endregion
 
                     #region Platforms
-                    UpdatePlatforms(e, _app, username);
+                    try
+                    {
+                        UpdatePlatforms(e, _app, username);
+                    }
+                    catch
+                    {
+                        Console.WriteLine("\n\t Platform not found!");
+                    }
                     #endregion
 
                     #region Locations
-                    UpdateLocations(e, _app, username);
+                    try
+                    {
+                        UpdateLocations(e, _app, username);
+                    }
+                    catch
+                    {
+                        Console.WriteLine("\n\t Location not found!");
+                    }
                     #endregion
 
                     Console.WriteLine("\n\t Redirecting " + shortURL + " ...");
