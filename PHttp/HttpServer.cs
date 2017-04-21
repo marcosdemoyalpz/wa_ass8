@@ -386,6 +386,8 @@ namespace PHttp
         {
             Console.WriteLine("\tProcess request...");
 
+            bool shortPath = false;
+
             ErrorHandler errorHandler = new ErrorHandler();
             List<string> IgnorePathList = new List<string>();
             string defaultPath = "URL_Shortener_App/Home/Index";
@@ -421,14 +423,25 @@ namespace PHttp
                     return false;
                 }
             }
-            if (path == "" || path == "/")
+
+            if (path == "" || path == "/" ||
+                (path.Replace("/", "") == defaultPath.Replace("/Home/Index", "") && path.Replace("/", "") == appName))
             {
                 path = defaultPath;
-                e.Response.Redirect(e.Request.Url.ToString() + path);
+                e.Response.Redirect(defaultURL + path);
                 return false;
             }
+            Console.WriteLine("\n\t" + path.Replace("/", "").Substring(0, 3) + "\n");
+            if (path.Replace("/", "").Substring(0, 3) == "go=")
+            {
+                shortPath = true;
+                path = "URL_Shortener_App/Short/Path?" + e.Request.Url.PathAndQuery.Replace("/", "");
+                e.Response.Redirect(defaultURL + path);
+                return false;
+            }
+
             appName = path.Split('?')[0].Split('/')[1];
-            if (path[path.Length - 1] != '/') path = path + "/";
+            if (path[path.Length - 1] != '/' && shortPath == false) path = path + "/";
             string resources = ConfigurationManager.AppSettings["Virtual"];
             DirectoryInfo info = new DirectoryInfo(resources);
             if (!info.Exists) { return false; } //make sure directory exists            

@@ -68,7 +68,7 @@ namespace PHttp
             string key = "demo";
             HttpWebRequest HttpWReq;
             HttpWebResponse HttpWResp;
-            strQuery = "http://www.ip2location.com/demo?" + "ip=" + myIP + "&package=WS24&format=json";
+            strQuery = "http://api.ip2location.com" + "?ip=" + myIP + "&key=" + key + "&package=WS24&format=json";
             JavaScriptSerializer serializer = new JavaScriptSerializer();
 
             HttpWReq = (HttpWebRequest)WebRequest.Create(strQuery);
